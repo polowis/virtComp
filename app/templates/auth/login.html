@@ -3,7 +3,33 @@
         <title>VirtComp - Login</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
-
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+  
+              // Get all "navbar-burger" elements
+              const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+  
+              // Check if there are any navbar burgers
+              if ($navbarBurgers.length > 0) {
+  
+              // Add a click event on each of them
+              $navbarBurgers.forEach( el => {
+                  el.addEventListener('click', () => {
+  
+                  // Get the target from the "data-target" attribute
+                  const target = el.dataset.target;
+                  const $target = document.getElementById(target);
+  
+                  // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                  el.classList.toggle('is-active');
+                  $target.classList.toggle('is-active');
+  
+                  });
+              });
+              }
+  
+              });
+            </script>
         <style>
         .form {
             margin:3% auto 0 auto;
@@ -23,148 +49,9 @@
         </style>
     </head>
     <body>
-            <nav class="navbar" role="navigation" aria-label="main navigation">
-                    <div class="navbar-brand">
-                      <a class="navbar-item" href="/">
-                        <img src="/static/img/logo.png" width="112" height="28">
-                      </a>
-                  
-                      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                      </a>
-                    </div>
-                  
-                    <div id="navbarBasicExample" class="navbar-menu">
-                      <div class="navbar-start">
-                        <a class="navbar-item" href="/">
-                          Home
-                        </a>
-                  
-                        <a class="navbar-item">
-                          Documentation
-                        </a>
-                  
-                        <div class="navbar-item has-dropdown is-hoverable">
-                          <a class="navbar-link">
-                            More
-                          </a>
-                  
-                          <div class="navbar-dropdown">
-                            <a class="navbar-item">
-                              About
-                            </a>
-                            <a class="navbar-item">
-                              Jobs
-                            </a>
-                            <a class="navbar-item">
-                              Contact
-                            </a>
-                            <hr class="navbar-divider">
-                            <a class="navbar-item">
-                              Report an issue
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                  
-                      <div class="navbar-end">
-                        <div class="navbar-item">
-                          <div class="buttons">
-                            <a class="button is-primary" href="/register">
-                              <strong>Sign up</strong>
-                            </a>
-                            <a class="button is-light" href="/login">
-                              Log in
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </nav>
-                
-
-            <div class="form">
-            <h3 id="form-header">Log in</h3>
-            <div class="field">
-                    <label class="label">Username</label>
-                    <div class="control has-icons-left has-icons-right">
-                      <input class="input" type="text" placeholder="Username" value="">
-                      <span class="icon is-small is-left">
-                        <i class="fas fa-user"></i>
-                      </span>
-                    </div>
-            </div>
-            <div class="field">
-                    <label class="label">Email</label>
-                    <div class="control has-icons-left has-icons-right">
-                      <input class="input" type="email" placeholder="Email Address" value="">
-                      <span class="icon is-small is-left">
-                        <i class="fas fa-envelope"></i>
-                      </span>
-                    </div>
-            </div>
-
-            <div class="field">
-                    <label class="label">Password</label>
-                    <div class="control has-icons-left has-icons-right">
-                      <input class="input" type="password" placeholder="" value="">
-                      <span class="icon is-small is-left">
-                        <i class="fas fa-key"></i>
-                      </span>
-                    </div>
-            </div>
-
-            <div class="field">
-                    <label class="label">Repeat password</label>
-                    <div class="control has-icons-left has-icons-right">
-                      <input class="input" type="password" placeholder="" value="">
-                      <span class="icon is-small is-left">
-                        <i class="fas fa-eye-slash"></i>
-                      </span>
-                    </div>
-            </div>
-
-            <div class="field">
-                    <div class="control">
-                      <label class="checkbox">
-                        <input type="checkbox">
-                        I agree to the <a href="/terms">terms and conditions</a>
-                      </label>
-                    </div>
-            </div>
-
-            <div class="control">
-                    <button class="button is-primary">Submit</button>
-            </div>
-        </div>
-          <script>
-          document.addEventListener('DOMContentLoaded', () => {
-
-            // Get all "navbar-burger" elements
-            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-            // Check if there are any navbar burgers
-            if ($navbarBurgers.length > 0) {
-
-            // Add a click event on each of them
-            $navbarBurgers.forEach( el => {
-                el.addEventListener('click', () => {
-
-                // Get the target from the "data-target" attribute
-                const target = el.dataset.target;
-                const $target = document.getElementById(target);
-
-                // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-                el.classList.toggle('is-active');
-                $target.classList.toggle('is-active');
-
-                });
-            });
-            }
-
-            });
-          </script>
+          <div id="app">
+              <login-component></login-component>
+          </div>
+          <script src="/static/js/app.js"></script>
     </body>
 </html>

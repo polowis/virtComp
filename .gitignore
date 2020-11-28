@@ -123,3 +123,8 @@ dmypy.json
 .pyre/
 virtComp/app/migrations
 node_modules
+.DS_Store
+app/static/js/app.js
+app/static/js/*hot-update.json
+app/static/js/*hot-update.js
+
