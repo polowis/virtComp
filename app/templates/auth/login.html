@@ -2,19 +2,10 @@
     <head>
         <title>VirtComp - Login</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+
         <style>
-        @import url(https://fonts.googleapis.com/css2?family=Concert+One&display=swap);
-
-        body {
-            margin:0;
-            font-family:arial,tahoma,sans-serif;
-            font-size:12px;
-            font-weight:normal;
-            direction:ltr;
-        background:white;
-        }
-
-        form {
+        .form {
             margin:3% auto 0 auto;
             padding:30px;
             width:400px;
@@ -23,99 +14,11 @@
             background:white;
             border-radius:10px;
         }
-
-        form label {
-            font-size:14px;
-            color:darkgray;
-            cursor:pointer;
-        }
-
-        form label,
-        form input {
-            float:left;
-            clear:both;
-        }
-
-        form input {
-            margin:15px 0;
-            padding:15px 10px;
-            width:100%;
-            outline:none;
-            border:1px solid #bbb;
-            border-radius:20px;
-            display:inline-block;
-            -webkit-box-sizing:border-box;
-            -moz-box-sizing:border-box;
-                    box-sizing:border-box;
-            -webkit-transition:0.2s ease all;
-            -moz-transition:0.2s ease all;
-                -ms-transition:0.2s ease all;
-                -o-transition:0.2s ease all;
-                    transition:0.2s ease all;
-        }
-
-        form input[type=text]:focus,
-        form input[type="password"]:focus {
-            border-color:cornflowerblue;
-        }
-
-        input[type=submit] {
-            padding:15px 50px;
-            width:auto;
-            background:#1abc9c;
-            border:none;
-            color:white;
-            cursor:pointer;
-            display:inline-block;
-            float:right;
-            clear:right;
-            -webkit-transition:0.2s ease all;
-            -moz-transition:0.2s ease all;
-                -ms-transition:0.2s ease all;
-                -o-transition:0.2s ease all;
-                    transition:0.2s ease all;
-        }
-
-        input[type=submit]:hover {
-            opacity:0.8;
-        }
-
-        input[type="submit"]:active {
-            opacity:0.4;
-        }
-
-        .forgot,
-        .register {
-            margin:10px;
-            float:left;
-            clear:left;
-            display:inline-block;
-            color:cornflowerblue;
-            text-decoration:none;
-        }
-
-        .forgot:hover,
-        .register:hover {
-            color:darkgray;
-        }
-
-        #logo {
-            margin:0 auto;
-            width:200px;
-            font-family:'Concert One', cursive;
-            font-size:60px;
-            font-weight:bold;
-            text-align:center;
-            color:#080808;
-            -webkit-transition:0.2s ease all;
-            -moz-transition:0.2s ease all;
-                -ms-transition:0.2s ease all;
-                -o-transition:0.2s ease all;
-                    transition:0.2s ease all;
-        }
-
-        #logo:hover {
-            color:#1abc9c;
+        #form-header {
+            text-align: center;
+            text-transform:uppercase;
+            font-weight: bold;
+            font-size: 30px;
         }
         </style>
     </head>
@@ -135,7 +38,7 @@
                   
                     <div id="navbarBasicExample" class="navbar-menu">
                       <div class="navbar-start">
-                        <a class="navbar-item">
+                        <a class="navbar-item" href="/">
                           Home
                         </a>
                   
@@ -169,10 +72,10 @@
                       <div class="navbar-end">
                         <div class="navbar-item">
                           <div class="buttons">
-                            <a class="button is-primary">
+                            <a class="button is-primary" href="/register">
                               <strong>Sign up</strong>
                             </a>
-                            <a class="button is-light">
+                            <a class="button is-light" href="/login">
                               Log in
                             </a>
                           </div>
@@ -180,22 +83,62 @@
                       </div>
                     </div>
                   </nav>
-        <form method="post" action="">
+                
 
-            <h3 id="logo">Log In</h3>
-          
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Type in your username.." autocomplete="off" required />
-          
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password.." autocomplete="off" required />
-          
-            <a class="forgot" href="#">Forgot Password?</a>
-            <a class="register" href="#">Register</a>
-          
-            <input type="submit" name="submit" value="Log In" />
-          
-          </form>
+            <div class="form">
+            <h3 id="form-header">Log in</h3>
+            <div class="field">
+                    <label class="label">Username</label>
+                    <div class="control has-icons-left has-icons-right">
+                      <input class="input" type="text" placeholder="Username" value="">
+                      <span class="icon is-small is-left">
+                        <i class="fas fa-user"></i>
+                      </span>
+                    </div>
+            </div>
+            <div class="field">
+                    <label class="label">Email</label>
+                    <div class="control has-icons-left has-icons-right">
+                      <input class="input" type="email" placeholder="Email Address" value="">
+                      <span class="icon is-small is-left">
+                        <i class="fas fa-envelope"></i>
+                      </span>
+                    </div>
+            </div>
+
+            <div class="field">
+                    <label class="label">Password</label>
+                    <div class="control has-icons-left has-icons-right">
+                      <input class="input" type="password" placeholder="" value="">
+                      <span class="icon is-small is-left">
+                        <i class="fas fa-key"></i>
+                      </span>
+                    </div>
+            </div>
+
+            <div class="field">
+                    <label class="label">Repeat password</label>
+                    <div class="control has-icons-left has-icons-right">
+                      <input class="input" type="password" placeholder="" value="">
+                      <span class="icon is-small is-left">
+                        <i class="fas fa-eye-slash"></i>
+                      </span>
+                    </div>
+            </div>
+
+            <div class="field">
+                    <div class="control">
+                      <label class="checkbox">
+                        <input type="checkbox">
+                        I agree to the <a href="/terms">terms and conditions</a>
+                      </label>
+                    </div>
+            </div>
+
+            <div class="control">
+                    <button class="button is-primary">Submit</button>
+            </div>
+        </div>
           <script>
           document.addEventListener('DOMContentLoaded', () => {
 
