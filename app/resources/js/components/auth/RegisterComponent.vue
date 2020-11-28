@@ -63,13 +63,22 @@
                 
 
             <div class="form">
-            <h3 id="form-header">Log in</h3>
+            <h3 id="form-header">Register</h3>
             <div class="field">
                     <label class="label">Username</label>
                     <div class="control has-icons-left has-icons-right">
                       <input class="input" type="text" placeholder="Username" value="">
                       <span class="icon is-small is-left">
                         <i class="fas fa-user"></i>
+                      </span>
+                    </div>
+            </div>
+            <div class="field">
+                    <label class="label">Email</label>
+                    <div class="control has-icons-left has-icons-right">
+                      <input class="input" type="email" placeholder="Email Address" value="">
+                      <span class="icon is-small is-left">
+                        <i class="fas fa-envelope"></i>
                       </span>
                     </div>
             </div>
@@ -81,6 +90,25 @@
                       <span class="icon is-small is-left">
                         <i class="fas fa-key"></i>
                       </span>
+                    </div>
+            </div>
+
+            <div class="field">
+                    <label class="label">Repeat password</label>
+                    <div class="control has-icons-left has-icons-right">
+                      <input class="input" type="password" placeholder="" value="">
+                      <span class="icon is-small is-left">
+                        <i class="fas fa-eye-slash"></i>
+                      </span>
+                    </div>
+            </div>
+
+            <div class="field">
+                    <div class="control">
+                      <label class="checkbox">
+                        <input type="checkbox">
+                        I agree to the <a href="/terms">terms and conditions</a>
+                      </label>
                     </div>
             </div>
 
