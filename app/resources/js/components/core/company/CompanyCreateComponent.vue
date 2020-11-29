@@ -5,23 +5,14 @@
             <div class="field">
                     <label class="label">Name</label>
                     <div class="control has-icons-left has-icons-right">
-                      <input class="input" type="text" placeholder="Company's name" value="">
+                      <input class="input is-primary" type="text" placeholder="Company's name" v-model="companyName" value="">
                       <span class="icon is-small is-left">
                         <i class="fas fa-building"></i>
                       </span>
                     </div>
             </div>
 
-            <div class="field">
-                <label class="label">Select business field</label>
-                <div class="control">
-                    <div class="select is-primary">
-                    <select>
-                        <option>Hi</option>
-                    </select>
-                    </div>
-                </div>
-            </div>
+            
 
             <div class="control">
                     <button class="button is-primary">Submit</button>
@@ -35,6 +26,28 @@ import NavbarComponent from '../../NavbarComponent'
 export default {
     components: {
         NavbarComponent
+    },
+
+    data() {
+        return {
+            companyName: ""
+        }
+    },
+
+    watch: {
+        companyName: function() {
+            this.debounceGetCompanyName()
+        }
+    },
+
+    created() {
+        debounceGetCompanyName = _.debounce(this.checkAvailableCompany, 50)
+    },
+
+    methods: {
+        checkAvailableCompany() {
+            
+        }
     }
 }
 </script>
