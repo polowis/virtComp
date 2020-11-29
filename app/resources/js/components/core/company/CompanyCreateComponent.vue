@@ -49,7 +49,6 @@ export default {
 
     methods: {
         checkAvailableCompany() {
-            let csrftoken = this.getCookie('csrftoken')
             let form = new FormData()
             form.append("companyName", this.companyName)
             axios.post('/company/hasavailablename/', form, { headers: {
