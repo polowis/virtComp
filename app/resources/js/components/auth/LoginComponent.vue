@@ -6,7 +6,7 @@
             <div class="field">
                     <label class="label">Username</label>
                     <div class="control has-icons-left has-icons-right">
-                      <input class="input" type="text" placeholder="Username" value="">
+                      <input class="input" type="text" placeholder="Username" v-model="username" value="">
                       <span class="icon is-small is-left">
                         <i class="fas fa-user"></i>
                       </span>
@@ -16,7 +16,7 @@
             <div class="field">
                     <label class="label">Password</label>
                     <div class="control has-icons-left has-icons-right">
-                      <input class="input" type="password" placeholder="" value="">
+                      <input class="input" type="password" placeholder="" v-model="password" value="">
                       <span class="icon is-small is-left">
                         <i class="fas fa-key"></i>
                       </span>
@@ -34,6 +34,26 @@ import NavbarComponent from '../NavbarComponent'
 export default {
     components: {
         NavbarComponent
+    },
+
+    data() {
+        return {
+            username: "",
+            password: ""
+        }
+    },
+
+    methods: {
+        login() {
+            let form = new FormData()
+            form.append('username', this.username)
+            form.append('password', this.password)
+            axios.post('/login/', form, { 
+                headers: {
+                'Content-Type': 'multipart/form-data'
+                }
+          })
+        }
     }
 }
 </script>
