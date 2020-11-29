@@ -1,9 +1,10 @@
 from django.contrib.auth import authenticate
 from django.views import View
-from django.http import HttpRequest
+from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from app.core.validator.base import Validator
 
 
 class RegisterView(View):
@@ -29,3 +30,39 @@ class RegisterView(View):
 
     def user_exists(self, username, email):
         return User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists()
+
+
+
+class UserAvailability(View):
+    def post(self, request: HttpRequest):
+        username = request.POST.get('username', None)
+        email = request.POST.get('email', None)
+        if email is not None: # if email request provided
+            return self.validate_email(email)
+
+        if username is not None: #if username request provided
+            return self.validate_username(username)
+    
+    def username_exists(self, username, email):
+        return User.objects.filter(username=username).exists() 
+    
+    def email_exists(self, email):
+        return User.objects.filter(email=email).exists()
+    
+
+    def validate_email(self, email):
+        if email is not None: # if email request provided
+            if Validator.is_email(email):
+                if self.email_exists(email):
+                    data = {'available': 'true'}
+                    return JsonResponse(data)
+            data = {'available': 'false'}
+            return JsonResponse(data)
+    
+    def validate_username(self, username):
+        if Validator.is_alphanumeric(username):
+            if self.username_exists(username):
+                data = {'available': 'true'}
+                return JsonResponse(data)
+        data = {'available': 'false'}
+        return JsonResponse(data)
