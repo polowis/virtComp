@@ -36,5 +36,5 @@ class CompanyAvailability(View):
     def company_is_available(self, name):
         if name is None:
             return False
-        return Company.objects.get(name__iexact=name) is not None
+        return Company.objects.filter(company_name=name.lower()).first() is None
 

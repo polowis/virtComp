@@ -10,6 +10,8 @@
                         <i class="fas fa-building"></i>
                       </span>
                     </div>
+                    <div v-if="companyAvailability == true" style="color: #00d1b2">The company name is available to register</div>
+                    <div v-if="companyAvailability == false && companyName.length > 0" style="color: #e60c0c">The company name is not available</div>
             </div>
 
             
@@ -30,7 +32,8 @@ export default {
 
     data() {
         return {
-            companyName: ""
+            companyName: "",
+            companyAvailability: false
         }
     },
 
@@ -41,13 +44,22 @@ export default {
     },
 
     created() {
-        debounceGetCompanyName = _.debounce(this.checkAvailableCompany, 50)
+        this.debounceGetCompanyName = _.debounce(this.checkAvailableCompany, 50)
     },
 
     methods: {
         checkAvailableCompany() {
-            
-        }
+            let csrftoken = this.getCookie('csrftoken')
+            let form = new FormData()
+            form.append("companyName", this.companyName)
+            axios.post('/company/hasavailablename/', form, { headers: {
+                'Content-Type': 'multipart/form-data'
+                }}).then(response=> {
+                    let data = response.data
+                    this.companyAvailability = data.available
+            })
+        },
+
     }
 }
 </script>
