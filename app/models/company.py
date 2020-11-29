@@ -24,7 +24,7 @@ class CompanyManager(models.Manager):
 class Company(models.Model):
     company_id = models.CharField(max_length=255, default=generate_company_id)
     company_name = models.CharField(max_length=255)
-    owner_name = models.CharField(max_length=255)
+    owner_name = models.CharField(max_length=255, default="null")
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     balance = models.DecimalField(default=0, max_digits=20, decimal_places=4)
     popularity = models.IntegerField(default=0)
