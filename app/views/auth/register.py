@@ -42,6 +42,9 @@ class UserAvailability(View):
 
         if username is not None: #if username request provided
             return self.validate_username(username)
+        
+        data = {'available': 'false'}
+        return JsonResponse(data)
     
     def username_exists(self, username, email):
         return User.objects.filter(username=username).exists() 
@@ -51,13 +54,13 @@ class UserAvailability(View):
     
 
     def validate_email(self, email):
-        if email is not None: # if email request provided
-            if Validator.is_email(email):
-                if self.email_exists(email):
-                    data = {'available': 'true'}
-                    return JsonResponse(data)
-            data = {'available': 'false'}
-            return JsonResponse(data)
+        
+        if Validator.is_email(email):
+            if self.email_exists(email):
+                data = {'available': 'true'}
+                return JsonResponse(data)
+        data = {'available': 'false'}
+        return JsonResponse(data)
     
     def validate_username(self, username):
         if Validator.is_alphanumeric(username):

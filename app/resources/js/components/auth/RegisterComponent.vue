@@ -64,7 +64,41 @@ import NavbarComponent from '../NavbarComponent'
 export default {
     components: {
         NavbarComponent
+    },
+
+    data() {
+        return {
+            username: "",
+            email: ""
+        }
+    },
+
+    watch: {
+        username: function() {
+            this.debounceUsername()
+        }
+    },
+
+    created() {
+        this.debounceUsername = _debounce(this.checkUsernameAvaibility, 50)
+    },
+
+    methods: {
+        checkUsernameAvaibility() {
+            if(this.username.length > 0) {
+                let form = new FormData()
+                form.append("username", this.username)
+
+                axios.post('/user/isavailable', form, { headers: {
+                'Content-Type': 'multipart/form-data'
+                }}).then(response => {
+                    let data = response.data
+                })
+            }
+        }
     }
+
+
 }
 </script>
 <style scoped>
