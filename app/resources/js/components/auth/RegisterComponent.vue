@@ -69,7 +69,9 @@ export default {
     data() {
         return {
             username: "",
-            email: ""
+            email: "",
+            password: "",
+            repeatPassword: ""
         }
     },
 
@@ -85,17 +87,26 @@ export default {
 
     methods: {
         checkUsernameAvaibility() {
-            if(this.username.length > 0) {
+            if(this.username.length > 0 && this.email.length > 0) {
                 let form = new FormData()
                 form.append("username", this.username)
 
                 axios.post('/user/isavailable', form, { headers: {
-                'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data'
                 }}).then(response => {
                     let data = response.data
                 })
             }
+        },
+
+        repeatPasswordIsMatched() {
+            if(this.password.length > 7 && this.repeatPassword.length > 7) {
+                return this.password == this.repeatPassword
+            }
+            
         }
+
+    
     }
 
 
