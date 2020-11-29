@@ -45,8 +45,9 @@
                           </div>
                         </div>
                       </div>
-                  
-                      <div class="navbar-end">
+
+
+                      <div class="navbar-end" v-if="user.id == 'none'">
                         <div class="navbar-item">
                           <div class="buttons">
                             <a class="button is-primary" href="/register">
@@ -62,3 +63,25 @@
                   </nav>
     </div>
 </template>
+<script>
+export default {
+    data() {
+        return {
+            user: ""
+        }
+    },
+
+    created(){
+        this.getCurrentUser()
+
+    },
+    methods: {
+        getCurrentUser() {
+            axios.get("/currentuser/").then(response =>{
+                let data = response.data
+                this.user = data
+            })
+        }
+    }
+}
+</script>
