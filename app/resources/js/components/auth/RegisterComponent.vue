@@ -8,7 +8,7 @@
             <div class="field">
                     <label class="label">Username</label>
                     <div class="control has-icons-left has-icons-right">
-                      <input class="input" type="text" placeholder="Username" value="">
+                      <input class="input" type="text" placeholder="Username" v-model="username" value="">
                       <span class="icon is-small is-left">
                         <i class="fas fa-user"></i>
                       </span>
@@ -17,11 +17,19 @@
             <div class="field">
                     <label class="label">Email</label>
                     <div class="control has-icons-left has-icons-right">
-                      <input class="input" type="email" placeholder="Email Address" value="">
+                      <input class="input" type="email" placeholder="Email Address" v-model="email" value="">
                       <span class="icon is-small is-left">
                         <i class="fas fa-envelope"></i>
                       </span>
                     </div>
+            </div>
+
+            <div class="field">
+                <div v-if="credentialAvailability == true && username.length != 0 && email.length != 0" style="color: #e60c0c">Username or email is invalid</div>
+            </div>
+
+            <div class="field">
+                <div v-if="credentialAvailability == false && username.length != 0 && email.length != 0" style="color: #e60c0c">Username or email is invalid</div>
             </div>
 
             <div class="field">
@@ -71,30 +79,66 @@ export default {
             username: "",
             email: "",
             password: "",
-            repeatPassword: ""
+            repeatPassword: "",
+            credentialAvailability: false
         }
     },
 
     watch: {
         username: function() {
             this.debounceUsername()
+        },
+
+        email: function() {
+            this.debounceEmail()
         }
     },
 
     created() {
-        this.debounceUsername = _debounce(this.checkUsernameAvaibility, 50)
+        this.debounceUsername = _.debounce(this.checkAvaibility, 50)
+        this.debounceEmail = _.debounce(this.checkAvaibility, 50)
     },
 
     methods: {
+        checkAvaibility() {
+            if(this.username.length > 0 && this.email.length > 0) {
+                let form = new FormData()
+                form.append("username", this.username)
+                form.append('email', this.email)
+
+                axios.post('/user/isavailable/', form, { headers: {
+                    'Content-Type': 'multipart/form-data'
+                }}).then(response => {
+                    let data = response.data
+                    this.credentialAvailability = data.available
+                })
+            }
+        },
+
         checkUsernameAvaibility() {
             if(this.username.length > 0 && this.email.length > 0) {
                 let form = new FormData()
                 form.append("username", this.username)
 
-                axios.post('/user/isavailable', form, { headers: {
+                axios.post('/user/isavailable/', form, { headers: {
                     'Content-Type': 'multipart/form-data'
                 }}).then(response => {
                     let data = response.data
+                    this.credentialAvailability = data.available
+                })
+            }
+        },
+
+        checkEmailAvailability() {
+            if(this.username.length > 0 && this.email.length > 0) {
+                let form = new FormData()
+                form.append("email", this.email)
+
+                axios.post('/user/isavailable/', form, { headers: {
+                    'Content-Type': 'multipart/form-data'
+                }}).then(response => {
+                    let data = response.data
+                    this.credentialAvailability = data.available
                 })
             }
         },
@@ -103,7 +147,7 @@ export default {
             if(this.password.length > 7 && this.repeatPassword.length > 7) {
                 return this.password == this.repeatPassword
             }
-            
+
         }
 
     
