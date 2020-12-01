@@ -37,7 +37,7 @@ class CompanyCreateView(View):
 class CompanyAvailability(View):
     def post(self, request: HttpRequest):
         company_name = request.POST.get('companyName', None)
-        if request.user.is_authenticated and Validator.is_alphanumeric(company_name):
+        if request.user.is_authenticated and self.has_valid_company_name(company_name):
             if self.company_is_available(request.POST.get('companyName', None)):
                 data = {
                     "available": True
@@ -55,7 +55,9 @@ class CompanyAvailability(View):
             "error": "Unknown error"
         }
         return JsonResponse(data)
-        
+    
+    def has_valid_company_name(self, company_name):
+        return Validator.is_alphanumeric(company_name) and Validator.has_below(company_name, 20)
     
     def company_is_available(self, name):
         if name is None:

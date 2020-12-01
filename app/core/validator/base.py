@@ -40,6 +40,29 @@ class Validator(object):
             return True
         
         return False
+    
+    @staticmethod
+    def has_below(context, value):
+        if isinstance(context, str) and isinstance(value, int):
+            return len(context) < value
+        
+        if isinstance(context, int) and isinstance(value, int):
+            return context < value
+        
+        return False
+    
+    @staticmethod
+    def has_above(context, value):
+        if isinstance(context, str) and isinstance(value, int):
+            return len(context) > value
+        
+        if isinstance(context, int) and isinstance(value, int):
+            return context > value
+        
+        return False
+
+
+            
 
 
     
