@@ -11,7 +11,7 @@
                       </span>
                     </div>
                     <div v-if="companyAvailability == true" style="color: #00d1b2">The company name is available to register</div>
-                    <div v-if="companyAvailability == false && companyName.length > 0" style="color: #e60c0c">The company name is not available</div>
+                    <div v-if="companyAvailability == false" style="color: #e60c0c">The company name is not available</div>
             </div>
 
             

@@ -36,7 +36,8 @@ class CompanyCreateView(View):
 
 class CompanyAvailability(View):
     def post(self, request: HttpRequest):
-        if request.user.is_authenticated:
+        company_name = request.POST.get('companyName', None)
+        if request.user.is_authenticated and Validator.is_alphanumeric(company_name):
             if self.company_is_available(request.POST.get('companyName', None)):
                 data = {
                     "available": True
