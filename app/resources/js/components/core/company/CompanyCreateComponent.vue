@@ -13,6 +13,12 @@
                     <div v-if="companyAvailability == true && companyName.length > 0" style="color: #00d1b2">The company name is available to register</div>
                     <div v-if="companyAvailability == false && companyName.length > 0" style="color: #e60c0c">The company name is not available</div>
             </div>
+            <div class="field">
+                <div class="notification is-primary">
+                    This is a <strong>beta</strong> version. Each company will receive $300 credits to get started. 
+                    In <strong>alpha</strong> version, you will have to select plan and pay for the chosen price as credits to start
+                </div>
+            </div>
 
             
 
