@@ -25,11 +25,11 @@
             </div>
 
             <div class="field">
-                <div v-if="credentialAvailability == true && username.length != 0 && email.length != 0" style="color: #e60c0c">Username or email is invalid</div>
+                <div v-if="credentialAvailability == true && (username.length > 0 && email.length > 0)" style="color: #e60c0c">Username or email is valid</div>
             </div>
 
             <div class="field">
-                <div v-if="credentialAvailability == false && username.length != 0 && email.length != 0" style="color: #e60c0c">Username or email is invalid</div>
+                <div v-if="credentialAvailability == false && (username.length > 0 && email.length > 0)" style="color: #e60c0c">Username or email is invalid</div>
             </div>
 
             <div class="field">
@@ -110,6 +110,7 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 }}).then(response => {
                     let data = response.data
+                    console.log(data)
                     this.credentialAvailability = data.available
                 })
             }
