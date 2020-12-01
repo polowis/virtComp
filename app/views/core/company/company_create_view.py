@@ -49,7 +49,13 @@ class CompanyAvailability(View):
             }
 
             return JsonResponse(data)
-        return HttpResponse(status=419)
+
+        data = {
+            "available": False,
+            "error": "Unknown error"
+        }
+        return JsonResponse(data)
+        
     
     def company_is_available(self, name):
         if name is None:
