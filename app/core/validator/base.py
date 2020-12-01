@@ -12,12 +12,23 @@ class Validator(object):
     def is_alpha(string: str) -> bool:
         if isinstance(string, str):
             return re.match(r"(^[a-zA-Z])*$", string) != None
-            
+        return False
+
     @staticmethod
     def is_alphanumeric(string: str) -> bool:
         """return true if given string only contains alphanumeric"""
         if isinstance(string, str):
             return re.match(r"(^[a-zA-Z0-9]*$)", string) != None
+        return False
+    
+    @staticmethod
+    def is_number(context):
+        if isinstance(context, int):
+            return True
+        
+        if isinstance(context, str):
+            return re.match(r"(^[0-9]*$)", context) != None
+        
         return False
     
     @staticmethod
