@@ -9,16 +9,16 @@ class Validator(object):
         return False
 
     @staticmethod
-    def is_alpha(string: str) -> bool:
-        if isinstance(string, str):
-            return re.match(r"(^[a-zA-Z])*$", string) != None
+    def is_alpha(context: str) -> bool:
+        if isinstance(context, str):
+            return re.match(r"(^[a-zA-Z])*$", context) != None
         return False
 
     @staticmethod
-    def is_alphanumeric(string: str) -> bool:
-        """return true if given string only contains alphanumeric"""
-        if isinstance(string, str):
-            return re.match(r"(^[a-zA-Z0-9]*$)", string) != None
+    def is_alphanumeric(context: str) -> bool:
+        """return true if given context only contains alphanumeric"""
+        if isinstance(context, str):
+            return re.match(r"(^[a-zA-Z0-9]*$)", context) != None
         return False
     
     @staticmethod
@@ -32,11 +32,11 @@ class Validator(object):
         return False
     
     @staticmethod
-    def is_boolean(string: str) -> bool:
-        if isinstance(string, str):
-            return string.lower() in ['true', 'false', '1', '0']
+    def is_boolean(context: str) -> bool:
+        if isinstance(context, str):
+            return context.lower() in ['true', 'false', '1', '0']
 
-        if isinstance(string, bool):
+        if isinstance(context, bool):
             return True
         
         return False
