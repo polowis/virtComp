@@ -6,13 +6,18 @@
             To get started, please create your company, you can create as many as you like but be smart. 
             To get assistance, please visit our <a href="/help">help page</a>
         </p>
+        <div class="field center">
+                <div class="notification is-primary">
+                    This is beta version, each account can only create one company. In alpha version, you can spend money to create more than one company. 
+                </div>
+            </div>
         <div class="wrapper-table">
         <div style="width: 700px">
          <a class="button is-success is-small is-pulled-right">
                 <span class="icon is-small">
                 <i class="fas fa-plus"></i>
                 </span>
-                <span>Create a company</span>
+                <span @click.prevent="createCompany()">Create a company</span>
         </a>
         </div>
 
@@ -32,6 +37,12 @@ import NavbarComponent from '../NavbarComponent'
 export default {
     components: {
         NavbarComponent
+    },
+
+    methods: {
+        createCompany() {
+            window.location.href = "/company/create/"
+        }
     }
 }
 </script>
