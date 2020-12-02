@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from app.models.company import Company
 from app.core.validator.base import Validator
 
+
 class CompanyCreateView(View):
     
     template_name = 'core/company/create.html'
@@ -15,11 +16,12 @@ class CompanyCreateView(View):
             return HttpResponse(status=419)
     
     def post(self, request: HttpRequest):
+        company_manager = CompanyAvailability()
         if request.user.is_authenticated:
             company_name = request.POST.get('companyName', None)
             if company_name is None:
                 data = {'message': 'missing company name'}
-            if Validator.is_alphanumeric(company_name):
+            if company_manager.can_create_company(company_name):
                 try:
                     company = Company.objects.create_company(company_name, request.user.username, request.user)
                     company.save()
@@ -62,5 +64,8 @@ class CompanyAvailability(View):
     def company_is_available(self, name):
         if name is None:
             return False
-        return Company.objects.filter(company_name=name.lower()).first() is None
+        return Company.objects.filter(company_name=name.lower()).first() is None # return true if no matching found
+    
+    def can_create_company(self, company_name):
+        return self.company_is_available() and self.has_valid_company_name(company_name)
 
