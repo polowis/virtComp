@@ -35,7 +35,7 @@
             <div class="field">
                     <label class="label">Password</label>
                     <div class="control has-icons-left has-icons-right">
-                      <input class="input" type="password" placeholder="" value="">
+                      <input class="input" type="password" v-model="password" placeholder="" value="">
                       <span class="icon is-small is-left">
                         <i class="fas fa-key"></i>
                       </span>
@@ -45,12 +45,15 @@
             <div class="field">
                     <label class="label">Repeat password</label>
                     <div class="control has-icons-left has-icons-right">
-                      <input class="input" type="password" placeholder="" value="">
+                      <input class="input" type="password" v-model="repeatPassword" placeholder="" value="">
                       <span class="icon is-small is-left">
                         <i class="fas fa-eye-slash"></i>
                       </span>
                     </div>
             </div>
+            <div class="field">
+                <div v-if="repeatPasswordIsMatched()" style="color: #00d1b2">Password matched</div>
+                </div>
 
             <div class="field">
                     <div class="control">
@@ -62,7 +65,7 @@
             </div>
 
             <div class="control">
-                    <button class="button is-primary">Submit</button>
+                    <button class="button is-primary" @click.prevent="register()">Submit</button>
             </div>
         </div>
     </div>
@@ -80,7 +83,8 @@ export default {
             email: "",
             password: "",
             repeatPassword: "",
-            credentialAvailability: false
+            credentialAvailability: false,
+            passwordLength: false
         }
     },
 
@@ -91,12 +95,22 @@ export default {
 
         email: function() {
             this.debounceEmail()
+        },
+
+        password: function() {
+            this.debouncePassword()
+        },
+
+        repeatPassword: function() {
+            this.debounceRepeatPassword()
         }
     },
 
     created() {
         this.debounceUsername = _.debounce(this.checkAvaibility, 50)
         this.debounceEmail = _.debounce(this.checkAvaibility, 50)
+        this.debouncePassword = _.debounce(this.checkPassword, 50)
+        this.debounceRepeatPassword = _.debounce(this.checkPassword, 50)
     },
 
     methods: {
@@ -110,7 +124,6 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 }}).then(response => {
                     let data = response.data
-                    console.log(data)
                     this.credentialAvailability = data.available
                 })
             }
@@ -149,6 +162,30 @@ export default {
                 return this.password == this.repeatPassword
             }
 
+        },
+
+        checkPassword() {
+            if(this.password.length > 0 && this.password.length < 8) {
+                this.passwordLength = true
+            }
+
+            if(this.password.length > 0 && this.password.length > 7) {
+                this.passwordLength = false
+            }
+        },
+
+        register() {
+            if(this.credentialAvailability && this.passwordLength) {
+                let form = new FormData()
+                form.append('username', this.username)
+                form.append('email', this.email)
+                form.append('password', this.password)
+                form.append('repeatPassword', this.repeatPassword)
+
+                axios.post('/register/', form, { headers: {'Content-Type': 'multipart/form-data'}}).then(response => {
+                    let data = response.data
+                })
+            }
         }
 
     
