@@ -54,6 +54,10 @@
             <div class="field">
                 <div v-if="repeatPasswordIsMatched()" style="color: #00d1b2">Password matched</div>
                 </div>
+            
+            <div class="field">
+                <div v-if="msg.length > 0" style="color: #e60c0c">{{this.msg}}</div>
+                </div>
 
             <div class="field">
                     <div class="control">
@@ -84,7 +88,8 @@ export default {
             password: "",
             repeatPassword: "",
             credentialAvailability: false,
-            passwordLength: false
+            passwordLength: false,
+            msg: ""
         }
     },
 
@@ -166,11 +171,11 @@ export default {
 
         checkPassword() {
             if(this.password.length > 0 && this.password.length < 8) {
-                this.passwordLength = true
+                this.passwordLength = false
             }
 
             if(this.password.length > 0 && this.password.length > 7) {
-                this.passwordLength = false
+                this.passwordLength = true
             }
         },
 
@@ -184,6 +189,7 @@ export default {
 
                 axios.post('/register/', form, { headers: {'Content-Type': 'multipart/form-data'}}).then(response => {
                     let data = response.data
+                    this.msg = data.msg
                 })
             }
         }
