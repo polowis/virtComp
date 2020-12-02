@@ -25,11 +25,11 @@
             </div>
 
             <div class="field">
-                <div v-if="credentialAvailability == true && (username.length > 0 && email.length > 0)" style="color: #e60c0c">Username or email is valid</div>
+                <div v-if="credentialAvailability == true && username.length > 0 && email.length > 0" style="color: #00d1b2">Username and email are valid</div>
             </div>
 
             <div class="field">
-                <div v-if="credentialAvailability == false && (username.length > 0 && email.length > 0)" style="color: #e60c0c">Username or email is invalid</div>
+                <div v-if="credentialAvailability == false && username.length > 0 && email.length > 0" style="color: #e60c0c">Username or email is invalid</div>
             </div>
 
             <div class="field">

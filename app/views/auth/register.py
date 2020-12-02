@@ -17,19 +17,25 @@ class RegisterView(View):
         post_username = request.POST.get('username', None)
         post_email = request.POST.get('email', None)
         post_password = request.POST.get('password', None)
+        post_repeat_password = request.POST.get('repeatpassword', None)
 
         if self.user_exists(post_username, post_email):
-            msg = 'User already exists'
+            data = {'msg': 'User already exists'}
+        
+        if not self.has_valid_credential(post_username, post_email):
+            data = {'msg': 'Username or email is invalid'}
+        
         else:
             user = User.objects.create_user(post_username, post_email, post_password)
             login(request, user)
 
             return redirect('/home')
 
-        
-
     def user_exists(self, username, email):
         return User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists()
+    
+    def has_valid_credential(self, username, email):
+        return Validator.is_alphanumeric(username) and Validator.is_email(email)
 
 
 
@@ -40,17 +46,17 @@ class UserAvailability(View):
 
         if username is not None and email is not None:
             if self.has_exists_email(email) or self.has_exists_username(username):
-                data = {'available': 'false'}
+                data = {'available': False}
                 return JsonResponse(data)
 
             if self.has_valid_email(email) and self.has_valid_username(username):
-                data = {'available': 'true'}
+                data = {'available': True}
                 return JsonResponse(data)
 
-            data = {'available': 'false'}
+            data = {'available': False}
             return JsonResponse(data)
 
-        data = {'available': 'false'}
+        data = {'available': True}
         return JsonResponse(data)
     
     def username_exists(self, username):
