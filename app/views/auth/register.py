@@ -3,7 +3,7 @@ from django.views import View
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from app.core.validator.base import Validator
 
 
@@ -21,21 +21,31 @@ class RegisterView(View):
 
         if self.user_exists(post_username, post_email):
             data = {'msg': 'User already exists'}
+            return JsonResponse(data)
         
         if not self.has_valid_credential(post_username, post_email):
             data = {'msg': 'Username or email is invalid'}
+            return JsonResponse(data)
         
-        else:
-            user = User.objects.create_user(post_username, post_email, post_password)
-            login(request, user)
+        if self.password_dont_match(post_password, post_repeat_password):
+            data = {'msg': 'Password does not match'}
+            return JsonResponse(data)
+        
+        user = User.objects.create_user(post_username, post_email, post_password)
+        login(request, user)
 
-            return redirect('/home')
+        return redirect('/home/')
 
     def user_exists(self, username, email):
         return User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists()
     
     def has_valid_credential(self, username, email):
         return Validator.is_alphanumeric(username) and Validator.is_email(email)
+    
+    def password_dont_match(self, password, repeatpassword):
+        if password is not None and repeatpassword is not None:
+            return password != repeatpassword
+        return False
 
 
 

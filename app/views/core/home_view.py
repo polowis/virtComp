@@ -8,7 +8,7 @@ class HomeView(View):
 
     def get(self, request: HttpRequest):
         if not request.user.is_authenticated:
-            return redirect("/login")
+            return redirect("/login/")
         return render(request, self.template_name)
 
 
