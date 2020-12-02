@@ -24,6 +24,7 @@ class CompanyCreateView(View):
             if company_manager.can_create_company(company_name):
                 try:
                     company = Company.objects.create_company(company_name, request.user.username, request.user)
+                    company.balance = 300
                     company.save()
                     data = {'message': 'Company successfully created'}
                     return JsonResponse(data)
