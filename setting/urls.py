@@ -28,6 +28,6 @@ urlpatterns = [
     path('company/create/', CompanyCreateView.as_view()),
     path('company/hasavailablename/', CompanyAvailability.as_view()),
     path('user/isavailable/', UserAvailability.as_view()),
-    path('api/companytype/', CompanyTypeView.as_view()),
+    path('api/data/companytype/', CompanyTypeView.as_view()),
 
 ]
