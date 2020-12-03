@@ -29,5 +29,6 @@ urlpatterns = [
     path('company/hasavailablename/', CompanyAvailability.as_view()),
     path('user/isavailable/', UserAvailability.as_view()),
     path('api/data/companytype/', CompanyTypeView.as_view()),
+    path('user/companies/', CurrentUserCompany.as_view())
 
 ]

@@ -21,13 +21,21 @@
         </a>
         </div>
 
-        <table class="table" style="width: 700px">
+        <table class="table is-hoverable" style="width: 700px">
             <thead>
                 <th>Company Name</th>
                 <th>Current Balance</th>
                 <th>No. Cooperations</th>
                 <th>No. Employees</th>
             </thead>
+            <tbody>
+                <tr v-for="company in companiesOwned" v-bind:key=company.company_id>
+                    <td @click.prevent="registerSavedCompany(company.company_name)" style="cursor: pointer; color: #00d1b2">{{company.company_name}}</td>
+                    <td>{{company.balance}}</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+            </tbody>
         </table>
         </div>
     </div>
@@ -39,9 +47,30 @@ export default {
         NavbarComponent
     },
 
+    data() {
+        return {
+            companiesOwned: []
+        }
+    },
+
+    created() {
+        this.fecthCurrentUserCompany()
+    },
+
     methods: {
         createCompany() {
             window.location.href = "/company/create/"
+        },
+
+        fecthCurrentUserCompany() {
+            axios.post('/user/companies/').then(response => {
+                let data = response.data
+                this.companiesOwned = data
+            })
+        },
+
+        registerSavedCompany(name) {
+            document.cookie = `company=${name}`;
         }
     }
 }
