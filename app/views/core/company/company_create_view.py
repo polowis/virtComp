@@ -26,10 +26,10 @@ class CompanyCreateView(View):
                     company = Company.objects.create_company(company_name, request.user.username, request.user)
                     company.balance = 300
                     company.save()
-                    data = {'message': 'Company successfully created'}
-                    return JsonResponse(data)
+                    return redirect('/home/')
 
-                except:
+                except Exception as e:
+                    print(e)
                     data = {'message': 'An error occurred'}
                     return JsonResponse(data)
 
@@ -68,5 +68,5 @@ class CompanyAvailability(View):
         return Company.objects.filter(company_name=name.lower()).first() is None # return true if no matching found
     
     def can_create_company(self, company_name):
-        return self.company_is_available() and self.has_valid_company_name(company_name)
+        return self.company_is_available(company_name) and self.has_valid_company_name(company_name)
 
