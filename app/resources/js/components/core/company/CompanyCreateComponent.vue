@@ -19,11 +19,14 @@
                     In <strong>alpha</strong> version, you will have to select plan and pay for the chosen price as credits to start
                 </div>
             </div>
+            <div class="field">
+                <div v-if="msg.length > 0" style="color: #e60c0c">{{this.msg}}</div>
+                </div>
 
             
 
             <div class="control">
-                    <button class="button is-primary">Submit</button>
+                    <button class="button is-primary" @click.prevent="createCompany()">Submit</button>
             </div>
         </div>
     </div>
@@ -39,7 +42,8 @@ export default {
     data() {
         return {
             companyName: "",
-            companyAvailability: false
+            companyAvailability: false,
+            msg: ""
         }
     },
 
@@ -64,6 +68,21 @@ export default {
                     this.companyAvailability = data.available
             })
         },
+
+        createCompany() {
+            if(this.companyAvailability)
+            {
+                let form = new FormData()
+                form.append('companyName', this.companyName)
+                axios.post('/company/create/', form, {headers: {'Content-Type': 'multipart/form-data'
+                }}).then(response => {
+                    let data = response.data
+                    this.msg = data.message
+                    
+                })
+            }
+
+        }
 
     }
 }
