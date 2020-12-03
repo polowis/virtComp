@@ -20,6 +20,7 @@ def generate_company_id():
 class CompanyManager(models.Manager):
     def create_company(self, company_name, owner_name, owner_object):
         company = self.create(company_name=company_name, owner_name=owner_name, owner=owner_object)
+        return company
 
 class Company(models.Model):
     company_id = models.CharField(max_length=255, default=generate_company_id)
@@ -31,8 +32,8 @@ class Company(models.Model):
     reputation = models.IntegerField(default=0)
     qualification = models.IntegerField(default=0)
     created_at = models.DateTimeField(editable=False)
-    updated_at = models.DateTimeField()
-    deleted_at = models.DateTimeField()
+    updated_at = models.DateTimeField(null=True)
+    deleted_at = models.DateTimeField(null=True)
 
     objects = CompanyManager()
 
