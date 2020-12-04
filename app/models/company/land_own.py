@@ -1,6 +1,7 @@
 from django.db import models
 import time, math
 
+from app.models.company import Company
 
 current_time = lambda: int(round(time.time() * 1000))
 
@@ -17,6 +18,6 @@ def generate_unique_id():
 class LandOwn(models.Model):
     land_id = models.CharField(max_length=255, default=generate_unique_id)
     level = models.IntegerField(default=0)
-    company_name = models.CharField(max_length=255)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company_name = models.CharField(max_length=255, null=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     status = models.CharField(max_length=255)

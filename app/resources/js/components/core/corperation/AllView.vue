@@ -3,18 +3,22 @@
         <NavbarComponent></NavbarComponent>
 
         <div class="wrapper-table">
+            <!--
          <div class="field">
             <h3 class="has-text-primary title is-3 center">Land</h3>
-        </div>
-             <div style="width: 700px">
+        </div>-->
+        
+        <!--
          <a class="button is-success is-small is-pulled-right">
                 <span class="icon is-small">
                 <i class="fas fa-plus"></i>
                 </span>
                 <span @click.prevent="createCompany()">Create a company</span>
-        </a>
-        </div>
-        <table class="table is-hoverable" style="width: 700px">
+        </a>-->
+       
+       <div style="margin-top: 30px;">
+        <table class="table is-hoverable is-pulled-left" style="width: 450px; padding: 5px; flex: 50%;">
+            <caption class="has-text-primary title is-4">Land Buying/Renting</caption>
             <thead>
                 <th>Land id</th>
                 <th>Land level</th>
@@ -25,18 +29,22 @@
                
             </tbody>
         </table>
-        <br><br>
-        <table class="table is-hoverable" style="width: 700px">
+        </div>
+        
+        <div style="margin-top: 30px;">
+        <table class="table is-hoverable is-pulled-right" style="width: 450px; padding: 5px; flex: 50%;">
+            <caption class="has-text-primary title is-4">Build/Rent corp</caption>
             <thead>
-                <th>Corporation Name</th>
-                <th>Current Balance</th>
-                <th>Storage Capacity</th>
-                <th>No. Employees</th>
+                <th>Corp name</th>
+                <th>Balance</th>
+                <th>Storage</th>
+                <th>Employees</th>
             </thead>
             <tbody>
                
             </tbody>
         </table>
+        </div>
         </div>
     </div>
 </template>
@@ -52,7 +60,7 @@ export default {
 <style scoped>
 .wrapper-table {
         margin: auto;
-        width: 700px;
+        width: 1000px;
 }
 
 .center{
