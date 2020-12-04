@@ -193,7 +193,7 @@ export default {
                         this.msg = data.msg
                     }
                     else if(data.status == 'success') {
-                        window.location = data.redirect_url
+                        window.location.href = data.redirect_url
                     }
                     
                 })

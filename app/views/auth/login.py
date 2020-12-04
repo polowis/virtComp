@@ -14,16 +14,15 @@ class LoginView(View):
         return render(request, self.template_name)
     
     def post(self, request: HttpRequest):
-        if request.user.is_authenticated:
-            return redirect(settings.REDIRECT_IF_LOGGED_IN)
-            
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-        else:
-            pass
+            data = {'status': 'success', 'redirect_url': '/home/'}
+            return JsonResponse(data)
+        data = {'status': 'error', 'message': 'Username or email does not exist'}
+        return JsonResponse(data)
 
 class LogoutView(View):
     def post(self, request: HttpRequest):

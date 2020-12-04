@@ -23,8 +23,14 @@
                     </div>
             </div>
 
+            <div class="field" v-if="errorMessage.length > 0">
+                <div class="notification is-danger">
+                    <div>{{this.errorMessage}}</div>
+                </div>
+            </div>
+
             <div class="control">
-                    <button class="button is-primary">Submit</button>
+                    <button class="button is-primary" @click.prevent="login()">Submit</button>
             </div>
         </div>
     </div>
@@ -39,7 +45,8 @@ export default {
     data() {
         return {
             username: "",
-            password: ""
+            password: "",
+            errorMessage: ""
         }
     },
 
@@ -52,6 +59,13 @@ export default {
                 headers: {
                 'Content-Type': 'multipart/form-data'
                 }
+          }).then(response => {
+                let data = response.data
+                if(data.status == 'success'){
+                    window.location.href = data.redirect_url || '/home/'
+                } else if(data.status == 'error') [
+                    this.errorMessage = data.message
+                ]
           })
         }
     }
