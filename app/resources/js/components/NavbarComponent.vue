@@ -45,7 +45,16 @@
                           </div>
                         </div>
                       </div>
-
+                    
+                    <div class="navbar-end" v-if="user.id != 'none'">
+                        <div class="navbar-item">
+                            <div class="buttons">
+                                <a class="button is-danger" @click.prevent="logout()">
+                                    <strong>Log out</strong>
+                                </a>
+                            </div>
+                        </div>
+                     </div>
 
                       <div class="navbar-end" v-if="user.id == 'none'">
                         <div class="navbar-item">
@@ -81,6 +90,10 @@ export default {
                 let data = response.data
                 this.user = data
             })
+        },
+
+        logout() {
+            
         }
     }
 }
