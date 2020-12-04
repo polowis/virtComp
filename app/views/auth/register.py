@@ -20,27 +20,27 @@ class RegisterView(View):
         post_repeat_password = request.POST.get('repeatpassword', None)
 
         if self.user_exists(post_username, post_email):
-            data = {'msg': 'User already exists'}
+            data = {'status': 'error', 'msg': 'User already exists'}
             return JsonResponse(data)
         
         if not self.has_valid_credential(post_username, post_email):
-            data = {'msg': 'Username or email is invalid'}
+            data = {'status': 'error', 'msg': 'Username or email is invalid'}
             return JsonResponse(data)
         
         if self.password_dont_match(post_password, post_repeat_password):
-            data = {'msg': 'Password does not match'}
+            data = {'status': 'error', 'msg': 'Password does not match'}
             return JsonResponse(data)
         
         user = User.objects.create_user(post_username, post_email, post_password)
         login(request, user)
 
-        return redirect('/home/')
+        data = {'status': 'success', 'redirect_url': '/home/'}
 
     def user_exists(self, username, email):
         return User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists()
     
     def has_valid_credential(self, username, email):
-        return Validator.is_alphanumeric(username) and Validator.is_email(email)
+        return Validator.is_alphanumeric(username) and Validator.is_email(email) and Validator.has_below(username, 16)
     
     def password_dont_match(self, password, repeatpassword):
         if password is not None and repeatpassword is not None:

@@ -189,7 +189,13 @@ export default {
 
                 axios.post('/register/', form, { headers: {'Content-Type': 'multipart/form-data'}}).then(response => {
                     let data = response.data
-                    this.msg = data.msg
+                    if(data.status == 'error') {
+                        this.msg = data.msg
+                    }
+                    else if(data.status == 'success') {
+                        window.location = data.redirect_url
+                    }
+                    
                 })
             }
         }
