@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 
 current_time = lambda: int(round(time.time() * 1000))
 
-BUSINESS_FIELD = ['restaurant', 'real estate', 'market', 'farm']
 
 def generate_company_id():
     """generate company id"""
@@ -46,9 +45,6 @@ class Company(models.Model):
             self.created_at = timezone.now()
         self.updated_at = timezone.now()
         return super(Company, self).save(*args, **kwargs)
-    
-    class Meta:
-        app_label = "app"
 
 
 
