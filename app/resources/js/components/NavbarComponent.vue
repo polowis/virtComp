@@ -93,7 +93,12 @@ export default {
         },
 
         logout() {
-            
+            axios.post('/logout/').then(response =>{
+              let data = response.data
+              if(data.message == 'success') {
+                window.location = data.redirect_url
+              }
+            })
         }
     }
 }

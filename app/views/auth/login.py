@@ -1,9 +1,9 @@
 from django.views import View
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest
 from setting import settings
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class LoginView(View):
     template_name = 'auth/login.html'
@@ -24,3 +24,9 @@ class LoginView(View):
             login(request, user)
         else:
             pass
+
+class LogoutView(View):
+    def post(self, request: HttpRequest):
+        logout(request)
+        data  = {'message': 'success', 'redirect_url': '/'}
+        return JsonResponse(data)
