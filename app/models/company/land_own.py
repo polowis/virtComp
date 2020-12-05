@@ -1,5 +1,5 @@
 from django.db import models
-import time, math
+import time, math, random
 
 from app.models.company import Company
 
@@ -28,3 +28,6 @@ class LandOwn(models.Model):
     buy_cost = models.DecimalField(max_digits=20, decimal_places=4)
 
     objects = LandOwnManager()
+
+    def is_available(self):
+        return self.status == ''
