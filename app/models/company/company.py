@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 current_time = lambda: int(round(time.time() * 1000))
 
 
-def generate_unique_id():
+def generate_company_id():
     """generate unique id"""
     character = "1234567890abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWSTUVWXYZ"
     temp_id = ""
