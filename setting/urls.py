@@ -31,5 +31,6 @@ urlpatterns = [
     path('api/data/companytype/', CompanyTypeView.as_view()),
     path('user/companies/', CurrentUserCompany.as_view()),
     path('logout/', LogoutView.as_view()),
+    path('company/corporation/', CompanyView.as_view()),
 
 ]

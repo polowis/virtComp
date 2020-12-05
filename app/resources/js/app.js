@@ -6,6 +6,7 @@ Vue.component('login-component', require('./components/auth/LoginComponent.vue')
 Vue.component('register-component', require('./components/auth/RegisterComponent.vue').default)
 Vue.component('home-component', require('./components/core/HomeComponent.vue').default)
 Vue.component('company-create-component', require('./components/core/company/CompanyCreateComponent.vue').default)
+Vue.component('corporation-all-view', require('./components/core/corperation/AllView.vue').default)
 
 const app = new Vue({
     el: '#app',

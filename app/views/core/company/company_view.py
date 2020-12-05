@@ -5,15 +5,21 @@ from app.core.util.company import get_current_register_company
 
 class CompanyView(View):
     def get(self, request: HttpRequest):
-        template_name = 'company/view.html'
+        template_name = 'core/corporation/all_view.html'
         if request.user.is_authenticated:
             return render(request, template_name)
-        return HttpResponse(status=419)
+        return redirect('/login/')
     
     def post(self, request: HttpRequest):
         if request.user.is_authenticated:
             company = get_current_register_company(request)
             if company is not None:
                 company = list(company.values())
-                return JsonResponse(data, safe=False)
-        return HttpResponse(status=419)
+                return JsonResponse(company, safe=False)
+
+
+class CompanyCorporationView(View):
+    def post(self, request: HttpRequest):
+        company = get_current_register_company(request)
+        if company is not None:
+            pass
