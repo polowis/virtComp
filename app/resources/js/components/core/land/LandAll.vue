@@ -3,8 +3,15 @@
     <NavbarComponent></NavbarComponent>
 
     <div class="wrapper-table">
-
-        <table class="table is-hoverable" style="width: 900px">
+         <div style="width: 700px">
+         <a class="button is-success is-small is-pulled-right">
+                <span class="icon is-small">
+                <i class="fas fa-redo"></i>
+                </span>
+                <span @click.prevent="fetchLands()">Refresh</span>
+        </a>
+        </div>
+        <table class="table is-hoverable" style="width: 700px">
             <thead>
                 <th>Land ID</th>
                 <th>Buy Cost</th>
@@ -55,7 +62,6 @@ export default {
                 if(data.hasOwnProperty('error')){
                     window.location.href = data.redirect_url
                 }
-
                 this.lands = data
             })
         },
