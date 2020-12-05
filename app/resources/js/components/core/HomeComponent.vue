@@ -49,7 +49,8 @@ export default {
 
     data() {
         return {
-            companiesOwned: []
+            companiesOwned: [],
+            error: ""
         }
     },
 
@@ -70,7 +71,21 @@ export default {
         },
 
         registerSavedCompany(name) {
-            document.cookie = `company=${name}`;
+            let company = name || ''
+            if(company.length > 0){
+                let form = new FormData()
+                form.append("companyName", company)
+                axios.post('/company/signed/', form, { headers: {
+                    'Content-Type': 'multipart/form-data'
+                }}).then(response => {
+                    let data = response.data
+                    if(data.hasOwnProperty('success')) {
+                        //window.location.href = data.redirect_url
+                    } else{
+                        this.error = 'Cannot securely open your company'
+                    }
+                })
+            }
         }
     }
 }
