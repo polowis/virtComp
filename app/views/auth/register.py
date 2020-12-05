@@ -35,6 +35,7 @@ class RegisterView(View):
         login(request, user)
 
         data = {'status': 'success', 'redirect_url': '/home/'}
+        return JsonResponse(data, safe=False)
 
     def user_exists(self, username, email):
         return User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists()
