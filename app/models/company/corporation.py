@@ -17,4 +17,5 @@ class Corporation(models.Model):
     status = models.CharField(max_length=255)
     employees = models.IntegerField(default=0)
     max_employees = models.IntegerField(default=0)
+    current_rent_cost = models.DecimalField(max_digits=20, decimal_places=4, default=0)
 
