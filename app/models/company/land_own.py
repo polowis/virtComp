@@ -10,14 +10,18 @@ def generate_unique_id():
     character = "1234567890abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWSTUVWXYZ"
     temp_id = ""
     for i in range(32):
-        temp_id += str(math.floor(random.random() * len(character)))
+        temp_id += character[(math.floor(random.random() * len(character)))]
         
     return temp_id + str(current_time())
+
 
 class LandOwnManager(models.Manager):
     def create_land(self, level, buy_cost):
         land = self.create(level=level, buy_cost=buy_cost)
         return land
+    
+    def get_available_land(self):
+        return self.filter(status='')
 
 class LandOwn(models.Model):
     land_id = models.CharField(max_length=255, default=generate_unique_id)
@@ -28,6 +32,3 @@ class LandOwn(models.Model):
     buy_cost = models.DecimalField(max_digits=20, decimal_places=4)
 
     objects = LandOwnManager()
-
-    def is_available(self):
-        return self.status == ''

@@ -7,14 +7,15 @@ from django.contrib.auth.models import User
 current_time = lambda: int(round(time.time() * 1000))
 
 
-def generate_company_id():
-    """generate company id"""
+def generate_unique_id():
+    """generate unique id"""
     character = "1234567890abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWSTUVWXYZ"
     temp_id = ""
     for i in range(32):
-        temp_id += str(math.floor(random.random() * len(character)))
+        temp_id += character[(math.floor(random.random() * len(character)))]
         
     return temp_id + str(current_time())
+
 
 class CompanyManager(models.Manager):
     def create_company(self, company_name, owner_name, owner_object):
