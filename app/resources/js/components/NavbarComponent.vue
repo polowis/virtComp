@@ -52,6 +52,7 @@
                                 <a class="button is-danger" @click.prevent="logout()">
                                     <strong>Log out</strong>
                                 </a>
+                                <a class="button is-primary">Hi {{this.user.username}}</a>
                             </div>
                         </div>
                      </div>
