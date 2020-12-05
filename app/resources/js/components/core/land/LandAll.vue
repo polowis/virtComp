@@ -4,7 +4,7 @@
 
     <div class="wrapper-table">
          <div style="width: 700px">
-         <a class="button is-success is-small is-pulled-right">
+         <a class="button is-primary is-small is-pulled-right">
                 <span class="icon is-small">
                 <i class="fas fa-redo"></i>
                 </span>
@@ -20,7 +20,7 @@
             </thead>
             <tbody>
                 <tr v-for="land in lands" v-bind:key="land.land_id">
-                    <td>{{land.land_id}}</td>
+                    <td style="cursor: pointer; color: #00d1b2">{{land.land_id}}</td>
                     <td>{{land.buy_cost}}</td>
                     <td>{{land.rent_cost}}</td>
                     <td>{{land.level}}</td>
