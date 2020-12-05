@@ -16,8 +16,8 @@ def generate_unique_id():
 
 
 class LandOwnManager(models.Manager):
-    def create_land(self, level, buy_cost):
-        land = self.create(level=level, buy_cost=buy_cost)
+    def create_land(self, level, buy_cost, rent_cost):
+        land = self.create(level=level, buy_cost=buy_cost, rent_cost=rent_cost)
         return land
     
     def get_available_land(self):
@@ -30,5 +30,6 @@ class LandOwn(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     status = models.CharField(max_length=255, default='')
     buy_cost = models.DecimalField(max_digits=20, decimal_places=4)
+    rent_cost = models.DecimalField(max_digits=20, decimal_places=4, default=0)
 
     objects = LandOwnManager()

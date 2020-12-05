@@ -22,8 +22,9 @@ class Command(BaseCommand):
             for i in range(int(number_of_land)):
                 land_level = choice(self.get_land_level(), p=self.get_probability())
                 land: Land = Land.objects.get(level=land_level)
+                land_rent = land.rent
                 land_cost = uniform(float(land.min_land_cost), float(land.max_land_cost))
-                land_created = LandOwn.objects.create_land(land_level, land_cost)
+                land_created = LandOwn.objects.create_land(land_level, land_cost, land_rent)
                 land_created.save()
                 print(f'Create land level {land_level} with the price at {land_cost}')
 
