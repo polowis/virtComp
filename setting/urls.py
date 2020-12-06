@@ -33,5 +33,10 @@ urlpatterns = [
     path('logout/', LogoutView.as_view()),
     path('company/corporation/', CompanyView.as_view()),
     path('land/view/', LandAvailable.as_view()),
+    path('land/<land_id>/view', LandView.as_view()),
+    path('company/signed/', CompanyLoggedInView.as_view())
 
 ]
+
+handler403 = 'app.views.exceptions.base.Error403'
+handler404 = 'app.views.exceptions.base.Error404'
