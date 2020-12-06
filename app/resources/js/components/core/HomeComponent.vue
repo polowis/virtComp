@@ -80,7 +80,7 @@ export default {
                 }}).then(response => {
                     let data = response.data
                     if(data.hasOwnProperty('success')) {
-                        //window.location.href = data.redirect_url
+                        window.location.href = data.redirect_url
                     } else{
                         this.error = 'Cannot securely open your company'
                     }
