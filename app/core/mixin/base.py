@@ -20,3 +20,11 @@ class CompanyLoggedInRequiredJSONMixin:
         else:
             data = {'error': 'No company found'}
             return JsonResponse(data, safe=False)
+
+
+class UserLoggedInRequiredMixin:
+    def dispatch(self, request: HttpRequest, *args, **kwargs):
+        if request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
