@@ -9,7 +9,7 @@ def generate_unique_id():
     """generate unique id"""
     character = "1234567890abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWSTUVWXYZ"
     temp_id = ""
-    for i in range(32):
+    for i in range(16):
         temp_id += character[(math.floor(random.random() * len(character)))]
         
     return temp_id + str(current_time())
