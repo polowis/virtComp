@@ -23,6 +23,7 @@
                             <option>South America</option>
                             <option>Oceania</option>
                             <option>Europe</option>
+                            <option>Africa</option>
                         </select>
                         </div>
                     </div>
@@ -102,7 +103,7 @@ export default {
         },
 
         checkValidContinent() {
-            if(['asia', 'europe', 'south america', 'north america', 'oceania'].includes(this.continent.toLowerCase())){
+            if(['asia', 'europe', 'south america', 'north america', 'oceania', 'africa'].includes(this.continent.toLowerCase())){
                 this.continentError = false;
             } else{
                 this.continentError = true;
