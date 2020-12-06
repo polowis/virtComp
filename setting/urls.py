@@ -37,3 +37,5 @@ urlpatterns = [
     path('company/signed/', CompanyLoggedInView.as_view())
 
 ]
+
+handler403 = 'app.views.exceptions.base.Error403'
