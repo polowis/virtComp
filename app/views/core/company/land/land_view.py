@@ -21,10 +21,22 @@ class LandAvailable(CompanyLoggedInRequiredMixin, View):
         data = {'error': 'not logged in', 'redirect_url': '/login/'}
         return JsonResponse(data, safe=False)
 
-class LandView(View):
+class LandView(UserLoggedInRequiredMixin, View):
     template_name = 'core/land/view.html'
     def get(self, request: HttpRequest, land_id=None):
         if land_id is None:
             return HttpResponse(status=404)
-        land = get_object_or_404(LandOwn, land_id=land_id)
-        return render(request, self.template_name)
+        try:
+            land = list(LandOwn.objects.values().get(land_id=land_id))
+            land_json = JsonResponse(land, safe=False)
+            return render(request, self.template_name)
+        except Exception as e:
+            return HttpResponse(status=404)
+
+    def post(self, request: HttpRequest, land_id=None):
+        try:
+            land = list(LandOwn.objects.values().get(land_id=land_id))
+            return JsonResponse(land, safe=False)
+        except Exception as e:
+            data = {'error': 'Not Found'}
+            return JsonResponse(data)

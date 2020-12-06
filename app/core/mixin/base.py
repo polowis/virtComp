@@ -2,6 +2,7 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from app.core.util.company import *
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect
 
 class CompanyLoggedInRequiredMixin:
     def dispatch(self, request: HttpRequest, *args, **kwargs):
@@ -20,3 +21,11 @@ class CompanyLoggedInRequiredJSONMixin:
         else:
             data = {'error': 'No company found'}
             return JsonResponse(data, safe=False)
+
+
+class UserLoggedInRequiredMixin:
+    def dispatch(self, request: HttpRequest, *args, **kwargs):
+        if request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return redirect('/login/')

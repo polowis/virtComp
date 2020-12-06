@@ -20,7 +20,7 @@
             </thead>
             <tbody>
                 <tr v-for="land in lands" v-bind:key="land.land_id">
-                    <td style="cursor: pointer; color: #00d1b2">{{land.land_id}}</td>
+                    <td style="cursor: pointer; color: #00d1b2" @click.prevent="redirectToLand(land.land_id)">{{land.land_id}}</td>
                     <td>{{land.buy_cost}}</td>
                     <td>{{land.rent_cost}}</td>
                     <td>{{land.level}}</td>
@@ -68,6 +68,10 @@ export default {
 
         shortenLandID(land_id){
             return land_id.substring(0, 10) + '...'
+        },
+
+        redirectToLand(land_id) {
+            window.location.href = `/land/${land_id}/view/`
         }
     }
 }

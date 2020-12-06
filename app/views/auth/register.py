@@ -5,12 +5,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from app.core.validator.base import Validator
-
+from setting import local_settings
 
 class RegisterView(View):
     template_name = "auth/register.html"
     
     def get(self, request: HttpRequest):
+        if request.user.is_authenticated:
+            return redirect(local_settings.REDIRECT_IF_LOGGED_IN)
         return render(request, self.template_name)
     
     def post(self, request: HttpRequest):
