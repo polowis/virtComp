@@ -7,7 +7,7 @@ def get_current_register_company(request: HttpRequest):
         cookie = request.get_signed_cookie(cookie_name)
         if cookie is not None:
             try:
-                company = Company.objects.get(company_name=cookie_name)
+                company = Company.objects.get(company_name=cookie)
                 if company.owner_name == request.user.username:
                     return company
                 return None

@@ -4,8 +4,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from app.models.company.land_own import LandOwn
 import random
 from setting import local_settings
+from app.core.mixin.base import *
 
-class LandAvailable(View):
+class LandAvailable(CompanyLoggedInRequiredMixin, View):
     template_name = 'core/land/all.html'
     def get(self, request: HttpRequest):
         if request.user.is_authenticated:
