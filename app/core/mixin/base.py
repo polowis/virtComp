@@ -1,6 +1,7 @@
 
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from app.core.util.company import *
+from django.core.exceptions import PermissionDenied
 
 class CompanyLoggedInRequiredMixin:
     def dispatch(self, request: HttpRequest, *args, **kwargs):
@@ -8,7 +9,7 @@ class CompanyLoggedInRequiredMixin:
         if company is not None:
             return super().dispatch(request, *args, **kwargs)
         else:
-            return HttpResponse(status=404)
+            raise PermissionDenied
 
 
 class CompanyLoggedInRequiredJSONMixin:
