@@ -14,6 +14,21 @@
                     <div v-if="companyAvailability == false && companyName.length > 0" style="color: #e60c0c">The company name is not available</div>
             </div>
             <div class="field">
+                <label class="label">Select Continent</label>
+                    <div class="control">
+                        <div class="select is-primary">
+                        <select v-model="continent">
+                            <option>Asia</option>
+                            <option>North America</option>
+                            <option>South America</option>
+                            <option>Oceania</option>
+                            <option>Europe</option>
+                        </select>
+                        </div>
+                    </div>
+                    <div v-if="continentError == true" style="color: #e60c0c">Invalid continent name</div>
+            </div>
+            <div class="field">
                 <div class="notification is-primary">
                     This is a <strong>beta</strong> version. Each company will receive $300 credits to get started. 
                     In <strong>alpha</strong> version, you will have to select plan and pay for the chosen price as credits to start
@@ -43,7 +58,9 @@ export default {
         return {
             companyName: "",
             companyAvailability: false,
-            msg: ""
+            msg: "",
+            continent: "",
+            continentError: false,
         }
     },
 
@@ -70,7 +87,7 @@ export default {
         },
 
         createCompany() {
-            if(this.companyAvailability)
+            if(this.companyAvailability && this.continentError == false)
             {
                 let form = new FormData()
                 form.append('companyName', this.companyName)
@@ -82,6 +99,14 @@ export default {
                 })
             }
 
+        },
+
+        checkValidContinent() {
+            if(['asia', 'europe', 'south america', 'north america', 'oceania'].includes(this.continent.toLowerCase())){
+                this.continentError = false;
+            } else{
+                this.continentError = true;
+            }
         }
 
     }
