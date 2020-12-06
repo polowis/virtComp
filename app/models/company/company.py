@@ -27,6 +27,7 @@ class Company(models.Model):
     company_name = models.CharField(max_length=255)
     owner_name = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    continent = models.CharField(max_length=255, default='asia')
     balance = models.DecimalField(default=0, max_digits=20, decimal_places=4)
     popularity = models.IntegerField(default=0)
     reputation = models.IntegerField(default=0)
