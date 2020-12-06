@@ -2,6 +2,7 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from app.core.util.company import *
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect
 
 class CompanyLoggedInRequiredMixin:
     def dispatch(self, request: HttpRequest, *args, **kwargs):
@@ -27,4 +28,4 @@ class UserLoggedInRequiredMixin:
         if request.user.is_authenticated:
             return super().dispatch(request, *args, **kwargs)
         else:
-            raise PermissionDenied
+            return redirect('/login/')

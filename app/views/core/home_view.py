@@ -2,8 +2,9 @@ from django.views import View
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
 from app.models.company import Company
+from app.core.mixin.base import UserLoggedInRequiredMixin
 
-class HomeView(View):
+class HomeView(UserLoggedInRequiredMixin, View):
     
     template_name = "core/home.html"
 
