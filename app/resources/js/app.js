@@ -8,6 +8,7 @@ Vue.component('home-component', require('./components/core/HomeComponent.vue').d
 Vue.component('company-create-component', require('./components/core/company/CompanyCreateComponent.vue').default)
 Vue.component('corporation-all-view', require('./components/core/corperation/AllView.vue').default)
 Vue.component('land-all-component', require('./components/core/land/LandAll.vue').default)
+Vue.component('homev2-component', require('./components/core/HomeV2Component.vue').default)
 
 const app = new Vue({
     el: '#app',

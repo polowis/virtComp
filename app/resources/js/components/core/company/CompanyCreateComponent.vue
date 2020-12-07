@@ -2,8 +2,9 @@
     <div>
         <NavbarComponent></NavbarComponent>
         <div class="form">
+            <h3 class="text-form-header" style="text-align: center;">Create your company</h3>
             <div class="field">
-                    <label class="label">Name</label>
+                    <label class="label" style="color:white;">Name</label>
                     <div class="control has-icons-left has-icons-right">
                       <input class="input is-primary" type="text" placeholder="Company's name" v-model="companyName" value="">
                       <span class="icon is-small is-left">
@@ -14,7 +15,7 @@
                     <div v-if="companyAvailability == false && companyName.length > 0" style="color: #e60c0c">The company name is not available</div>
             </div>
             <div class="field">
-                <label class="label">Select Continent</label>
+                <label class="label" style="color:white;">Select Continent</label>
                     <div class="control">
                         <div class="select is-primary">
                         <select v-model="continent">
@@ -121,7 +122,15 @@ export default {
     width:400px;
     height:auto;
     overflow:hidden;
-    background:white;
+    background:#738a75;
     border-radius:10px;
+    color: #FFFFFF;
+}
+
+.text-form-header {
+    text-align: center;
+    text-transform:uppercase;
+    font-weight: bold;
+    font-size: 20px;
 }
 </style>

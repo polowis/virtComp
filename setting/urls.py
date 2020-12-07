@@ -17,6 +17,11 @@ from django.contrib import admin
 from django.urls import path
 from app.views import *
 from django.views.generic import TemplateView
+from django.http import HttpResponse, HttpRequest
+from django.shortcuts import render
+
+def NewUIView(request: HttpRequest):
+    return render(request, 'design_v2/demo.html')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,7 +39,8 @@ urlpatterns = [
     path('company/corporation/', CompanyView.as_view()),
     path('land/view/', LandAvailable.as_view()),
     path('land/<land_id>/view/', LandView.as_view()),
-    path('company/signed/', CompanyLoggedInView.as_view())
+    path('company/signed/', CompanyLoggedInView.as_view()),
+    path('design/', NewUIView)
 
 ]
 

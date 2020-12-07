@@ -1,0 +1,25 @@
+.page{
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100%;
+    max-width: 1170px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 0px 0px, rgba(0, 0, 0, 0.3) 0px 5px 25px 0px;
+    position: relative;
+    background-color: #405247;
+    margin: 0px auto;
+}
+.fixedheader {
+    position:fixed !important;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    z-index: 10;
+	max-width: 1170px;
+}
+.fixedheader.visible-title {
+    top: 0;
+}
+.fixedheader.visible-title.horizontal-main{
+	box-shadow: 0 8px 20px 0 rgba(255,255,255,0.07) !important;
+}
