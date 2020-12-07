@@ -1,4 +1,7 @@
 /********** common setting **********/
+body {
+    background-color: #405247;
+}
 h2 {
     font-size: 2.8rem !important;
     font-weight: 700;
@@ -14,9 +17,6 @@ button {
     cursor: pointer;
 }
 
-.jumbotron {
-    margin-bottom: 0 !important;
-}
 
 .atlas-cta {
     border-radius: 22px !important;
@@ -106,25 +106,6 @@ button {
     padding: 5px 0;
 }
 
-/********** contact **********/
-#contact {
-    background-size: cover;
-}
-
-#contact ul li {
-    padding: 3px 0;
-}
-
-#contact form {
-    color: #00FFAD;
-}
-
-#contact form input,
-#contact form textarea {
-    background: transparent;
-    border: 1px solid #00FFAD;
-    color: #ffffff;
-}
 
 /********** copyright **********/
 #copyright {
