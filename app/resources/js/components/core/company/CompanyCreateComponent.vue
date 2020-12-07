@@ -2,6 +2,7 @@
     <div>
         <NavbarComponent></NavbarComponent>
         <div class="form">
+            <h3 class="text-form-header" style="text-align: center;">Register</h3>
             <div class="field">
                     <label class="label">Name</label>
                     <div class="control has-icons-left has-icons-right">
@@ -123,5 +124,12 @@ export default {
     overflow:hidden;
     background:white;
     border-radius:10px;
+}
+
+.text-form-header {
+    text-align: center;
+    text-transform:uppercase;
+    font-weight: bold;
+    font-size: 20px;
 }
 </style>
