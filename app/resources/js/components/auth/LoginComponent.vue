@@ -4,7 +4,7 @@
             <div class="form">
             <h3 id="form-header">Log in</h3>
             <div class="field">
-                    <label class="label">Username</label>
+                    <label class="label" style="color:white;">Username</label>
                     <div class="control has-icons-left has-icons-right">
                       <input class="input" type="text" placeholder="Username" v-model="username" value="">
                       <span class="icon is-small is-left">
@@ -14,7 +14,7 @@
             </div>
 
             <div class="field">
-                    <label class="label">Password</label>
+                    <label class="label" style="color:white;">Password</label>
                     <div class="control has-icons-left has-icons-right">
                       <input class="input" type="password" placeholder="" v-model="password" value="">
                       <span class="icon is-small is-left">
@@ -78,8 +78,9 @@ export default {
             width:400px;
             height:auto;
             overflow:hidden;
-            background:white;
+            background:#738a75;
             border-radius:10px;
+            color: #FFFFFF;
         }
         #form-header {
             text-align: center;
@@ -87,4 +88,5 @@ export default {
             font-weight: bold;
             font-size: 30px;
         }
+    
 </style>

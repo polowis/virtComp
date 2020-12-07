@@ -6,7 +6,7 @@
             <div class="form">
             <h3 id="form-header">Register</h3>
             <div class="field">
-                    <label class="label">Username</label>
+                    <label class="label" style="color:white;">Username</label>
                     <div class="control has-icons-left has-icons-right">
                       <input class="input" type="text" placeholder="Username" v-model="username" value="">
                       <span class="icon is-small is-left">
@@ -15,7 +15,7 @@
                     </div>
             </div>
             <div class="field">
-                    <label class="label">Email</label>
+                    <label class="label" style="color:white;">Email</label>
                     <div class="control has-icons-left has-icons-right">
                       <input class="input" type="email" placeholder="Email Address" v-model="email" value="">
                       <span class="icon is-small is-left">
@@ -33,7 +33,7 @@
             </div>
 
             <div class="field">
-                    <label class="label">Password</label>
+                    <label class="label" style="color:white;">Password</label>
                     <div class="control has-icons-left has-icons-right">
                       <input class="input" type="password" v-model="password" placeholder="" value="">
                       <span class="icon is-small is-left">
@@ -43,7 +43,7 @@
             </div>
 
             <div class="field">
-                    <label class="label">Repeat password</label>
+                    <label class="label" style="color:white;">Repeat password</label>
                     <div class="control has-icons-left has-icons-right">
                       <input class="input" type="password" v-model="repeatPassword" placeholder="" value="">
                       <span class="icon is-small is-left">
@@ -213,8 +213,9 @@ export default {
             width:400px;
             height:auto;
             overflow:hidden;
-            background:white;
+            background:#738a75;
             border-radius:10px;
+            color: #FFFFFF;
         }
         #form-header {
             text-align: center;
