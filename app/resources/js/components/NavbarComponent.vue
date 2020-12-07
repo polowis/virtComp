@@ -15,16 +15,16 @@
                   
                     <div id="navbarBasicExample" class="navbar-menu">
                       <div class="navbar-start">
-                        <a class="navbar-item" href="/">
+                        <a class="navbar-item" href="/home/" style="color:white">
                           Home
                         </a>
                   
-                        <a class="navbar-item">
+                        <a class="navbar-item" href="#" style="color:white">
                           Documentation
                         </a>
                   
                         <div class="navbar-item has-dropdown is-hoverable">
-                          <a class="navbar-link">
+                          <a class="navbar-link" style="color:white;">
                             More
                           </a>
                   
