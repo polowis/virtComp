@@ -2,10 +2,6 @@
 body {
     background-color: #405247;
 }
-h2 {
-    font-size: 2.8rem !important;
-    font-weight: 700;
-}
 
 img {
     display: block;
@@ -17,6 +13,9 @@ button {
     cursor: pointer;
 }
 
+.jumbotron {
+    margin-bottom: 0 !important;
+}
 
 .atlas-cta {
     border-radius: 22px !important;

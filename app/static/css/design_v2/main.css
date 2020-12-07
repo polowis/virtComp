@@ -292,7 +292,8 @@ pre code {
 	background-color:#63736e;
 	background-clip: border-box;
 	margin-bottom: 30px;
-	border: 1px solid  rgba(255,255,255,0.1);
+    border: 1px solid  rgba(255,255,255,0.1);
+    color: #FFFFFF;
 }
 
 .card-draggable-placeholder {
@@ -2561,9 +2562,6 @@ a.text-lighter:hover, a.text-lighter:focus {
 	}
 	.container {
 		min-width: 992px !important;
-	}
-	.navbar {
-		display: none;
 	}
 	.badge {
 		border: 1px solid #000;
