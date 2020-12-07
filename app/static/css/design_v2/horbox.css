@@ -9,9 +9,6 @@
     background-color: #405247;
     margin: 0px auto;
 }
-body{
-	/*background-color:#3a3856 !important;*/
-}
 .fixedheader {
     position:fixed !important;
     left: 0;

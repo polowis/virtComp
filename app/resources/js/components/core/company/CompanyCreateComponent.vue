@@ -2,7 +2,7 @@
     <div>
         <NavbarComponent></NavbarComponent>
         <div class="form">
-            <h3 class="text-form-header" style="text-align: center;">Register</h3>
+            <h3 class="text-form-header" style="text-align: center;">Create your company</h3>
             <div class="field">
                     <label class="label" style="color:white;">Name</label>
                     <div class="control has-icons-left has-icons-right">
