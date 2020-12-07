@@ -61,7 +61,7 @@ export default {
             companyName: "",
             companyAvailability: false,
             msg: "",
-            continent: "",
+            continent: "Asia",
             continentError: false,
         }
     },
@@ -119,7 +119,7 @@ export default {
 .form {
     margin:3% auto 0 auto;
     padding:30px;
-    width:400px;
+    width:500px;
     height:auto;
     overflow:hidden;
     background:#738a75;
