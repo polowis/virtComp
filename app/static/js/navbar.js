@@ -1,4 +1,4 @@
-document.location.reload()
+
 document.addEventListener('DOMContentLoaded', () => {
   
     // Get all "navbar-burger" elements
