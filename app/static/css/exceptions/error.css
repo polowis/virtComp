@@ -2,7 +2,7 @@
     box-sizing: border-box;
 }
 * {
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: #405247;
     transform-style: preserve-3d;
 }
 *:focus {
@@ -17,7 +17,7 @@ body {
     align-content: center;
     justify-content: center;
     padding: 12px;
-    background: #343434;
+    background: #405247;
     color: white;
     font-family: "brandon-grotesque", "Brandon Grotesque", "Source Sans Pro", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
     font-size: 24px;
@@ -47,6 +47,7 @@ svg {
     position: relative;
     z-index: 4;
     margin-left: -50px;
+    background-color: #405247;
 }
 .crack polyline {
     fill: none;
@@ -126,10 +127,10 @@ main > div:last-child span:last-child {
 }
 @keyframes removeFill {
     0% {
-        fill: rgba(52, 52, 52, 1);
+        fill: #405247;
    }
     100% {
-        fill: rgba(52, 52, 52, 0);
+        fill: #405247;
    }
 }
 @keyframes pulseColor {
