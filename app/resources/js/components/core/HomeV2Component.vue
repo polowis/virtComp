@@ -15,7 +15,7 @@
                                             <div class="card-body">
                                                 <h3 class="mb-3">Gross profit Margin</h3>
                                                 <div class="chart-circle" data-value="0.75" data-thickness="10" data-color="#ad59ff">
-                                                    <canvas width="240" height="240" style="height: 120px; width: 120px;"></canvas><canvas width="128" height="128"></canvas>
+                                                    <canvas id="example" width="240" height="240" style="height: 120px; width: 120px;"></canvas><canvas width="128" height="128"></canvas>
                                                     <div class="chart-circle-value"><div class="text-xxl">75%</div></div>
                                                 </div>
                                             </div>
@@ -252,10 +252,42 @@
 <script>
 import NavbarComponent from '../NavbarComponent'
 import BalanceSheetComponent from './BalanceSheetComponent'
+import Chart from 'chart.js'
 export default {
     components: {
         NavbarComponent,
         BalanceSheetComponent
+    },
+
+    mounted() {
+        this.createPieChart({
+            datasets: [{
+                data: [10, 20],
+                backgroundColor: ['red']
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'example', 'another'
+            ],
+
+            
+        })
+    },
+
+    methods: {
+        createPieChart(chartData) {
+            const canvas = document.getElementById('example')
+                const options = {
+                type: 'doughnut',
+                data: chartData,
+                options: {legend: {
+                    display: false
+                },  arc: { borderWidth: 0 }},
+                
+            }
+        new Chart(canvas, options)
+        }
     }
 }
 </script>

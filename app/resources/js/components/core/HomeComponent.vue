@@ -1,10 +1,10 @@
 <template>
     <div>
         <NavbarComponent></NavbarComponent>
-        <h3 class="title center" style="padding-bottom: 10px;">Welcome back</h3>
-        <p class="is-small center">VirtComp is a business simulation where you can earn rewards
+        <h3 class="title center" style="padding-bottom: 10px; color:white;">Welcome back</h3>
+        <p class="is-small center" style="color:white;">VirtComp is a business simulation where you can earn rewards
             To get started, please create your company, you can create as many as you like but be smart. 
-            To get assistance, please visit our <a href="/help">help page</a>
+            To get assistance, please visit our <a href="/help" class="link">help page</a>
         </p>
         <div class="field center">
                 <div class="notification is-primary">
@@ -21,7 +21,7 @@
         </a>
         </div>
 
-        <table class="table is-hoverable" style="width: 700px">
+        <table class="table custom-table">
             <thead>
                 <th>Company Name</th>
                 <th>Current Balance</th>
@@ -29,7 +29,7 @@
                 <th>No. Employees</th>
             </thead>
             <tbody>
-                <tr v-for="company in companiesOwned" v-bind:key=company.company_id>
+                <tr class="hover-row" v-for="company in companiesOwned" v-bind:key=company.company_id>
                     <td @click.prevent="registerSavedCompany(company.company_name)" style="cursor: pointer; color: #00d1b2">{{company.company_name}}</td>
                     <td>{{company.balance}}</td>
                     <td>0</td>
@@ -100,6 +100,33 @@ export default {
     .wrapper-table {
         margin: auto;
         width: 700px;
+    }
+
+    .custom-table {
+        width: 700px; 
+        background-color: #738a75;
+        color: #FFFFFF;
+    }
+
+    .custom-table th{
+        color: #FFFFFF;
+        font-weight: bold;
+    }
+
+    .hover-row:hover{
+        background-color: #63736e;
+    }
+
+    .custom-table th{
+        border-bottom: 1px solid #60ffa7;
+    }
+
+    .link:hover{
+        color: lightsalmon;
+    }
+
+    .link{
+        color: #dcc732;
     }
 
 </style>

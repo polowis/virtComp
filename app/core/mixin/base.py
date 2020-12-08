@@ -29,3 +29,10 @@ class UserLoggedInRequiredMixin:
             return super().dispatch(request, *args, **kwargs)
         else:
             return redirect('/login/')
+
+class RedirectIfLoggedInMixin:
+    def dispatch(self, request: HttpRequest, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return redirect('/home/')
