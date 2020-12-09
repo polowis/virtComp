@@ -3,6 +3,10 @@ body {
     background-color: #405247;
 }
 
+html {
+    background-color: #405247;
+}
+
 img {
     display: block;
     max-width: 100%;
