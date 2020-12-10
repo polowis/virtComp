@@ -3,3 +3,4 @@ from .api import *
 from .company_view import *
 from .land import *
 from .company_logged_in import *
+from .company import *

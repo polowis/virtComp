@@ -41,7 +41,7 @@ urlpatterns = [
     path('land/<land_id>/view/', LandView.as_view()),
     path('company/signed/', CompanyLoggedInView.as_view()),
     path('design/', NewUIView),
-    path('company/current', CompanyGetView.as_view()),
+    path('company/current/', CompanyGetView.as_view()),
 
 ]
 

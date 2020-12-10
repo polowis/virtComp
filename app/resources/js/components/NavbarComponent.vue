@@ -22,6 +22,11 @@
                         <a class="navbar-item" href="#" style="color:white">
                           Documentation
                         </a>
+
+                        <a class="navbar-item" href="#" style="color:white" v-if="company != ''">
+                          Company
+                        </a>
+
                   
                         <div class="navbar-item has-dropdown is-hoverable">
                           <a class="navbar-link" style="color:white;">
@@ -78,12 +83,14 @@
 export default {
     data() {
         return {
-            user: ""
+            user: "",
+            company: ""
         }
     },
 
     created(){
         this.getCurrentUser()
+        this.getCurrentCompany()
 
     },
     methods: {
@@ -92,6 +99,13 @@ export default {
                 let data = response.data
                 this.user = data
             })
+        },
+
+        getCurrentCompany() {
+          axios.get('/company/current/').then(response =>{
+            let data = response.data
+            this.company = data
+          })
         },
 
         logout() {
