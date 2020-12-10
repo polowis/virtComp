@@ -133,15 +133,17 @@ a.navbar-item:hover{
   background-color: #3a4441;
 }
 
-a.navbar-link:hover{
-  background-color: #3a4441;
+.navbar-link:hover{
+  background-color: #3a4441 !important;
 }
 .navbar-menu {
   background-color: #63736e;
 }
 
+
+
 .navbar-link {
-  color: #f9ffcb;
+  color: #f9ffcb !important;
 }
 
 .navbar-dropdown {
