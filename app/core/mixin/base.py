@@ -36,3 +36,6 @@ class RedirectIfLoggedInMixin:
             return super().dispatch(request, *args, **kwargs)
         else:
             return redirect('/home/')
+
+class MobileRedirectMixin(object):
+    pass
