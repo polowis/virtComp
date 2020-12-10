@@ -88,7 +88,7 @@ export default {
     },
     methods: {
         getCurrentUser() {
-            axios.get("/currentuser/").then(response =>{
+            axios.get("/user/current/").then(response =>{
                 let data = response.data
                 this.user = data
             })

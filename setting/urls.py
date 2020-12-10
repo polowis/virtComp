@@ -29,7 +29,7 @@ urlpatterns = [
     path('login/', LoginView.as_view()),
     path('register/', RegisterView.as_view()),
     path('home/', HomeView.as_view()),
-    path('currentuser/', UserView.as_view()),
+    path('user/current/', UserView.as_view()),
     path('company/create/', CompanyCreateView.as_view()),
     path('company/hasavailablename/', CompanyAvailability.as_view()),
     path('user/isavailable/', UserAvailability.as_view()),
@@ -40,7 +40,8 @@ urlpatterns = [
     path('land/view/', LandAvailable.as_view()),
     path('land/<land_id>/view/', LandView.as_view()),
     path('company/signed/', CompanyLoggedInView.as_view()),
-    path('design/', NewUIView)
+    path('design/', NewUIView),
+    path('company/current', CompanyGetView.as_view()),
 
 ]
 
