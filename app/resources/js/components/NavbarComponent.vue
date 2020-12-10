@@ -23,7 +23,7 @@
                           Documentation
                         </a>
 
-                        <a class="navbar-item" href="#" style="color:white" v-if="company != ''">
+                        <a class="navbar-item" href="/company/" style="color:white" v-if="company != ''">
                           Company
                         </a>
 
