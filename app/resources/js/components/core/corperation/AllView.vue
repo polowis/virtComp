@@ -63,6 +63,8 @@ export default {
         width: 1000px;
 }
 
+
+
 .center{
     font-weight: bold;
     text-transform: uppercase;

@@ -1,7 +1,8 @@
 <template>
     <div>
     <NavbarComponent></NavbarComponent>
-
+    <div class="page">
+        <div class="app-content">
     <div class="wrapper-table">
          <div style="width: 700px">
          <a class="button is-primary is-small is-pulled-right">
@@ -11,7 +12,7 @@
                 <span @click.prevent="fetchLands()">Refresh</span>
         </a>
         </div>
-        <table class="table is-hoverable" style="width: 700px">
+        <table class="table is-hoverable" style="width: 700px; color: #ffffff">
             <thead>
                 <th>Land ID</th>
                 <th>Buy Cost</th>
@@ -19,7 +20,7 @@
                 <th>Level</th>
             </thead>
             <tbody>
-                <tr v-for="land in lands" v-bind:key="land.land_id">
+                <tr v-for="land in lands" v-bind:key="land.land_id" class="hover-row">
                     <td style="cursor: pointer; color: #00d1b2" @click.prevent="redirectToLand(land.land_id)">{{land.land_id}}</td>
                     <td>{{land.buy_cost}}</td>
                     <td>{{land.rent_cost}}</td>
@@ -35,6 +36,8 @@
                 </tr>-->
             </tbody>
         </table>
+        </div>
+        </div>
         </div>
     </div>
 </template>
@@ -81,4 +84,11 @@ export default {
         margin: auto;
         width: 700px;
     }
+.table thead th{
+    color: #03a9f4 !important;
+}
+
+.hover-row:hover{
+    background-color:  #3a4441 !important;
+}
 </style>
