@@ -22,6 +22,11 @@
                         <a class="navbar-item" href="#" style="color:white">
                           Documentation
                         </a>
+
+                        <a class="navbar-item" href="/company/" style="color:white" v-if="company != ''">
+                          Company
+                        </a>
+
                   
                         <div class="navbar-item has-dropdown is-hoverable">
                           <a class="navbar-link" style="color:white;">
@@ -78,20 +83,29 @@
 export default {
     data() {
         return {
-            user: ""
+            user: "",
+            company: ""
         }
     },
 
     created(){
         this.getCurrentUser()
+        this.getCurrentCompany()
 
     },
     methods: {
         getCurrentUser() {
-            axios.get("/currentuser/").then(response =>{
+            axios.get("/user/current/").then(response =>{
                 let data = response.data
                 this.user = data
             })
+        },
+
+        getCurrentCompany() {
+          axios.get('/company/current/').then(response =>{
+            let data = response.data
+            this.company = data
+          })
         },
 
         logout() {
@@ -119,15 +133,17 @@ a.navbar-item:hover{
   background-color: #3a4441;
 }
 
-a.navbar-link:hover{
-  background-color: #3a4441;
+.navbar-link:hover{
+  background-color: #3a4441 !important;
 }
 .navbar-menu {
   background-color: #63736e;
 }
 
+
+
 .navbar-link {
-  color: #f9ffcb;
+  color: #f9ffcb !important;
 }
 
 .navbar-dropdown {

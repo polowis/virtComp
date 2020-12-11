@@ -2,11 +2,14 @@
     <div>
         <NavbarComponent></NavbarComponent>
         <div class="page" >
+           
             <div class="page-main" style="margin-top: 20px;">
                 <!-- app-content-->
+                
                 <div class="app-content">
                     <div class="side-app">
                         <div class="main-content fixed-header visible-title">
+                            
                             <!-- Page content -->
                             <div class="container">
                                 <div class="row finance-content">
@@ -263,7 +266,8 @@ export default {
         this.createPieChart({
             datasets: [{
                 data: [10, 20],
-                backgroundColor: ['red']
+                backgroundColor: ['red'],
+                borderWidth: [0, 0]
             }],
 
             // These labels appear in the legend and in the tooltips when hovering different arcs
