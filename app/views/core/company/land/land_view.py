@@ -27,7 +27,7 @@ class LandView(UserLoggedInRequiredMixin, View):
         if land_id is None:
             return HttpResponse(status=404)
         try:
-            land = list(LandOwn.objects.values().get(land_id=land_id))
+            land = LandOwn.objects.values().get(land_id=land_id)
             land_json = JsonResponse(land, safe=False)
             return render(request, self.template_name)
         except Exception as e:
@@ -35,7 +35,7 @@ class LandView(UserLoggedInRequiredMixin, View):
 
     def post(self, request: HttpRequest, land_id=None):
         try:
-            land = list(LandOwn.objects.values().get(land_id=land_id))
+            land = LandOwn.objects.values().get(land_id=land_id)
             return JsonResponse(land, safe=False)
         except Exception as e:
             data = {'error': 'Not Found'}
