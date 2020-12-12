@@ -17,6 +17,14 @@ class CompanyManager(models.Manager):
     def create_company(self, company_name, owner_name, owner_object):
         company = self.create(company_name=company_name, owner_name=owner_name, owner=owner_object)
         return company
+    
+    def company_is_exists(self, name: str) -> bool:
+        """Return true if company exists"""
+        try:
+            company = self.get(company_name=name)
+            return True
+        except:
+            return False
 
 class Company(models.Model):
     company_id = models.CharField(max_length=255, default=generate_company_id)
