@@ -1,5 +1,5 @@
 from django.db import models
-import time, math, random
+import time, math, random, uuid
 
 from app.models.company import Company
 
@@ -7,13 +7,7 @@ current_time = lambda: int(round(time.time() * 1000))
 
 def generate_unique_id():
     """generate unique id"""
-    character = "1234567890abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWSTUVWXYZ"
-    temp_id = ""
-    for i in range(16):
-        temp_id += character[(math.floor(random.random() * len(character)))]
-        
-    return temp_id + str(current_time())
-
+    return str(uuid.uuid1()).replace("-", "")
 
 class LandOwnManager(models.Manager):
     def create_land(self, level, buy_cost, rent_cost):

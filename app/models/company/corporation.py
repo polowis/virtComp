@@ -2,18 +2,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from app.models.company.company import Company
-import random, time, math
+import random, time, math, uuid
 
 
 current_time = lambda: int(round(time.time() * 1000))
 def generate_unique_id():
     """generate unique id"""
-    character = "1234567890abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWSTUVWXYZ"
-    temp_id = ""
-    for i in range(32):
-        temp_id += character[(math.floor(random.random() * len(character)))]
-        
-    return temp_id + str(current_time())
+    return str(uuid.uuid1()).replace("-", "")
 
 
 class Corporation(models.Model):
