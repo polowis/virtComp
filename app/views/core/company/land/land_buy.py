@@ -11,6 +11,7 @@ class LandBuy(View):
             if company.balance >= land.buy_cost:
                 new_balance = company.balance - land.buy_cost
                 company.balance = new_balance
+                company.save()
         except:
             data = {'error': 'Not Found'}
             return JsonResponse(data)
