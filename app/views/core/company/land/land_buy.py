@@ -8,9 +8,21 @@ class LandBuy(View):
         try:
             land: LandOwn = LandOwn.objects.get(land_id=land_id)
             company: Company = get_current_register_company(request)
-            if company.balance >= land.buy_cost:
-                new_balance = company.balance - land.buy_cost
-                company.balance = new_balance
+            if not self.land_already_bought(land):
+                self.buy(land, company)
+            else:
+                data = {'error': True, 'message': "A company has owned this land"}
+                return JsonResponse(data)
         except:
-            data = {'error': 'Not Found'}
+            data = {'error': True, 'message': 'Not found'}
             return JsonResponse(data)
+    
+
+    def buy(self, land: LandOwn, company: Company):
+        if company.balance >= land.buy_cost:
+            new_balance = company.balance - land.buy_cost
+            company.balance = new_balance
+            company.save()
+    
+    def land_already_bought(self, land: LandOwn) -> bool:
+        return land.company_name is not None

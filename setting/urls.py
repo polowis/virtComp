@@ -47,3 +47,4 @@ urlpatterns = [
 
 handler403 = 'app.views.exceptions.base.Error403'
 handler404 = 'app.views.exceptions.base.Error404'
+handler500 = 'app.views.exceptions.base.Error500'
