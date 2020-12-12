@@ -17,6 +17,12 @@
                     <p>Land Cost: {{land.buy_cost}}</p>
                     <p>Land Rent: {{land.rent_cost}}</p>
                     <p v-if="land.company_name === null" style="color: #00d1b2">Available to buy/rent</p>
+                    <div v-if="land.company_name === null">
+                        <div class="control">
+                            <button class="button is-primary" @click.prevent="buyLand()">Buy</button>
+                            <button class="button is-primary" @click.prevent="rentLand()">Rent</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -45,7 +51,12 @@ export default {
             axios.post((location.pathname+location.search)).then(response => {
                 let data = response.data
                 this.land = data
-                console.log(data.company_name)
+            })
+        },
+
+        buyLand() {
+            axios.post(`/land/${this.land.land_id}/buy`).then(response => {
+                
             })
         }
     }
