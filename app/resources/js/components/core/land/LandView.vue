@@ -14,8 +14,8 @@
                     <p>Company Owner: {{land.company_name}}</p>
                     <p>Land Status: {{land.status}}</p>
                     <p>Land Level: {{land.level}}</p>
-                    <p>Land Cost: {{land.buy_cost}}</p>
-                    <p>Land Rent: {{land.rent_cost}} / week</p>
+                    <p>Land Cost: ${{land.buy_cost}}</p>
+                    <p>Land Rent: ${{land.rent_cost}} / week</p>
                     <p v-if="land.company_name === null" style="color: #00d1b2">Available to buy/rent</p>
                     <div v-if="land.company_name === null">
                         <div class="control">
