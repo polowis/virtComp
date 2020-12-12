@@ -11,5 +11,5 @@ class CompanyLoggedInView(View):
             http_response = HttpResponse(json_response)
             http_response.set_signed_cookie('host_user', company_name)
             return http_response
-        data = {'error': True}
+        data = {'error': True, 'message': "Parameter name of the company must not be empty"  }
         return JsonResponse(data)

@@ -8,7 +8,7 @@ class LandBuy(View):
         try:
             land: LandOwn = LandOwn.objects.get(land_id=land_id)
             company: Company = get_current_register_company(request)
-            if land.company_name is not None:
+            if not self.land_already_bought(land):
                 self.buy(land, company)
             else:
                 data = {'error': True, 'message': "A company has owned this land"}
@@ -23,3 +23,6 @@ class LandBuy(View):
             new_balance = company.balance - land.buy_cost
             company.balance = new_balance
             company.save()
+    
+    def land_already_bought(self, land: LandOwn) -> bool:
+        return land.company_name is not None
