@@ -3,6 +3,7 @@ from app.core.util.base import generate_unique_id
 from app.models.company import Company
 from django.utils import timezone
 from typing import Union
+from datetime import timedelta
 
 class LandscapeManager(models.Manager):
     def get_all_landscape_by_company(self, lookup_company: Union[Company, str]) -> bool:
@@ -63,7 +64,6 @@ class Landscape(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     buy_cost = models.DecimalField(max_digits=20, decimal_places=4)
     rent_cost = models.DecimalField(max_digits=20, decimal_places=4)
-    building = models.ForeignKey(Building, on_delete=models.CASCADE, null=True)
     is_buy = models.BooleanField(default=False)
     is_rent = models.BooleanField(default=False)
     created_at = models.DateTimeField(editable=False)
