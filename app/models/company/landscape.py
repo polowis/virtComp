@@ -54,7 +54,7 @@ class LandscapeManager(models.Manager):
                     raise TypeError("The landscape id cannot be found")
             raise TypeError("The landscape id must be a string")
     
-    def create_land(self, level: int, buy_cost: int, rent_cost: int):
+    def create_land(self, level: int, buy_cost: int, rent_cost: int) -> Landscape:
         """Create default land
 
         :param level: the level of the landscape
@@ -62,6 +62,8 @@ class LandscapeManager(models.Manager):
         :param buy_cost: the cost to buy the landscape
 
         :param rent_cost: the cost to rent the landscape
+
+        return Landscape instance
         """
         landscape: Landscape = self.create(level=level, buy_cost=buy_cost, rent_cost=rent_cost)
         return landscape
