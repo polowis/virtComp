@@ -79,7 +79,7 @@ class Landscape(models.Model):
     is_rent = models.BooleanField(default=False)
     created_at = models.DateTimeField(editable=False)
     updated_at = models.DateTimeField(null=True)
-    last_collected_money_at = models.DateTimeField()
+    last_collected_money_at = models.DateTimeField(null=True)
 
     objects = LandscapeManager()
 
@@ -93,7 +93,7 @@ class Landscape(models.Model):
             self.is_buy = True
             self.is_rent = False
             self.last_collected_money_at = timezone.now()
-            return super(Landscape, self).save(*args, **kwargs)
+            return self.save(*args, **kwargs)
         else:
             raise Exception("Unable to buy landscape")
     
@@ -106,7 +106,7 @@ class Landscape(models.Model):
             self.is_buy = False
             self.is_rent = True
             self.last_collected_money_at = timezone.now()
-            return super(Landscape, self).save(*args, **kwargs)
+            return self.save(*args, **kwargs)
         else:
             raise Exception("Unable to rent landscape")
     
@@ -124,3 +124,10 @@ class Landscape(models.Model):
         if self.company:
             return False
         return self.is_buy == False and self.is_rent == False
+    
+    def save(self, *args, **kwargs):
+        """Save the object to the database"""
+        if not self.id:
+            self.created_at = timezone.now()
+        self.updated_at = timezone.now()
+        return super().save(*args, **kwargs)
