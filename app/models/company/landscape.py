@@ -8,6 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class LandscapeManager(models.Manager):
     def get_landscape_by_company(self, company: Union[Company, str]) -> bool:
         if type(company) is Company:
@@ -23,7 +24,7 @@ class LandscapeManager(models.Manager):
             return self.filter(company=company, is_rent=True)
         if isinstance(company, str):
             return self.filter(company_name=company, is_rent=True)
-        
+
         raise TypeError("lookup_company must be a Company instance or" +
                         " a string of company name")
 
@@ -34,18 +35,18 @@ class LandscapeManager(models.Manager):
         False
 
         Exception: Model not found exception will raise if there is no result
-        found. 
+        found.
 
         """
         if force_primary:
             return self.get(id=landscape_id)
         return self.get(land_id=landscape_id)
-    
+
     def landscape_is_available(self, landscape_id: str,
                                force_primary=False) -> bool:
         """Return true if landscape is available to purchase (buy/rent)
 
-        If you wish to look up by primary_key, simple add force_primary=True, 
+        If you wish to look up by primary_key, simple add force_primary=True,
         default is False
         """
         if force_primary:
@@ -66,7 +67,7 @@ class LandscapeManager(models.Manager):
                     logger.info(e)
                     raise TypeError("The landscape id cannot be found")
             raise TypeError("The landscape id must be a string")
-    
+
     def create_land(self, level: int, buy_cost: int,
                     rent_cost: int) -> Landscape:
         """Create default land
@@ -113,7 +114,7 @@ class Landscape(models.Model):
             return self.save(*args, **kwargs)
         else:
             raise Exception("Unable to buy landscape")
-    
+
     def rent(self, *args, **kwargs):
         """Rent a landscape. This function simple will try to update
         properties respectively.
