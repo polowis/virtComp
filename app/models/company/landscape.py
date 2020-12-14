@@ -20,6 +20,17 @@ class LandscapeManager(models.Manager):
             return self.filter(company_name=lookup_company, is_rent=True)
         
         raise TypeError("lookup_company must be a Company instance or a string of company name")
+
+    def get_landscape_by_id(self, landscape_id: Union[int, str], force_primary=False) -> Landscape:
+        """Return the landscape instance by id. 
+        If force_primary is True, it will search for primary_key. Default is False
+
+        Exception: Model not found exception will raise if there is no result found. 
+
+        """
+        if force_primary:
+            return self.get(id=landscape_id)
+        return self.get(land_id=landscape_id)
     
     def landscape_is_available(self, landscape_id: str, force_primary=False) -> bool:
         """Return true if landscape is available to purchase (buy/rent)
