@@ -4,7 +4,9 @@ from app.models.company import Company
 from django.utils import timezone
 from typing import Union
 from app.models import Landscape
+import logging
 
+logger = logging.getLogger(__name__)
 
 class LandscapeManager(models.Manager):
     def get_landscape_by_company(self, company: Union[Company, str]) -> bool:
@@ -52,6 +54,7 @@ class LandscapeManager(models.Manager):
                     landscape: Landscape = self.get(id=landscape_id)
                     return landscape.can_be_purchased
                 except Exception as e:
+                    logger.info(e)
                     raise TypeError("The landscape id cannot be found")
             raise TypeError("The landscape id must be a string")
         else:
@@ -60,6 +63,7 @@ class LandscapeManager(models.Manager):
                     landscape: Landscape = self.get(land_id=landscape_id)
                     return landscape.can_be_purchased
                 except Exception as e:
+                    logger.info(e)
                     raise TypeError("The landscape id cannot be found")
             raise TypeError("The landscape id must be a string")
     
