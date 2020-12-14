@@ -5,12 +5,56 @@ from django.utils import timezone
 from typing import Union
 
 class LandscapeManager(models.Manager):
-    def get_all_landscape_by_company(self, lookup_company: Union[Company, str]):
+    def get_all_landscape_by_company(self, lookup_company: Union[Company, str]) -> bool:
         if type(lookup_company) is Company:
             return self.filter(company=lookup_company)
         if isinstance(company, str):
             return self.filter(company_name=lookup_company)
         raise TypeError("lookup_company must be a Company instance or a string of company name")
+
+    def get_landscape_on_rent_by_company(self, lookup_company: Union[Company, str]) -> bool:
+        if type(lookup_company) is Company:
+            return self.filter(company=lookup_company, is_rent=True)
+        if isinstance(company, str):
+            return self.filter(company_name=lookup_company, is_rent=True)
+        
+        raise TypeError("lookup_company must be a Company instance or a string of company name")
+    
+    def landscape_is_available(self, landscape_id: str, force_primary=False) -> bool:
+        """Return true if landscape is available to purchase (buy/rent)
+
+        If you wish to look up by primary_key, simple add force_primary=True, default is False
+        """
+        if force_primary:
+            if isinstance(landscape_id, str):
+                try:
+                    landscape: Landscape = self.get(id=landscape_id)
+                    return landscape.can_be_purchased
+                except Exception as e:
+                    raise TypeError("The landscape id cannot be found")
+            raise TypeError("The landscape id must be a string")
+        else:
+            if isinstance(landscape_id, str):
+                try:
+                    landscape: Landscape = self.get(land_id=landscape_id)
+                    return landscape.can_be_purchased
+                except Exception as e:
+                    raise TypeError("The landscape id cannot be found")
+            raise TypeError("The landscape id must be a string")
+    
+    def create_land(self, level: int, buy_cost: int, rent_cost: int):
+        """Create default land
+
+        :param level: the level of the landscape
+
+        :param buy_cost: the cost to buy the landscape
+
+        :param rent_cost: the cost to rent the landscape
+        """
+        landscape: Landscape = self.create(level=level, buy_cost=buy_cost, rent_cost=rent_cost)
+        return landscape
+
+
 
 class Landscape(models.Model):
     land_id = models.CharField(max_length=255, default=generate_unique_id)
@@ -44,7 +88,7 @@ class Landscape(models.Model):
     
     def rent(self, *args, **kwargs):
         """Rent a landscape. This function simple will try to update properties respectively.
-        
+
         Alternatively, you can update it like the way how you normally do with django
         """
         if self.id:
@@ -65,6 +109,7 @@ class Landscape(models.Model):
         return self.is_buy
     
     def can_be_purchased(self) -> bool:
+        """Return true if this landscape can be purchased"""
         if self.company:
             return False
         return self.is_buy == False and self.is_rent == False
