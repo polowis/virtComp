@@ -3,39 +3,48 @@ from app.core.util.base import generate_unique_id
 from app.models.company import Company
 from django.utils import timezone
 from typing import Union
-from datetime import timedelta
+from app.models import Landscape
+
 
 class LandscapeManager(models.Manager):
-    def get_all_landscape_by_company(self, lookup_company: Union[Company, str]) -> bool:
-        if type(lookup_company) is Company:
-            return self.filter(company=lookup_company)
+    def get_landscape_by_company(self, company: Union[Company, str]) -> bool:
+        if type(company) is Company:
+            return self.filter(company=company)
         if isinstance(company, str):
-            return self.filter(company_name=lookup_company)
-        raise TypeError("lookup_company must be a Company instance or a string of company name")
+            return self.filter(company_name=company)
+        raise TypeError("lookup_company must be a Company instance or a " +
+                        "string of company name")
 
-    def get_landscape_on_rent_by_company(self, lookup_company: Union[Company, str]) -> bool:
-        if type(lookup_company) is Company:
-            return self.filter(company=lookup_company, is_rent=True)
+    def get_rent_landscape_by_company(self,
+                                      company: Union[Company, str]) -> bool:
+        if type(company) is Company:
+            return self.filter(company=company, is_rent=True)
         if isinstance(company, str):
-            return self.filter(company_name=lookup_company, is_rent=True)
+            return self.filter(company_name=company, is_rent=True)
         
-        raise TypeError("lookup_company must be a Company instance or a string of company name")
+        raise TypeError("lookup_company must be a Company instance or" +
+                        " a string of company name")
 
-    def get_landscape_by_id(self, landscape_id: Union[int, str], force_primary=False) -> Landscape:
-        """Return the landscape instance by id. 
-        If force_primary is True, it will search for primary_key. Default is False
+    def get_landscape_by_id(self, landscape_id: Union[int, str],
+                            force_primary=False) -> Landscape:
+        """Return the landscape instance by id.
+        If force_primary is True, it will search for primary_key. Default is
+        False
 
-        Exception: Model not found exception will raise if there is no result found. 
+        Exception: Model not found exception will raise if there is no result
+        found. 
 
         """
         if force_primary:
             return self.get(id=landscape_id)
         return self.get(land_id=landscape_id)
     
-    def landscape_is_available(self, landscape_id: str, force_primary=False) -> bool:
+    def landscape_is_available(self, landscape_id: str,
+                               force_primary=False) -> bool:
         """Return true if landscape is available to purchase (buy/rent)
 
-        If you wish to look up by primary_key, simple add force_primary=True, default is False
+        If you wish to look up by primary_key, simple add force_primary=True, 
+        default is False
         """
         if force_primary:
             if isinstance(landscape_id, str):
@@ -54,7 +63,8 @@ class LandscapeManager(models.Manager):
                     raise TypeError("The landscape id cannot be found")
             raise TypeError("The landscape id must be a string")
     
-    def create_land(self, level: int, buy_cost: int, rent_cost: int) -> Landscape:
+    def create_land(self, level: int, buy_cost: int,
+                    rent_cost: int) -> Landscape:
         """Create default land
 
         :param level: the level of the landscape
@@ -65,9 +75,9 @@ class LandscapeManager(models.Manager):
 
         return Landscape instance
         """
-        landscape: Landscape = self.create(level=level, buy_cost=buy_cost, rent_cost=rent_cost)
+        landscape: Landscape = self.create(level=level, buy_cost=buy_cost,
+                                           rent_cost=rent_cost)
         return landscape
-
 
 
 class Landscape(models.Model):
@@ -85,11 +95,12 @@ class Landscape(models.Model):
 
     objects = LandscapeManager()
 
-
     def buy(self, *args, **kwargs):
-        """Buy the landscape. This function simple will try to update properties respectively.
+        """Buy the landscape. This function simple will try to
+        update properties respectively.
 
-        Alternatively, you can update it like the way how you normally do with django
+        Alternatively, you can update it like the way how you normally
+        do with django
         """
         if self.id:
             self.is_buy = True
@@ -100,9 +111,11 @@ class Landscape(models.Model):
             raise Exception("Unable to buy landscape")
     
     def rent(self, *args, **kwargs):
-        """Rent a landscape. This function simple will try to update properties respectively.
+        """Rent a landscape. This function simple will try to update
+        properties respectively.
 
-        Alternatively, you can update it like the way how you normally do with django
+        Alternatively, you can update it like the way how you normally
+        do with django
         """
         if self.id:
             self.is_buy = False
@@ -111,22 +124,21 @@ class Landscape(models.Model):
             return self.save(*args, **kwargs)
         else:
             raise Exception("Unable to rent landscape")
-    
 
     def on_rent(self) -> bool:
         """Return true if this landscape is on rent by a company"""
         return self.is_buy
-    
+
     def already_bought(self) -> bool:
         """Return true if this landscape is already bought from a company"""
         return self.is_buy
-    
+
     def can_be_purchased(self) -> bool:
         """Return true if this landscape can be purchased"""
         if self.company:
             return False
-        return self.is_buy == False and self.is_rent == False
-    
+        return not self.is_buy and not self.is_rent
+
     def save(self, *args, **kwargs):
         """Save the object to the database"""
         if not self.id:
