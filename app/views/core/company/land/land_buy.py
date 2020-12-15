@@ -1,7 +1,8 @@
 from django.views import View
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, JsonResponse
 from app.models import LandOwn, Company
 from app.core.util.company import get_current_register_company
+
 
 class LandBuy(View):
     def post(self, request: HttpRequest, land_id=None):

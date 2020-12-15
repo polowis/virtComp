@@ -19,7 +19,3 @@ class CurrentUserCompany(View):
     def post(self, request: HttpRequest):
         company = list(Company.objects.filter(owner_name=request.user.username).values())
         return JsonResponse(company, safe=False)
-
-
-
-

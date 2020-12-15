@@ -1,5 +1,5 @@
 
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, JsonResponse
 from app.core.util.company import *
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
@@ -30,12 +30,14 @@ class UserLoggedInRequiredMixin:
         else:
             return redirect('/login/')
 
+
 class RedirectIfLoggedInMixin:
     def dispatch(self, request: HttpRequest, *args, **kwargs):
         if not request.user.is_authenticated:
             return super().dispatch(request, *args, **kwargs)
         else:
             return redirect('/home/')
+
 
 class MobileRedirectMixin(object):
     pass

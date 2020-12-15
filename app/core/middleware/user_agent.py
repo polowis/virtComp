@@ -1,5 +1,6 @@
 import re
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpRequest
+
 
 class UserAgentMiddleware(object):
 

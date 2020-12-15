@@ -5,6 +5,7 @@ from django.http import HttpRequest, JsonResponse
 from setting import local_settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+
 class LoginView(View):
     template_name = 'auth/login.html'
 
@@ -23,6 +24,7 @@ class LoginView(View):
             return JsonResponse(data)
         data = {'status': 'error', 'message': 'Username or email does not exist'}
         return JsonResponse(data)
+
 
 class LogoutView(View):
     def post(self, request: HttpRequest):

@@ -17,5 +17,3 @@ class Command(BaseCommand):
             for i in range(int(number_of_land)):
                 landscape: Landscape = Landscape.objects.create_land(continent)
                 print("Created landscape with id {}".format(landscape.land_id))
-
-

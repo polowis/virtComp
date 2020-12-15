@@ -19,7 +19,7 @@ class Command(BaseCommand):
                         'min_land_cost': row[4]
                     }
                     obj, created = Land.objects.update_or_create(level=row[0],
-                    defaults=default_value)
+                                                                 defaults=default_value)
                     print('Loaded data at', default_value)
         except Exception as e:
             raise CommandError(e)

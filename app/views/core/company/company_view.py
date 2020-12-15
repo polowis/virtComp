@@ -1,7 +1,8 @@
 from django.views import View
-from django.http import HttpRequest, JsonResponse, HttpResponse
+from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
 from app.core.util.company import get_current_register_company
+
 
 class CompanyView(View):
     def get(self, request: HttpRequest):

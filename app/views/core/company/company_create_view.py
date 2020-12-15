@@ -37,6 +37,7 @@ class CompanyCreateView(View):
             return JsonResponse(data)
         return HttpResponse(status=419)
 
+
 class CompanyAvailability(View):
     def post(self, request: HttpRequest):
         company_name = request.POST.get('companyName', None)
@@ -65,7 +66,8 @@ class CompanyAvailability(View):
     def company_is_available(self, name):
         if name is None:
             return False
-        return Company.objects.filter(company_name=name.lower()).first() is None # return true if no matching found
+        return Company.objects.filter(company_name=name.lower()).first() is None
+        # return true if no matching found
     
     def can_create_company(self, company_name):
         return self.company_is_available(company_name) and self.has_valid_company_name(company_name)

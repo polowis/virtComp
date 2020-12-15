@@ -8,8 +8,7 @@ class BuildingTypeManager(models.Manager):
 
         if isinstance(building_type, str):
             return self.get(category=building_type)
-        raise TypeError("Building type must be a string but got" +
-                        f"{type(building_type)}")
+        raise TypeError(f"Building type must be a string but got {type(building_type)}")
 
 
 class BuildingType(models.Model):

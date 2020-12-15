@@ -18,8 +18,7 @@ class LandscapeManager(models.Manager):
             return self.filter(company=company)
         if isinstance(company, str):
             return self.filter(company_name=company)
-        raise TypeError("lookup_company must be a Company instance or a " +
-                        "string of company name")
+        raise TypeError("lookup_company must be a Company instance or a string of company name")
 
     def get_rent_landscape_by_company(self,
                                       company: Union[Company, str]) -> bool:
@@ -28,8 +27,7 @@ class LandscapeManager(models.Manager):
         if isinstance(company, str):
             return self.filter(company_name=company, is_rent=True)
 
-        raise TypeError("lookup_company must be a Company instance or" +
-                        " a string of company name")
+        raise TypeError("lookup_company must be a Company instance or a string of company name")
 
     def get_landscape_by_id(self, landscape_id: Union[int, str],
                             force_primary=False) -> Landscape:
@@ -84,14 +82,12 @@ class LandscapeManager(models.Manager):
             level: int = Land.objects.get_random_land_level()
             land: Land = Land.objects.get_land_by_level(level)
 
-            landscape: Landscape = self.create(
-                                level=level,
-                                buy_cost=land.get_land_cost(),
-                                rent_cost=land.get_rent_cost(),
-                                contient_cost=land.get_continent_buy_cost(),
-                                continent_rent=land.get_continent_rent_cost(),
-                                continent=continent.lower()
-                                )
+            landscape: Landscape = self.create(level=level,
+                                               buy_cost=land.get_land_cost(),
+                                               rent_cost=land.get_rent_cost(),
+                                               contient_cost=land.get_continent_buy_cost(),
+                                               continent_rent=land.get_continent_rent_cost(),
+                                               continent=continent.lower())
             landscape.save()
             return landscape
 

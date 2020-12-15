@@ -5,7 +5,5 @@ from django.contrib import admin
 from .models import *
 
 admin.site.register(Company)
-admin.site.register(Material)
-admin.site.register(Item)
-admin.site.register(LandOwn)
+admin.site.register(Landscape)
 admin.site.register(Land)
