@@ -90,6 +90,7 @@ class Landscape(models.Model):
     level = models.Integer()
     company_name = models.CharField(max_length=255, null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+    continent = models.CharField(max_length=255)
     buy_cost = models.DecimalField(max_digits=20, decimal_places=4)
     rent_cost = models.DecimalField(max_digits=20, decimal_places=4)
     is_buy = models.BooleanField(default=False)
