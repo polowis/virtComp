@@ -2,6 +2,9 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from app.core.util.base import generate_unique_id
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class CompanyManager(models.Manager):
@@ -16,6 +19,7 @@ class CompanyManager(models.Manager):
             self.get(company_name=name)
             return True
         except Exception as e:
+            logger.warn(e)
             return False
 
 
