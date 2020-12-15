@@ -1,15 +1,18 @@
+from __future__ import annotations
 from django.db import models
 from app.core.util.base import generate_unique_id
-from app.models.company import Company
+from .company import Company
+from ..constants.land import Land
 from django.utils import timezone
 from typing import Union
-from app.models import Landscape
 import logging
+
 
 logger = logging.getLogger(__name__)
 
 
 class LandscapeManager(models.Manager):
+
     def get_landscape_by_company(self, company: Union[Company, str]) -> bool:
         if type(company) is Company:
             return self.filter(company=company)
@@ -68,31 +71,61 @@ class LandscapeManager(models.Manager):
                     raise TypeError("The landscape id cannot be found")
             raise TypeError("The landscape id must be a string")
 
-    def create_land(self, level: int, buy_cost: int,
-                    rent_cost: int) -> Landscape:
-        """Create default land
+    def create_land(self, continent: str) -> Landscape:
+        """Create default land. To retreive supported continents
 
-        :param level: the level of the landscape
+        You may use Land.objects.get_supported_continents() method
 
-        :param buy_cost: the cost to buy the landscape
-
-        :param rent_cost: the cost to rent the landscape
+        :param continent: supported continent (str)
 
         return Landscape instance
         """
-        landscape: Landscape = self.create(level=level, buy_cost=buy_cost,
-                                           rent_cost=rent_cost)
-        return landscape
+        if continent.lower() in Land.objects.get_supported_continents():
+            level: int = Land.objects.get_random_land_level()
+            land: Land = Land.objects.get_land_by_level(level)
+
+            landscape: Landscape = self.create(
+                                    level=level,
+                                    buy_cost=land.get_land_cost(),
+                                    rent_cost=land.get_rent_cost(),
+                                    contient_cost=land.get_continent_buy_cost(),
+                                    continent_rent=land.get_continent_rent_cost(),
+                                    continent=continent.lower())
+            landscape.save()
+            return landscape
+
+    def create_multiple_landscape(self, continent: str,
+                                  number_of_land: int) -> None:
+        """
+        generate multiple landscape.
+        This methods falls back to create_land method.
+
+        This method will try to convert number_of_land into a number.
+        Make sure that the continent provide is supported by virtComp
+
+        :param continent: the contient you wish to create a landscape for
+        :param number_of_land: the number of landscape to create
+
+        return None
+        """
+        for i in range(int(number_of_land)):
+            self.create_land(continent)
 
 
 class Landscape(models.Model):
     land_id = models.CharField(max_length=255, default=generate_unique_id)
-    level = models.Integer()
+    level = models.IntegerField()
     company_name = models.CharField(max_length=255, null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     continent = models.CharField(max_length=255)
     buy_cost = models.DecimalField(max_digits=20, decimal_places=4)
     rent_cost = models.DecimalField(max_digits=20, decimal_places=4)
+
+    # the cost of contient specific will be the extra cost.
+    # buy cost + continent_cost
+    contient_cost = models.DecimalField(max_digits=20, decimal_places=4)
+    contient_rent = models.DecimalField(max_digits=20, decimal_places=4)
+
     is_buy = models.BooleanField(default=False)
     is_rent = models.BooleanField(default=False)
     created_at = models.DateTimeField(editable=False)
