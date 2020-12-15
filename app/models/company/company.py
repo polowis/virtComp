@@ -1,33 +1,26 @@
 from django.db import models
-import math, random
 from django.utils import timezone
-import time
 from django.contrib.auth.models import User
-import uuid
-
-current_time = lambda: int(round(time.time() * 1000))
-
-
-def generate_company_id():
-    """generate unique id"""
-    return str(uuid.uuid1()).replace("-", "")
+from app.core.util.base import generate_unique_id
 
 
 class CompanyManager(models.Manager):
     def create_company(self, company_name, owner_name, owner_object):
-        company = self.create(company_name=company_name, owner_name=owner_name, owner=owner_object)
+        company = self.create(company_name=company_name, owner_name=owner_name,
+                              owner=owner_object)
         return company
-    
+
     def company_is_exists(self, name: str) -> bool:
         """Return true if company exists"""
         try:
-            company = self.get(company_name=name)
+            self.get(company_name=name)
             return True
-        except:
+        except Exception as e:
             return False
 
+
 class Company(models.Model):
-    company_id = models.CharField(max_length=255, default=generate_company_id)
+    company_id = models.CharField(max_length=255, default=generate_unique_id)
     company_name = models.CharField(max_length=255)
     owner_name = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -42,18 +35,8 @@ class Company(models.Model):
 
     objects = CompanyManager()
 
-
-    def is_valid_business_type(self, business_type: str):
-        return business_type.lower() in BUSINESS_FIELD
-
     def save(self, *args, **kwargs):
         if not self.id:
             self.created_at = timezone.now()
         self.updated_at = timezone.now()
         return super(Company, self).save(*args, **kwargs)
-
-
-
-    
-
-
