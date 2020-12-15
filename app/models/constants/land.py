@@ -53,8 +53,8 @@ class Land(models.Model):
         return self.rent
 
     def generate_continent_cost(self, base_cost):
-        return random.uniform(float(base_cost * 0.08),
-                              float(base_cost * 0.12))
+        return random.uniform(float(base_cost) * 0.08,
+                              float(base_cost) * 0.12)
 
     def get_continent_buy_cost(self):
         """Return the continent buy cost"""

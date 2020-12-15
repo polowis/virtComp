@@ -85,7 +85,7 @@ class LandscapeManager(models.Manager):
             landscape: Landscape = self.create(level=level,
                                                buy_cost=land.get_land_cost(),
                                                rent_cost=land.get_rent_cost(),
-                                               contient_cost=land.get_continent_buy_cost(),
+                                               continent_cost=land.get_continent_buy_cost(),
                                                continent_rent=land.get_continent_rent_cost(),
                                                continent=continent.lower())
             landscape.save()
@@ -120,8 +120,8 @@ class Landscape(models.Model):
 
     # the cost of contient specific will be the extra cost.
     # buy cost + continent_cost
-    contient_cost = models.DecimalField(max_digits=20, decimal_places=4)
-    contient_rent = models.DecimalField(max_digits=20, decimal_places=4)
+    continent_cost = models.DecimalField(max_digits=20, decimal_places=4)
+    continent_rent = models.DecimalField(max_digits=20, decimal_places=4)
 
     is_buy = models.BooleanField(default=False)
     is_rent = models.BooleanField(default=False)

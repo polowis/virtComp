@@ -12,7 +12,7 @@ def get_current_register_company(request: HttpRequest):
                 if company.owner_name == request.user.username:
                     return company
                 return None
-            except:
+            except Exception as e:
                 return None
         return None
     return None
