@@ -167,7 +167,7 @@ class Landscape(models.Model):
 
     def on_rent(self) -> bool:
         """Return true if this landscape is on rent by a company"""
-        return self.is_buy
+        return self.is_rent
 
     def already_bought(self) -> bool:
         """Return true if this landscape is already bought from a company"""
