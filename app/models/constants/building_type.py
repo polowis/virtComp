@@ -1,8 +1,15 @@
 from django.db import models
+from app.models import BuildingType
 
 
 class BuildingTypeManager(models.Manager):
-    pass
+    def get_building_by_type(self, building_type: str) -> BuildingType:
+        """Return BuildingType instance, raise error if not found"""
+        
+        if isinstance(building_type, str):
+            return self.get(category=building_type)
+        raise TypeError("Building type must be a string but got" +
+                        f"{type(building_type)}")
 
 
 class BuildingType(models.Model):
