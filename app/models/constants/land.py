@@ -6,7 +6,7 @@ import random
 class LandManager(models.Manager):
     def get_land_by_level(self, level: int) -> Land:
         return self.get(level=level)
-    
+
     def get_supported_continents(self) -> list:
         return ['asia', 'south america', 'north america', 'europe',
                 'oceania', 'africa']
