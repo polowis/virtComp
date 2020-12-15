@@ -25,7 +25,7 @@ class BuildingType(models.Model):
     Please consider using Building class instead. Building class is
     linked directly to this class.
     """
-    category = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
 
     # base level cost. This will be the buy cost base of this building
     # The formula determines the price of upgrading is as follows:

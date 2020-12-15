@@ -12,6 +12,7 @@ class Command(BaseCommand):
         try:
             with open(self.default_path) as f:
                 reader = csv.reader(f)
+                next(reader, None)
                 for row in reader:
                     default_value = {
                         'cost': row[1],

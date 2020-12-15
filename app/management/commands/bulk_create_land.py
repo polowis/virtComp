@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         number_of_lands = options['number_of_lands']
-        continent = options['land_continent']
+        continent: str = options['land_continent']
         for number_of_land in number_of_lands:
             for i in range(int(number_of_land)):
                 landscape: Landscape = Landscape.objects.create_land(continent)
