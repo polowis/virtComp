@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 import csv
 from app.models.constants.land import Land
 
+
 class Command(BaseCommand):
     help = 'Load a CSV file to database'
 

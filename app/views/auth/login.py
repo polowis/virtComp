@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, JsonResponse
 from setting import local_settings
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class LoginView(View):
@@ -29,5 +28,5 @@ class LoginView(View):
 class LogoutView(View):
     def post(self, request: HttpRequest):
         logout(request)
-        data  = {'message': 'success', 'redirect_url': '/'}
+        data = {'message': 'success', 'redirect_url': '/'}
         return JsonResponse(data)

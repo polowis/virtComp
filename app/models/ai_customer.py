@@ -1,19 +1,9 @@
 from django.db import models
 
 
-import time, uuid
-
-current_time = lambda: int(round(time.time() * 1000))
-
-
-def generate_unique_id():
-    """generate unique id"""
-    return str(uuid.uuid1()).replace("-", "")
-
-
 
 class AI_Customer(models.Model):
-    customer_id = models.CharField(max_length=255, default=generate_company_id)
+    customer_id = models.CharField(max_length=255)
     class_level = models.Integer()
     salary = models.DecimalField()
     productivity = models.IntegerField()

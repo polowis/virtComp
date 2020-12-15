@@ -1,4 +1,6 @@
 import re
+
+
 class Validator(object):
 
     @staticmethod

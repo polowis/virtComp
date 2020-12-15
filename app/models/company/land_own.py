@@ -1,13 +1,8 @@
 from django.db import models
-import time, math, random, uuid
 
 from app.models.company import Company
 
-current_time = lambda: int(round(time.time() * 1000))
 
-def generate_unique_id():
-    """generate unique id"""
-    return str(uuid.uuid1()).replace("-", "")
 
 class LandOwnManager(models.Manager):
     def create_land(self, level, buy_cost, rent_cost):
@@ -16,6 +11,7 @@ class LandOwnManager(models.Manager):
     
     def get_available_land(self):
         return self.filter(status='')
+
 
 class LandOwn(models.Model):
     land_id = models.CharField(max_length=255, default=generate_unique_id)

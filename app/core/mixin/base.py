@@ -4,6 +4,7 @@ from app.core.util.company import *
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 
+
 class CompanyLoggedInRequiredMixin:
     def dispatch(self, request: HttpRequest, *args, **kwargs):
         company = get_current_register_company(request)

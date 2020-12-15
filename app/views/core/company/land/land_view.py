@@ -9,7 +9,7 @@ from app.core.mixin.base import *
 
 class LandAvailable(CompanyLoggedInRequiredMixin, View):
     template_name = 'core/land/all.html'
-    
+
     def get(self, request: HttpRequest):
         if request.user.is_authenticated:
             return render(request, self.template_name)
@@ -31,8 +31,7 @@ class LandView(UserLoggedInRequiredMixin, View):
         if land_id is None:
             return HttpResponse(status=404)
         try:
-            land = LandOwn.objects.values().get(land_id=land_id)
-            land_json = JsonResponse(land, safe=False)
+            LandOwn.objects.values().get(land_id=land_id)
             return render(request, self.template_name)
         except Exception as e:
             return HttpResponse(status=404)

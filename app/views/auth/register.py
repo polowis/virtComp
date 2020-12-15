@@ -74,7 +74,7 @@ class UserAvailability(View):
         return JsonResponse(data)
     
     def username_exists(self, username):
-        return User.objects.filter(username=username).exists() 
+        return User.objects.filter(username=username).exists()
     
     def email_exists(self, email):
         return User.objects.filter(email=email).exists()
