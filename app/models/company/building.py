@@ -1,6 +1,8 @@
+from __future__ import annotations
 from django.db import models
 from app.core.util.base import generate_unique_id
-from app.models import Company, Landscape, Building
+from .company import Company
+from .landscape import Landscape
 
 
 class BuildingManager(models.Manager):
