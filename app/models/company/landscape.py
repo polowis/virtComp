@@ -85,12 +85,13 @@ class LandscapeManager(models.Manager):
             land: Land = Land.objects.get_land_by_level(level)
 
             landscape: Landscape = self.create(
-                                    level=level,
-                                    buy_cost=land.get_land_cost(),
-                                    rent_cost=land.get_rent_cost(),
-                                    contient_cost=land.get_continent_buy_cost(),
-                                    continent_rent=land.get_continent_rent_cost(),
-                                    continent=continent.lower())
+                                level=level,
+                                buy_cost=land.get_land_cost(),
+                                rent_cost=land.get_rent_cost(),
+                                contient_cost=land.get_continent_buy_cost(),
+                                continent_rent=land.get_continent_rent_cost(),
+                                continent=continent.lower()
+                                )
             landscape.save()
             return landscape
 
