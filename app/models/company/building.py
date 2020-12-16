@@ -19,6 +19,8 @@ class Building(models.Model):
     building_id = models.CharField(max_length=255, default=generate_unique_id)
     building_type = models.CharField(max_length=255)
     building_name = models.CharField(max_length=255)
+
+    # the current level of this type of building
     current_level = models.IntegerField()
     company_name = models.CharField(max_length=255)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
