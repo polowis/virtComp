@@ -1,35 +1,41 @@
 from __future__ import annotations
+
+from .company import Company
 from django.db import models
 from app.core.util.base import generate_unique_id
-from .company import Company
 from ..constants.land import Land
 from django.utils import timezone
 from typing import Union
 import logging
 
 
+
+
 logger = logging.getLogger(__name__)
 
 
 class LandscapeManager(models.Manager):
+    
 
     def get_landscape_by_company(self, company: Union[Company, str]) -> bool:
-        if type(company) is Company:
+        if type(company) == Company:
             return self.filter(company=company)
         if isinstance(company, str):
             return self.filter(company_name=company)
-        raise TypeError("lookup_company must be a Company instance or a " +
-                        "string of company name")
+        raise TypeError("lookup_company must be a Company instance or a string of company name")
 
     def get_rent_landscape_by_company(self,
                                       company: Union[Company, str]) -> bool:
-        if type(company) is Company:
+        if type(company) == Company:
             return self.filter(company=company, is_rent=True)
         if isinstance(company, str):
             return self.filter(company_name=company, is_rent=True)
 
-        raise TypeError("lookup_company must be a Company instance or" +
-                        " a string of company name")
+        raise TypeError("lookup_company must be a Company instance or a string of company name")
+    
+    def get_supported_continents(self):
+        """Return the list of supported continents from Land class"""
+        return Land.objects.get_supported_continents()
 
     def get_landscape_by_id(self, landscape_id: Union[int, str],
                             force_primary=False) -> Landscape:
@@ -84,16 +90,16 @@ class LandscapeManager(models.Manager):
             level: int = Land.objects.get_random_land_level()
             land: Land = Land.objects.get_land_by_level(level)
 
-            landscape: Landscape = self.create(
-                                level=level,
-                                buy_cost=land.get_land_cost(),
-                                rent_cost=land.get_rent_cost(),
-                                contient_cost=land.get_continent_buy_cost(),
-                                continent_rent=land.get_continent_rent_cost(),
-                                continent=continent.lower()
-                                )
+            landscape: Landscape = self.create(level=level,
+                                               buy_cost=land.get_land_cost(),
+                                               rent_cost=land.get_rent_cost(),
+                                               continent_cost=land.get_continent_buy_cost(),
+                                               continent_rent=land.get_continent_rent_cost(),
+                                               continent=continent.lower())
             landscape.save()
             return landscape
+        else:
+            raise Exception("Invalid continent name. Please see Land.objects.get_supported_continents()")
 
     def create_multiple_landscape(self, continent: str,
                                   number_of_land: int) -> None:
@@ -114,6 +120,11 @@ class LandscapeManager(models.Manager):
 
 
 class Landscape(models.Model):
+    """The base landscape models for create or upgrading anything related to land
+    
+    To only retrive default and base land details, consider using Land object instead.
+    Alternatively, Landscape also supports retrieving information from Land object
+    """
     land_id = models.CharField(max_length=255, default=generate_unique_id)
     level = models.IntegerField()
     company_name = models.CharField(max_length=255, null=True)
@@ -124,8 +135,8 @@ class Landscape(models.Model):
 
     # the cost of contient specific will be the extra cost.
     # buy cost + continent_cost
-    contient_cost = models.DecimalField(max_digits=20, decimal_places=4)
-    contient_rent = models.DecimalField(max_digits=20, decimal_places=4)
+    continent_cost = models.DecimalField(max_digits=20, decimal_places=4)
+    continent_rent = models.DecimalField(max_digits=20, decimal_places=4)
 
     is_buy = models.BooleanField(default=False)
     is_rent = models.BooleanField(default=False)
@@ -167,7 +178,7 @@ class Landscape(models.Model):
 
     def on_rent(self) -> bool:
         """Return true if this landscape is on rent by a company"""
-        return self.is_buy
+        return self.is_rent
 
     def already_bought(self) -> bool:
         """Return true if this landscape is already bought from a company"""
@@ -178,6 +189,14 @@ class Landscape(models.Model):
         if self.company:
             return False
         return not self.is_buy and not self.is_rent
+    
+    def able_to_purchase(self, company: Company) -> bool:
+        """Return true if this given company instance be able to buy the land
+        
+        This function will check for balance left in company
+        """
+        if type(company) == Company:
+            return company.balance >= self.buy_cost
 
     def save(self, *args, **kwargs):
         """Save the object to the database"""
@@ -185,3 +204,11 @@ class Landscape(models.Model):
             self.created_at = timezone.now()
         self.updated_at = timezone.now()
         return super().save(*args, **kwargs)
+
+    def purchase_landscape(self, company: Company):
+        """The function will withdraw a certain amount of money from given company"""
+        self.company = company
+        self.company_name = company.company_name
+        company_new_balance = company.balance - self.buy_cost
+        company.balance = company_new_balance
+        company.save()

@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 import csv
 from app.models.constants.company_category import CompanyCategory
 
+
 class Command(BaseCommand):
     help = 'Load a CSV file to database'
 
@@ -24,7 +25,7 @@ class Command(BaseCommand):
                         'can_sell': self.convert_bool_value(row[9])
                     }
                     obj, created = CompanyCategory.objects.update_or_create(category=row[0],
-                    defaults=default_value)
+                                                                            defaults=default_value)
 
                     print('Load data complete')
         except Exception as e:

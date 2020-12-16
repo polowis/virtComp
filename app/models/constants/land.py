@@ -44,17 +44,21 @@ class Land(models.Model):
     objects = LandManager()
 
     def get_land_cost(self):
-        """generate land cost"""
+        """generate land cost. This will return a random result in the range
+        of 10% of land base cost
+        """
         return random.uniform(float(self.min_land_cost),
                               float(self.max_land_cost))
 
     def get_rent_cost(self):
-        """generate rent cost"""
+        """generate rent cost.
+        This simply return the rent cost property
+        """
         return self.rent
 
     def generate_continent_cost(self, base_cost):
-        return random.uniform(float(base_cost * 0.08),
-                              float(base_cost * 0.12))
+        return random.uniform(float(base_cost) * 0.08,
+                              float(base_cost) * 0.12)
 
     def get_continent_buy_cost(self):
         """Return the continent buy cost"""

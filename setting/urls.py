@@ -17,11 +17,13 @@ from django.contrib import admin
 from django.urls import path
 from app.views import *
 from django.views.generic import TemplateView
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpRequest
 from django.shortcuts import render
+
 
 def NewUIView(request: HttpRequest):
     return render(request, 'design_v2/demo.html')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

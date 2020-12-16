@@ -1,5 +1,5 @@
 from django.views import View
-from django.http import HttpResponse, HttpRequest, JsonResponse
+from django.http import HttpRequest, JsonResponse
 from app.core.util.company import get_current_register_company
 
 

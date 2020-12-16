@@ -1,11 +1,12 @@
-from django.contrib.auth import authenticate
+
 from django.views import View
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
 from app.core.validator.base import Validator
 from setting import local_settings
+
 
 class RegisterView(View):
     template_name = "auth/register.html"
@@ -73,7 +74,7 @@ class UserAvailability(View):
         return JsonResponse(data)
     
     def username_exists(self, username):
-        return User.objects.filter(username=username).exists() 
+        return User.objects.filter(username=username).exists()
     
     def email_exists(self, email):
         return User.objects.filter(email=email).exists()

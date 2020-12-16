@@ -1,7 +1,10 @@
+from __future__ import annotations
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from app.core.util.base import generate_unique_id
+import logging
+logger = logging.getLogger(__name__)
 
 
 class CompanyManager(models.Manager):
@@ -16,6 +19,7 @@ class CompanyManager(models.Manager):
             self.get(company_name=name)
             return True
         except Exception as e:
+            logger.warn(e)
             return False
 
 
@@ -40,3 +44,9 @@ class Company(models.Model):
             self.created_at = timezone.now()
         self.updated_at = timezone.now()
         return super(Company, self).save(*args, **kwargs)
+    
+    def can_buy_landscape(self, landscape) -> bool:
+        """
+        Return true if the company can buy the given landscape
+        """
+        return self.balance >= landscape.buy_cost

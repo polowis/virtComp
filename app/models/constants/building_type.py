@@ -8,8 +8,7 @@ class BuildingTypeManager(models.Manager):
 
         if isinstance(building_type, str):
             return self.get(category=building_type)
-        raise TypeError("Building type must be a string but got" +
-                        f"{type(building_type)}")
+        raise TypeError(f"Building type must be a string but got {type(building_type)}")
 
 
 class BuildingType(models.Model):
@@ -26,7 +25,7 @@ class BuildingType(models.Model):
     Please consider using Building class instead. Building class is
     linked directly to this class.
     """
-    category = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
 
     # base level cost. This will be the buy cost base of this building
     # The formula determines the price of upgrading is as follows:
@@ -55,3 +54,49 @@ class BuildingType(models.Model):
     # determine if this type of building is being able to sell items to
     # customers
     can_sell = models.BooleanField()
+
+    objects = BuildingTypeManager()
+
+
+    def get_max_employees(self, level: int = 0) -> float:
+        """Return the max employees for this type of building given the level
+        if level is not provided. The base max employees will be returned instead
+
+        if the level is a negative number, it will be considered as default value
+        """
+        if level <= 0:
+            return self.base_employees
+        else:
+            if isinstance(level, int):
+                return self.base_employees * self.employees_growth * level
+            raise TypeError("Level must be an integer but got {}".format(type(level)))
+    
+    def get_max_storage(self, level: int = 0) -> float:
+        """Return the max items can be stored in storage for this type of building given the level
+        if level is not provided. The base max storage will be returned instead.
+
+        if the level is a negative number, it will be considered as default value
+        """
+        if level <= 0:
+            return self.base_storage
+        else:
+            if isinstance(level, int):
+                return self.base_storage * self.storage_growth * level
+            raise TypeError("Level must be an integer but got {}".format(type(level)))
+    
+    def get_buy_cost(self, level: int = 0) -> float:
+        """
+        This will return the amount of money to buy this type of building
+        for the given level
+
+        :param level: The level of the building
+
+        if the level is a negative number, it will be considered as default value
+        """
+        if level <= 0:
+            return self.buy_cost
+        else:
+            if isinstance(level, int):
+                return self.buy_cost * self.cost_growth * level
+            raise TypeError("Level must be an integer but got {}".format(type(level)))
+
