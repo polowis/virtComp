@@ -53,15 +53,22 @@ class Building(models.Model):
 
     # the current level of this type of building
     current_level = models.IntegerField()
+
     company_name = models.CharField(max_length=255)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    # the storage field for this building
     current_storage = models.IntegerField()
     max_storage = models.IntegerField()
+
     current_employee = models.IntegerField(default=0)
     max_employee = models.IntegerField()
+
     is_buy = models.BooleanField(default=False)
     is_rent = models.BooleanField(default=False)
     rent_cost = models.DecimalField(max_digits=20, decimal_places=4)
+    buy_cost = models.DecimalField(max_digits=20, decimal_places=4)
+
     landscape = models.OneToOneField(Landscape, on_delete=models.CASCADE,
                                      primary_key=True)
     last_collected_money_at = models.DateTimeField()
