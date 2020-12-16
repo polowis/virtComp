@@ -54,3 +54,49 @@ class BuildingType(models.Model):
     # determine if this type of building is being able to sell items to
     # customers
     can_sell = models.BooleanField()
+
+    objects = BuildingTypeManager()
+
+
+    def get_max_employees(self, level: int = 0) -> float:
+        """Return the max employees for this type of building given the level
+        if level is not provided. The base max employees will be returned instead
+
+        if the level is a negative number, it will be considered as default value
+        """
+        if level <= 0:
+            return self.base_employees
+        else:
+            if isinstance(level, int):
+                return self.base_employees * self.employees_growth * level
+            raise TypeError("Level must be an integer but got {}".format(type(level)))
+    
+    def get_max_storage(self, level: int = 0) -> float:
+        """Return the max items can be stored in storage for this type of building given the level
+        if level is not provided. The base max storage will be returned instead.
+
+        if the level is a negative number, it will be considered as default value
+        """
+        if level <= 0:
+            return self.base_storage
+        else:
+            if isinstance(level, int):
+                return self.base_storage * self.storage_growth * level
+            raise TypeError("Level must be an integer but got {}".format(type(level)))
+    
+    def get_buy_cost(self, level: int = 0) -> float:
+        """
+        This will return the amount of money to buy this type of building
+        for the given level
+
+        :param level: The level of the building
+
+        if the level is a negative number, it will be considered as default value
+        """
+        if level <= 0:
+            return self.buy_cost
+        else:
+            if isinstance(level, int):
+                return self.buy_cost * self.cost_growth * level
+            raise TypeError("Level must be an integer but got {}".format(type(level)))
+
