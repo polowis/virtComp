@@ -28,6 +28,10 @@ class LandscapeManager(models.Manager):
             return self.filter(company_name=company, is_rent=True)
 
         raise TypeError("lookup_company must be a Company instance or a string of company name")
+    
+    def get_supported_continents(self):
+        """Return the list of supported continents from Land class"""
+        return Land.objects.get_supported_continents()
 
     def get_landscape_by_id(self, landscape_id: Union[int, str],
                             force_primary=False) -> Landscape:
@@ -112,6 +116,11 @@ class LandscapeManager(models.Manager):
 
 
 class Landscape(models.Model):
+    """The base landscape models for create or upgrading anything related to land
+    
+    To only retrive default and base land details, consider using Land object instead.
+    Alternatively, Landscape also supports retrieving information from Land object
+    """
     land_id = models.CharField(max_length=255, default=generate_unique_id)
     level = models.IntegerField()
     company_name = models.CharField(max_length=255, null=True)
@@ -176,6 +185,14 @@ class Landscape(models.Model):
         if self.company:
             return False
         return not self.is_buy and not self.is_rent
+    
+    def able_to_purchase(self, company: Company) -> bool:
+        """Return true if this given company instance be able to buy the land
+        
+        This function will check for balance left in company
+        """
+        if type(company) == Company:
+            return company.balance >= self.buy_cost
 
     def save(self, *args, **kwargs):
         """Save the object to the database"""
@@ -183,3 +200,11 @@ class Landscape(models.Model):
             self.created_at = timezone.now()
         self.updated_at = timezone.now()
         return super().save(*args, **kwargs)
+
+    def purchase_landscape(self, company: Company):
+        """The function will withdraw a certain amount of money from given company"""
+        self.company = company
+        self.company_name = company.company_name
+        company_new_balance = company.balance - self.buy_cost
+        company.balance = company_new_balance
+        company.save()
