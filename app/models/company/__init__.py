@@ -1,10 +1,8 @@
 
 
-from .company import Company
+from .company import *
 
 
-from .landscape import Landscape
+from .landscape import *
 
-from .building import Building
-
-__all__ = ['Company', 'Landscape', 'Building']
+from .building import *

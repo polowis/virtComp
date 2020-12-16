@@ -48,7 +48,7 @@ class Command(BaseCommand):
                 next(reader, None)
                 for row in reader:
                     land: Row = Row(row)
-                    default_value = {
+                    default_value: dict = {
                         'cost': land.buy_cost,
                         'rent': land.rent_cost,
                         'max_land_cost': land.max_land_cost,

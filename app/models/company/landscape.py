@@ -1,20 +1,25 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
+from .company import Company
 from django.db import models
 from app.core.util.base import generate_unique_id
-from .company import Company
 from ..constants.land import Land
 from django.utils import timezone
 from typing import Union
 import logging
 
 
+
+
 logger = logging.getLogger(__name__)
 
 
 class LandscapeManager(models.Manager):
+    
 
     def get_landscape_by_company(self, company: Union[Company, str]) -> bool:
-        if type(company) is Company:
+        if type(company) == Company:
             return self.filter(company=company)
         if isinstance(company, str):
             return self.filter(company_name=company)
@@ -22,7 +27,7 @@ class LandscapeManager(models.Manager):
 
     def get_rent_landscape_by_company(self,
                                       company: Union[Company, str]) -> bool:
-        if type(company) is Company:
+        if type(company) == Company:
             return self.filter(company=company, is_rent=True)
         if isinstance(company, str):
             return self.filter(company_name=company, is_rent=True)

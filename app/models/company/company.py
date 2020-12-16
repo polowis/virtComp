@@ -1,10 +1,9 @@
+from __future__ import annotations
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from app.core.util.base import generate_unique_id
 import logging
-from app.models import Landscape
-
 logger = logging.getLogger(__name__)
 
 
@@ -46,9 +45,8 @@ class Company(models.Model):
         self.updated_at = timezone.now()
         return super(Company, self).save(*args, **kwargs)
     
-    def can_buy_landscape(self, landscape: Landscape) -> bool:
+    def can_buy_landscape(self, landscape) -> bool:
         """
         Return true if the company can buy the given landscape
         """
-        if type(landscape) == Landscape:
-            return self.balance >= landscape.buy_cost
+        return self.balance >= landscape.buy_cost

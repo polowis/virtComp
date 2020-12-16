@@ -1,5 +1,6 @@
+from __future__ import annotations
 from django.db import models
-from app.models import BuildingType
+from .building_type import BuildingType
 
 
 class ItemManager(models.Manager):
