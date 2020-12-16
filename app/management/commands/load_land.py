@@ -4,7 +4,12 @@ from app.models.constants.land import Land
 
 
 class Row(object):
-    """The base row for readability purpose"""
+    """The base row for readability purpose
+    
+    Assuming that the csv file has the exact same format
+
+    level,buy_cost,rent_cost,max_land_cost,min_land_cost
+    """
     def __init__(self, row: list):
         self.row = row
     

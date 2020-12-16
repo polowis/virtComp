@@ -90,6 +90,8 @@ class LandscapeManager(models.Manager):
                                                continent=continent.lower())
             landscape.save()
             return landscape
+        else:
+            raise Exception("Invalid continent name. Please see Land.objects.get_supported_continents()")
 
     def create_multiple_landscape(self, continent: str,
                                   number_of_land: int) -> None:
