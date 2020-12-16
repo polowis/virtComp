@@ -5,6 +5,9 @@ from app.models import Landscape
 import random
 from setting import local_settings
 from app.core.mixin.base import *
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class LandAvailable(CompanyLoggedInRequiredMixin, View):
@@ -34,6 +37,7 @@ class LandView(UserLoggedInRequiredMixin, View):
             Landscape.objects.values().get(land_id=land_id)
             return render(request, self.template_name)
         except Exception as e:
+            logger.warn(e)
             return HttpResponse(status=404)
 
     def post(self, request: HttpRequest, land_id=None):
@@ -41,5 +45,6 @@ class LandView(UserLoggedInRequiredMixin, View):
             land = Landscape.objects.values().get(land_id=land_id)
             return JsonResponse(land, safe=False)
         except Exception as e:
+            logger.warn(e)
             data = {'error': 'Not Found'}
             return JsonResponse(data)
