@@ -118,6 +118,9 @@ class LandscapeManager(models.Manager):
         for i in range(int(number_of_land)):
             self.create_land(continent)
 
+    def get_available_land(self):
+        return self.filter(company_name=None)
+        
 
 class Landscape(models.Model):
     """The base landscape models for create or upgrading anything related to land

@@ -26,14 +26,15 @@ class CompanyCreateView(View):
                     company = Company.objects.create_company(company_name, request.user.username, request.user)
                     company.balance = 300
                     company.save()
-                    return redirect('/home/')
+                    data = {'error': False, 'redirect_url': '/home/'}
+                    return JsonResponse(data)
 
                 except Exception as e:
                     print(e)
-                    data = {'message': 'An error occurred'}
+                    data = {'error': True, 'message': 'An error occurred'}
                     return JsonResponse(data)
 
-            data = {'message': 'Invalid company name'}
+            data = {'error': True, 'message': 'Invalid company name'}
             return JsonResponse(data)
         return HttpResponse(status=419)
 

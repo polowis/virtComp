@@ -18,6 +18,7 @@
                 <th>Buy Cost</th>
                 <th>Rent Cost</th>
                 <th>Level</th>
+                <th>Continent</th>
             </thead>
             <tbody>
                 <tr v-for="land in lands" v-bind:key="land.land_id" class="hover-row">
@@ -25,6 +26,7 @@
                     <td>${{land.buy_cost}}</td>
                     <td>${{land.rent_cost}}</td>
                     <td>{{land.level}}</td>
+                    <td>{{land.continent}}</td>
 
                 </tr>
                 <!--

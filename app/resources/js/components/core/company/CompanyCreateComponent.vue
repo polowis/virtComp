@@ -97,6 +97,9 @@ export default {
                 }}).then(response => {
                     let data = response.data
                     this.msg = data.message
+                    if(data.error == false) {
+                        window.location.href = data.redirect_url
+                    }
                     
                 })
             }
