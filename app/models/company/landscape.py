@@ -120,7 +120,7 @@ class LandscapeManager(models.Manager):
 
     def get_available_land(self):
         return self.filter(company_name=None)
-        
+
 
 class Landscape(models.Model):
     """The base landscape models for create or upgrading anything related to land
