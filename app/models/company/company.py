@@ -1,10 +1,13 @@
 from __future__ import annotations
+import app.models
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from app.core.util.base import generate_unique_id
+from app.core.validator.base import Validator
 import logging
 logger = logging.getLogger(__name__)
+
 
 
 class CompanyManager(models.Manager):
@@ -21,6 +24,10 @@ class CompanyManager(models.Manager):
         except Exception as e:
             logger.warn(e)
             return False
+    
+    def can_create_company(self, name: str) -> bool:
+        """Return true if the given company name can be created"""
+        return not self.company_is_exists and Validator.is_alphanumeric(name) and Validator.has_below(name)
 
 
 class Company(models.Model):
@@ -45,7 +52,7 @@ class Company(models.Model):
         self.updated_at = timezone.now()
         return super(Company, self).save(*args, **kwargs)
     
-    def can_buy_landscape(self, landscape) -> bool:
+    def can_buy_landscape(self, landscape: app.models.Landscape) -> bool:
         """
         Return true if the company can buy the given landscape
         """

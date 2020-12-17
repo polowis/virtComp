@@ -18,13 +18,15 @@
                 <th>Buy Cost</th>
                 <th>Rent Cost</th>
                 <th>Level</th>
+                <th>Continent</th>
             </thead>
             <tbody>
-                <tr v-for="land in lands" v-bind:key="land.land_id" class="hover-row">
+                <tr v-for="land in this.normalizeLandData()" v-bind:key="land.land_id" class="hover-row">
                     <td style="cursor: pointer; color: #00d1b2" @click.prevent="redirectToLand(land.land_id)">{{land.land_id}}</td>
                     <td>${{land.buy_cost}}</td>
                     <td>${{land.rent_cost}}</td>
                     <td>{{land.level}}</td>
+                    <td>{{land.continent}}</td>
 
                 </tr>
                 <!--
@@ -58,6 +60,10 @@ export default {
         this.fetchLands()
     },
 
+    computed: {
+        
+    },
+
     methods: {
         fetchLands() {
             axios.post('/land/view/').then(response => {
@@ -75,7 +81,28 @@ export default {
 
         redirectToLand(land_id) {
             window.location.href = `/land/${land_id}/view/`
+        },
+
+        titleCase(str) {
+            let splitString = str.toLowerCase().split(' ');
+            for (let i = 0; i < splitString.length; i++) {
+                // You do not need to check if i is larger than splitStr length, as your for does that for you
+                // Assign it back to the array
+                splitString[i] = splitString[i].charAt(0).toUpperCase() + splitString[i].substring(1);     
+            }
+            // Directly return the joined string
+            return splitString.join(' '); 
+        },
+
+        normalizeLandData() {
+            return this.lands.map(land =>{
+                let tempLand = Object.assign({}, land)
+                tempLand.continent = this.titleCase(land.continent)
+                return tempLand
+
+            })
         }
+
     }
 }
 </script>

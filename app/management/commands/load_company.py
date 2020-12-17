@@ -32,7 +32,7 @@ class Command(BaseCommand):
             raise CommandError(e)
     
     def convert_bool_value(self, value):
-        if value.lower() in ['true','1', 'yes',]:
+        if value.lower() in ['true', '1', 'yes']:
             return True
         
         if value.lower() in ['false', '0', 'no']:

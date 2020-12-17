@@ -25,8 +25,8 @@ class LandManager(models.Manager):
 
     def get_random_land_level(self) -> int:
         """Return a random land level"""
-        return random.choices(self.get_probability(),
-                              self.get_supported_land_level(), k=1)[0]
+        return random.choices(self.get_supported_land_level(),
+                              self.get_probability(), k=1)[0]
 
     def get_random_continent(self) -> str:
         """get a random continent"""

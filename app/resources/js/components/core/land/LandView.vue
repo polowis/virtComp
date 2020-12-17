@@ -12,10 +12,12 @@
                     <h3>Land ID: {{land.land_id}}</h3>
                     
                     <p>Company Owner: {{land.company_name}}</p>
-                    <p>Land Status: {{land.status}}</p>
+                    <p v-if="land.company_name !== null">Land Status: Not available to purchase </p>
+                    <p v-else style="color: #00d1b2">Land Status: Available to purchase</p>
                     <p>Land Level: {{land.level}}</p>
                     <p>Land Cost: ${{land.buy_cost}}</p>
                     <p>Land Rent: ${{land.rent_cost}} / week</p>
+                    <p>Land Continent: {{this.titleCase(land.continent)}}</p>
                     <p v-if="land.company_name === null" style="color: #00d1b2">Available to buy/rent</p>
                     <div v-if="land.company_name === null">
                         <div class="control">
@@ -58,7 +60,17 @@ export default {
             axios.post(`/land/${this.land.land_id}/buy`).then(response => {
 
             })
-        }
+        },
+
+        titleCase(str) {
+            let splitString = str.toLowerCase().split(' ');
+            for (let i = 0; i < splitString.length; i++) {
+               
+                splitString[i] = splitString[i].charAt(0).toUpperCase() + splitString[i].substring(1);     
+            }
+            return splitString.join(' '); 
+        },
+
     }
 
 }
