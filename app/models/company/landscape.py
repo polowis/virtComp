@@ -119,6 +119,7 @@ class LandscapeManager(models.Manager):
             self.create_land(continent)
 
     def get_available_land(self):
+        """Return list of Landscape objects that are not owned by any company"""
         return self.filter(company_name=None)
 
 
