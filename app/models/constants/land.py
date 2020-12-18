@@ -1,6 +1,46 @@
 from __future__ import annotations
 from django.db import models
 import random
+import csv
+
+
+class LandCSVRow(object):
+    """The base row for readability purpose
+    
+    Assuming that the csv file has the exact same format
+
+    level,buy_cost,rent_cost,max_land_cost,min_land_cost
+    """
+    def __init__(self, row: list):
+        if isinstance(row, list) and self._has_correct_format(row):
+            self.row = row
+        raise TypeError("row must be a list with length of 5")
+    
+    @property
+    def level(self) -> int:
+        return self.row[0]
+
+    @property
+    def rent_cost(self) -> float:
+        return self.row[2]
+    
+    @property
+    def buy_cost(self) -> float:
+        return self.row[1]
+
+    @property
+    def max_land_cost(self) -> float:
+        return self.row[3]
+
+    @property
+    def min_land_cost(self) -> float:
+        return self.row[4]
+    
+    def _has_correct_format(self, row) -> bool:
+        """This will return true if the given list of rows
+        follow the required format.
+        """
+        return len(row) == 5
 
 
 class LandManager(models.Manager):
@@ -32,6 +72,30 @@ class LandManager(models.Manager):
         """get a random continent"""
         continent_list: list = self.get_supported_continents()
         return random.choice(continent_list)
+    
+    def load_land(self, path_to_csv_file: str = './csv_data/landData.csv') -> None:
+        """Load the land in given csv file.
+        
+        TODO: Allows to pass dictionary of lists
+        """
+        if isinstance(path_to_csv_file, str):
+            try:
+                with open(path_to_csv_file) as f:
+                    reader = csv.reader(f)
+                    next(reader, None)
+                    for row in reader:
+                        land: LandCSVRow = LandCSVRow(row)
+                        default_value: dict = {
+                            'cost': land.buy_cost,
+                            'rent': land.rent_cost,
+                            'max_land_cost': land.max_land_cost,
+                            'min_land_cost': land.min_land_cost
+                        }
+                        obj, created = Land.objects.update_or_create(level=land.level,
+                                                                     defaults=default_value)
+            except Exception as e:
+                raise FileNotFoundError("The file for csv file was not found")
+
 
 
 class Land(models.Model):
@@ -42,6 +106,9 @@ class Land(models.Model):
     min_land_cost = models.DecimalField(max_digits=20, decimal_places=4)
 
     objects = LandManager()
+
+    def __str__(self):
+        return self.level
 
     def get_land_cost(self):
         """generate land cost. This will return a random result in the range
