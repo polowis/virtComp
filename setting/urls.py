@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from app.views.exceptions import *
 from app.views import *
 from django.views.generic import TemplateView
 from django.http import HttpRequest
