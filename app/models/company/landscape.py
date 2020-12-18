@@ -194,7 +194,7 @@ class Landscape(models.Model):
             return False
         return not self.is_buy and not self.is_rent
     
-    def able_to_purchase(self, company: Company) -> bool:
+    def company_able_to_purchase(self, company: Company) -> bool:
         """Return true if this given company instance be able to buy the land
         
         This function will check for balance left in company
