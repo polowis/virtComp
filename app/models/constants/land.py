@@ -14,7 +14,8 @@ class LandCSVRow(object):
     def __init__(self, row: list):
         if isinstance(row, list) and self._has_correct_format(row):
             self.row = row
-        raise TypeError("row must be a list with length of 5")
+        else:
+            raise TypeError("row must be a list with length of 5")
     
     @property
     def level(self) -> int:
