@@ -17,6 +17,7 @@ class LandscapeTestCase(TestCase):
         self.assertEquals(self.land.can_be_purchased(), True)
     
     def test_land_not_able_to_buy_by_company(self):
+        self.company.balance = self.land.buy_cost - 1
         self.assertEquals(self.land.company_able_to_purchase(self.company), False)
     
     def test_land_able_to_buy_by_company(self):
