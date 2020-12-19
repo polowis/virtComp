@@ -3,7 +3,11 @@ from django.http import HttpRequest, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from app.models import Landscape
 import random
-from setting import local_settings
+import os
+if os.environ.get('GITHUB_WORKFLOW'):
+    from setting import settings as env
+else:
+    from setting import local_settings as env
 from app.core.mixin.base import *
 import logging
 
@@ -21,7 +25,7 @@ class LandAvailable(CompanyLoggedInRequiredMixin, View):
     def post(self, request: HttpRequest):
         if request.user.is_authenticated:
             lands_available = Landscape.objects.get_available_land()
-            random_lands = random.sample(list(lands_available.values()), local_settings.MAXIMUM_lAND_VIEW)
+            random_lands = random.sample(list(lands_available.values()), env.MAXIMUM_lAND_VIEW)
             return JsonResponse(random_lands, safe=False)
         data = {'error': 'not logged in', 'redirect_url': '/login/'}
         return JsonResponse(data, safe=False)
