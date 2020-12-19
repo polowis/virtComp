@@ -1,4 +1,6 @@
 
-from .land import *
-from .building_type import *
-from .item import *
+from .land import Land
+from .building_type import BuildingType
+from .item import Item
+
+__all__ = ['Land', 'BuildingType', 'Item']

@@ -1,9 +1,9 @@
 from __future__ import annotations
 from django.db import models
 from app.core.util.base import generate_unique_id
-from .company import Company
-from .landscape import Landscape
-from ..constants.building_type import BuildingType
+from app.models.core import Company
+from app.models.core import Landscape
+from app.models.constants import BuildingType
 import random
 
 

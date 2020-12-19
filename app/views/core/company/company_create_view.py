@@ -1,7 +1,7 @@
 from django.views import View
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
-from app.models.company import Company
+from app.models.core import Company
 from app.core.validator.base import Validator
 
 
