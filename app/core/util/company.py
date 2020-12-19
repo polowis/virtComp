@@ -1,5 +1,5 @@
 from django.http import HttpRequest
-from app.models.company import Company
+from app.models.core import Company
 from typing import Union
 
 
