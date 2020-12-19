@@ -194,7 +194,7 @@ class Landscape(models.Model):
             return False
         return not self.is_buy and not self.is_rent
     
-    def able_to_purchase(self, company: Company) -> bool:
+    def company_able_to_purchase(self, company: Company) -> bool:
         """Return true if this given company instance be able to buy the land
         
         This function will check for balance left in company
@@ -209,10 +209,11 @@ class Landscape(models.Model):
         self.updated_at = timezone.now()
         return super().save(*args, **kwargs)
 
-    def purchase_landscape(self, company: Company):
+    def purchase_landscape(self, company: Company) -> None:
         """The function will withdraw a certain amount of money from given company"""
         self.company = company
         self.company_name = company.company_name
         company_new_balance = company.balance - self.buy_cost
         company.balance = company_new_balance
         company.save()
+        self.buy()

@@ -11,9 +11,9 @@ logger = logging.getLogger(__name__)
 
 
 class CompanyManager(models.Manager):
-    def create_company(self, company_name, owner_name, owner_object):
-        company = self.create(company_name=company_name, owner_name=owner_name,
-                              owner=owner_object)
+    def create_company(self, company_name, owner_object, continent='asia'):
+        company = self.create(company_name=company_name, owner_name=owner_object.username,
+                              owner=owner_object, continent=continent)
         return company
 
     def company_is_exists(self, name: str) -> bool:
