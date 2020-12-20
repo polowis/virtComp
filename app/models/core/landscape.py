@@ -252,10 +252,16 @@ class Landscape(models.Model):
         :param company: the company instance that wants to buy the land
 
         :param method_acquired: the method of owning the land that the company wish to own
-        must be present in string format
+        must be present in string format (case insensitive but underscore must present).
+        Supported format: (continent_cost, continent_rent)
 
-        return extra cost in number format
+        return extra cost in number format. If the company does not required extra continent cost
+        this method will return 0
         """
-        if self.required_extra_continent_cost(company):
-            return getattr(self, method_acquired)
+
+        # preventing access to other attributes
+        supported_methods_acquired = ['continent_cost', 'continent_rent']
+
+        if self.required_extra_continent_cost(company) and method_acquired.lower() in supported_methods_acquired:
+            return getattr(self, method_acquired.lower())
         return 0
