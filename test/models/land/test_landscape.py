@@ -19,12 +19,22 @@ class LandscapeTestCase(TestCase):
     def test_land_not_able_to_buy_by_company(self):
         self.company.balance = self.land.buy_cost - 1
         self.company.save()
-        self.assertEquals(self.land.company_able_to_purchase(self.company), False)
+        self.assertEquals(self.land.company_able_to_purchase(self.company, 'buy_cost'), False)
+    
+    def test_land_not_able_to_buy_by_company_without_cost_key(self):
+        self.company.balance = self.land.buy_cost - 1
+        self.company.save()
+        self.assertEquals(self.land.company_able_to_purchase(self.company, 'buy'), False)
+    
+    def test_land_not_able_to_buy_by_company_without_cost_key_upper(self):
+        self.company.balance = self.land.buy_cost - 1
+        self.company.save()
+        self.assertEquals(self.land.company_able_to_purchase(self.company, 'BUY'), False)
     
     def test_land_able_to_buy_by_company(self):
         self.company.balance = self.land.buy_cost + 1
         self.company.save()
-        self.assertEquals(self.land.company_able_to_purchase(self.company), True)
+        self.assertEquals(self.land.company_able_to_purchase(self.company, 'buy_cost'), True)
     
     def test_company_required_extra_cost_to_buy_landscape(self):
         extra_cost_land = Landscape.objects.create_land('europe')

@@ -164,8 +164,14 @@ class Landscape(models.Model):
         """Buy the landscape. This function simple will try to
         update properties respectively.
 
+        NOTE: This does not subtract the required cost to obtain the landscape
+        but rather updating properties and save them to the database
+
         Alternatively, you can update it like the way how you normally
         do with django
+
+        This should not be called directly. Consider calling purchase_landscape for buying
+
         """
         if self.id:
             self.is_buy = True
@@ -179,8 +185,13 @@ class Landscape(models.Model):
         """Rent a landscape. This function simple will try to update
         properties respectively.
 
+        NOTE: This does not subtract the required cost to obtain the landscape
+        but rather updating properties and save them to the database
+
         Alternatively, you can update it like the way how you normally
         do with django
+
+        This should not be called directly. Consider calling rent_landscape for renting
         """
         if self.id:
             self.is_buy = False
@@ -204,15 +215,21 @@ class Landscape(models.Model):
             return False
         return not self.is_buy and not self.is_rent
     
-    def company_able_to_purchase(self, company: Company) -> bool:
+    def company_able_to_purchase(self, company: Company, method_acquired: str) -> bool:
         """Return true if this given company instance be able to buy the land
         
         This function will check for balance left in company
         """
-        if type(company) == Company:
-            return company.balance >= self.buy_cost
+        supported_methods_acquired = ['buy', 'rent', 'buy_cost', 'rent_cost']
+        if method_acquired.lower() in supported_methods_acquired and isinstance(method_acquired, str):
+            if not method_acquired.lower().endswith('_cost'):
+                method_acquired = method_acquired.lower() + '_cost'
+            
+            if type(company) == Company:
+                return company.balance >= getattr(self, method_acquired)
+        raise TypeError("method_acquired param must be in supported methods but got %s instead" % method_acquired)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         """Save the object to the database"""
         if not self.id:
             self.created_at = timezone.now()
@@ -233,8 +250,12 @@ class Landscape(models.Model):
             self.buy()
         else:
             raise TypeError("The company param must be an instance of Company but got {} instead".format(type(company)))
-    
-    def required_extra_continent_cost(self, company: Company):
+
+    def rent_landscape(self, company: Company) -> None:
+        if isinstance(company, Company):
+            self.company = company
+
+    def required_extra_continent_cost(self, company: Company) -> bool:
         """
         Return true if the there is an extra cost for owning a land
         outside company registered country
