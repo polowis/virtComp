@@ -1,2 +1,2 @@
-from .auth import *
-from .core import *
+from .auth import * # noqa
+from .core import * # noqa

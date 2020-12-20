@@ -25,6 +25,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: copy settings
+      run: |
+        cp ./setting/settings.py ./setting/local_settings.py 
     - name: Run Tests
       run: |
         python manage.py test

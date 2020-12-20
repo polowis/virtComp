@@ -27,8 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-REDIRECT_IF_LOGGED_IN = '/'
+REDIRECT_IF_LOGGED_IN = '/home/'
 
+LOGIN_URL = '/login/'
 
 # Application definition
 
@@ -126,3 +127,6 @@ STATIC_URL = '/static/'
 CSRF_COOKIE_NAME = "csrftoken"
 
 MAXIMUM_lAND_VIEW = 10
+
+SESSION_COOKIE_SECURE = True
+

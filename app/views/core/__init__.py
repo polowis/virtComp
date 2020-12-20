@@ -1,2 +1,2 @@
-from .home_view import *
-from .company import *
+from .home_view import * # noqa
+from .company import * # noqa

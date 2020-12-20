@@ -5,11 +5,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from app.core.validator.base import Validator
-import os
-if os.environ.get('GITHUB_WORKFLOW'):
-    from setting import settings as env
-else:
-    from setting import local_settings as env
+
+from setting import local_settings as env
 
 
 class RegisterView(View):

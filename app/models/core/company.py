@@ -11,26 +11,41 @@ logger = logging.getLogger(__name__)
 
 
 class CompanyManager(models.Manager):
-    def create_company(self, company_name, owner_object, continent='asia'):
-        company = self.create(company_name=company_name, owner_name=owner_object.username,
-                              owner=owner_object, continent=continent)
-        return company
+    def create_company(self, company_name: str, owner_object: User, continent='asia') -> Company:
+        """Create a company and save them to database. Return Company object
+
+        :param company_name: Name of the company
+
+        :param owner_object: The user object
+
+        :continent: the continent of the company
+
+        throw exception if unable to create
+        """
+        if self.can_create_company(company_name):
+            company = self.create(company_name=company_name, owner_name=owner_object.username,
+                                  owner=owner_object, continent=continent)
+            return company
+        raise Exception("Unable to create company. The company might be already exists")
 
     def company_is_exists(self, name: str) -> bool:
         """Return true if company exists"""
         try:
             self.get(company_name=name)
             return True
-        except Exception as e:
-            logger.warn(e)
+        except Exception as e: # noqa
+            # logger.warn(e)
             return False
     
     def can_create_company(self, name: str) -> bool:
         """Return true if the given company name can be created"""
-        return not self.company_is_exists and Validator.is_alphanumeric(name) and Validator.has_below(name)
+        return not self.company_is_exists(name) and Validator.is_alphanumeric(name) and Validator.has_below(name, 15)
 
 
 class Company(models.Model):
+    """
+    The company model. Use this class if you want to create a company associated with given user
+    """
     company_id = models.CharField(max_length=255, default=generate_unique_id)
     company_name = models.CharField(max_length=255)
     owner_name = models.CharField(max_length=255)

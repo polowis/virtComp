@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from .company import Company
+from app.models.core import Company
 from django.db import models
 from app.core.util.base import generate_unique_id
-from ..constants.land import Land
+from app.models.constants import Land
 from django.utils import timezone
 from typing import Union
 import logging
@@ -210,10 +210,42 @@ class Landscape(models.Model):
         return super().save(*args, **kwargs)
 
     def purchase_landscape(self, company: Company) -> None:
-        """The function will withdraw a certain amount of money from given company"""
-        self.company = company
-        self.company_name = company.company_name
-        company_new_balance = company.balance - self.buy_cost
-        company.balance = company_new_balance
-        company.save()
-        self.buy()
+        """The function will withdraw a certain amount of money from given company
+        
+        :param company: The company instance that wish to own this landscape
+        """
+        if isinstance(company, Company):
+            self.company = company
+            self.company_name = company.company_name
+            company_new_balance = company.balance - self.buy_cost
+            company.balance = company_new_balance
+            company.save()
+            self.buy()
+        else:
+            raise TypeError("The company param must be an instance of Company but got {} instead".format(type(company)))
+    
+    def required_extra_continent_cost(self, company: Company):
+        """
+        Return true if the there is an extra cost for owning a land
+        outside company registered country
+
+        Return False if there is no extra cost or invalid company object passing
+        """
+        if type(company) == Company:
+            return company.continent != self.continent
+        return False
+    
+    def get_extra_contient_cost(self, company: Company, method_acquired: str) -> Union[models.DecimalField, int]:
+        """This method return the extra cost for owning the land that outside of
+        company registered continent.
+
+        :param company: the company instance that wants to buy the land
+
+        :param method_acquired: the method of owning the land that the company wish to own
+        must be present in string format
+
+        return extra cost in number format
+        """
+        if self.required_extra_continent_cost(company):
+            return getattr(self, method_acquired)
+        return 0

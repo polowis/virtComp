@@ -1,3 +1,3 @@
-from .login import *
-from .register import *
-from .user import *
+from .login import * # noqa
+from .register import * # noqa
+from .user import * # noqa
