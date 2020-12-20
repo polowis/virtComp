@@ -26,6 +26,37 @@ class LandscapeTestCase(TestCase):
         self.company.save()
         self.assertEquals(self.land.company_able_to_purchase(self.company), True)
     
+    def test_company_required_extra_cost_to_buy_landscape(self):
+        extra_cost_land = Landscape.objects.create_land('europe')
+        self.assertEquals(extra_cost_land.required_extra_continent_cost(self.company), True)
+
+    def test_extra_continent_buy_cost_normal_case(self):
+        extra_cost_land = Landscape.objects.create_land('europe')
+        self.assertEquals(
+            extra_cost_land.get_extra_contient_cost(self.company, 'continent_cost'), extra_cost_land.continent_cost
+        )
+    
+    def test_extra_continent_buy_cost_uppercased(self):
+        extra_cost_land = Landscape.objects.create_land('europe')
+        self.assertEquals(
+            extra_cost_land.get_extra_contient_cost(self.company, 'CONTINENT_COST'), extra_cost_land.continent_cost
+        )
+    
+    def test_landscape_does_not_required_extra_continent_cost(self):
+        self.assertEquals(self.land.get_extra_contient_cost(self.company, 'continent_cost'), 0)
+    
+    def test_extra_continent_rent_cost_normal_case(self):
+        extra_cost_land = Landscape.objects.create_land('europe')
+        self.assertEquals(
+            extra_cost_land.get_extra_contient_cost(self.company, 'continent_rent'), extra_cost_land.continent_rent
+        )
+    
+    def test_extra_continent_rent_cost_upper_case(self):
+        extra_cost_land = Landscape.objects.create_land('europe')
+        self.assertEquals(
+            extra_cost_land.get_extra_contient_cost(self.company, 'CONTINENT_RENT'), extra_cost_land.continent_rent
+        )
+
     def test_landscape_is_bought(self):
         self.assertEquals(self.land.already_bought(), False)
     
