@@ -22,7 +22,7 @@ def get_current_register_company(request: HttpRequest, *args, **kwargs) -> Union
                 if company.owner_name == request.user.username:
                     return company
                 return None
-            except Exception as e:
+            except Exception as e: # noqa
                 return None
         return None
     return None

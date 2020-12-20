@@ -2,6 +2,9 @@ from django.views import View
 from django.http import HttpRequest, JsonResponse
 from app.models import Landscape, Company
 from app.core.util.company import get_current_register_company
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class LandBuy(View):
@@ -14,7 +17,8 @@ class LandBuy(View):
             else:
                 data = {'error': True, 'message': "A company has owned this land"}
                 return JsonResponse(data)
-        except:
+        except Exception as e:
+            logger.warn(e)
             data = {'error': True, 'message': 'Not found'}
             return JsonResponse(data)
     

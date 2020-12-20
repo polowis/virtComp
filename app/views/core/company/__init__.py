@@ -1,6 +1,6 @@
-from .company_create_view import *
-from .api import *
-from .company_view import *
-from .land import *
-from .company_logged_in import *
-from .company import *
+from .company_create_view import * # noqa
+from .api import * # noqa
+from .company_view import * # noqa
+from .land import * # noqa
+from .company_logged_in import * # noqa
+from .company import * # noqa
