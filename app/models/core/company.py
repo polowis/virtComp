@@ -5,13 +5,14 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from app.core.util.base import generate_unique_id
 from app.core.validator.base import Validator
+from django.contrib.auth.models import User
 import logging
 logger = logging.getLogger(__name__)
 
 
 
 class CompanyManager(models.Manager):
-    def create_company(self, company_name, owner_object, continent='asia') -> Company:
+    def create_company(self, company_name: str, owner_object: User, continent='asia') -> Company:
         """Create a company and save them to database. Return Company object
 
         :param company_name: Name of the company
@@ -33,13 +34,13 @@ class CompanyManager(models.Manager):
         try:
             self.get(company_name=name)
             return True
-        except Exception as e:
-            logger.warn(e)
+        except Exception as e: # noqa
+            # logger.warn(e)
             return False
     
     def can_create_company(self, name: str) -> bool:
         """Return true if the given company name can be created"""
-        return not self.company_is_exists and Validator.is_alphanumeric(name) and Validator.has_below(name)
+        return not self.company_is_exists(name) and Validator.is_alphanumeric(name) and Validator.has_below(name, 15)
 
 
 class Company(models.Model):
