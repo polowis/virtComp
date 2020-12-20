@@ -5,7 +5,6 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from app.core.util.base import generate_unique_id
 from app.core.validator.base import Validator
-from django.contrib.auth.models import User
 import logging
 logger = logging.getLogger(__name__)
 
