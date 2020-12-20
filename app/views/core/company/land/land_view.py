@@ -3,11 +3,8 @@ from django.http import HttpRequest, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from app.models import Landscape
 import random
-import os
-if os.environ.get('GITHUB_WORKFLOW'):
-    from setting import settings as env
-else:
-    from setting import local_settings as env
+
+from setting import local_settings as env
 from app.core.mixin.base import *
 import logging
 

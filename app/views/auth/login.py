@@ -2,11 +2,8 @@ from django.views import View
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, JsonResponse
-import os
-if os.environ.get('GITHUB_WORKFLOW'):
-    from setting import settings as env
-else:
-    from setting import local_settings as env
+
+from setting import local_settings as env
 
 
 class LoginView(View):
