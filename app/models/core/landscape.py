@@ -7,8 +7,8 @@ from app.models.constants import Land
 from django.utils import timezone
 from typing import Union
 import logging
-
-
+from setting import local_settings as env
+import random
 
 
 logger = logging.getLogger(__name__)
@@ -18,14 +18,15 @@ class LandscapeManager(models.Manager):
     
 
     def get_landscape_by_company(self, company: Union[Company, str]) -> bool:
+        """Return the list of landscape instance that are owned by the given company"""
         if type(company) == Company:
             return self.filter(company=company)
         if isinstance(company, str):
             return self.filter(company_name=company)
         raise TypeError("lookup_company must be a Company instance or a string of company name")
 
-    def get_rent_landscape_by_company(self,
-                                      company: Union[Company, str]) -> bool:
+    def get_rent_landscape_by_company(self, company: Union[Company, str]) -> bool:
+        """Return the list of landscape instance that on rent by the given company"""
         if type(company) == Company:
             return self.filter(company=company, is_rent=True)
         if isinstance(company, str):
@@ -121,6 +122,15 @@ class LandscapeManager(models.Manager):
     def get_available_land(self):
         """Return list of Landscape objects that are not owned by any company"""
         return self.filter(company_name=None)
+    
+    def get_random_available_land(self, json_format=True):
+        """get random land available to be purchased"""
+        if json_format:
+            landscapes_available = self.get_available_land()
+            random_lands = random.sample(list(landscapes_available.values()), env.MAXIMUM_lAND_VIEW)
+            return random_lands
+        else:
+            raise Exception("Not available in normal format.")
 
 
 class Landscape(models.Model):
