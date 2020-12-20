@@ -126,3 +126,6 @@ STATIC_URL = '/static/'
 CSRF_COOKIE_NAME = "csrftoken"
 
 MAXIMUM_lAND_VIEW = 10
+
+SESSION_COOKIE_SECURE = True
+

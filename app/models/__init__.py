@@ -1,8 +1,8 @@
 
 
-from .core import *
+from .core import * # noqa
 from .core import __all__ as core_model
-from .constants import *
+from .constants import * # noqa
 from .constants import __all__ as constants_model
 from .bank import CommunityBank, OwnerBank
 
