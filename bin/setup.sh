@@ -60,7 +60,6 @@ cp ./setting/settings.py ./setting/local_settings.py
 
 # run migrations
 echo "Running migrations..."
-./manage.py makemigrations
 ./manage.py migrate
 
 echo "Your setup is complete! If there are any problems, make sure to install fix or install the required dependencies and rerun this script again"
@@ -96,7 +95,6 @@ cp ./setting/settings.py ./setting/local_settings.py
 
 # run migrations
 echo "Running migrations..."
-./manage.py makemigrations
 ./manage.py migrate
 
 echo "Your setup is complete! If there are any problems, make sure to install fix or install the required dependencies and rerun this script again"
@@ -132,7 +130,6 @@ cp ./setting/settings.py ./setting/local_settings.py
 
 # run migrations
 echo "Running migrations..."
-./manage.py makemigrations
 ./manage.py migrate
 
 echo "Your setup is complete! If there are any problems, make sure to install fix or install the required dependencies and rerun this script again"
