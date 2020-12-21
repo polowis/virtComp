@@ -89,7 +89,7 @@ class LandscapeManager(models.Manager):
         default is False
         """
         if force_primary:
-            if isinstance(landscape_id, str):
+            if isinstance(landscape_id, str) or isinstance(landscape_id, int):
                 try:
                     landscape: Landscape = self.get(id=landscape_id)
                     return landscape.can_be_purchased()
@@ -98,7 +98,7 @@ class LandscapeManager(models.Manager):
                     raise TypeError("The landscape id cannot be found")
             raise TypeError("The landscape id must be a string")
         else:
-            if isinstance(landscape_id, str):
+            if isinstance(landscape_id, str) or isinstance(landscape_id, int):
                 try:
                     landscape: Landscape = self.get(land_id=landscape_id)
                     return landscape.can_be_purchased()

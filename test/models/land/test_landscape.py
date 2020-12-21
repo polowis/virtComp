@@ -13,6 +13,14 @@ class LandscapeTestCase(TestCase):
     def test_land_manager_is_available(self):
         land_is_available = Landscape.objects.landscape_is_available(self.land.land_id)
         self.assertEqual(land_is_available, True)
+    
+    def test_land_manager_is_available_with_force_index(self):
+        land_is_available = Landscape.objects.landscape_is_available(self.land.id, force_primary=True)
+        self.assertEqual(land_is_available, True)
+    
+    def test_get_landscape_by_id(self):
+        test_land = Landscape.objects.get_landscape_by_id(self.land.land_id)
+        self.assertEqual(self.land.land_id, test_land.land_id)
 
     def test_land_is_created(self):
         self.assertEqual(self.land.continent, 'asia')
