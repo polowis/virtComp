@@ -156,6 +156,8 @@ class Landscape(models.Model):
     is_rent = models.BooleanField(default=False)
     created_at = models.DateTimeField(editable=False)
     updated_at = models.DateTimeField(null=True)
+
+    # will be used to detect rent time
     last_collected_money_at = models.DateTimeField(null=True)
 
     objects = LandscapeManager()
@@ -240,11 +242,16 @@ class Landscape(models.Model):
         """The function will withdraw a certain amount of money from given company
         
         :param company: The company instance that wish to own this landscape
+
+        This function does not call company_able_to_purchase_method, you must call it manually and before this function
+        or else an exception will be thrown
         """
         if isinstance(company, Company):
             self.company = company
             self.company_name = company.company_name
             company_new_balance = company.balance - self.buy_cost
+            if company_new_balance < 0:
+                raise ValueError("Company balance must be positive")
             company.balance = company_new_balance
             company.save()
             self.buy()
@@ -252,8 +259,24 @@ class Landscape(models.Model):
             raise TypeError("The company param must be an instance of Company but got {} instead".format(type(company)))
 
     def rent_landscape(self, company: Company) -> None:
+        """The function will withdraw a certain amount of money from given company
+        
+        :param company: The company instance that wish to own this landscape
+
+        This function does not call company_able_to_purchase_method, you must call it manually and before this function
+        or else an exception will be thrown
+        """
         if isinstance(company, Company):
             self.company = company
+            self.company_name = company.company_name
+            company_new_balance = company.balance - self.rent_cost
+            if company_new_balance < 0:
+                raise ValueError("Company balance must be positive")
+            company.balance = company_new_balance
+            company.save()
+            self.rent()
+        else:
+            raise TypeError("The company param must be an instance of Company but got {} instead".format(type(company)))
 
     def required_extra_continent_cost(self, company: Company) -> bool:
         """
