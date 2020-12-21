@@ -15,7 +15,34 @@ logger = logging.getLogger(__name__)
 
 
 class LandscapeManager(models.Manager):
-    
+    """
+    The landscape manager.
+    """
+
+    def get_single_landscape_by_company(self, landscape_id: Union[str, int], company: Company,
+                                        force_primary: bool = False) -> Landscape:
+        """
+        This method return the landscape instance with given id and company.
+        The given company must own this landscape
+
+        if force_primary is True then it will look up for index key of the landscape in the database
+        default is False. You will need to make sure that param landscape_id is the actual index key
+        of the landscape not the land_id
+
+        :param company: the company instance or the company name. Both are fine but required
+        """
+        if force_primary:
+            if type(company) == Company:
+                return self.get(id=landscape_id, company=company)
+            if isinstance(company, str):
+                return self.get(id=landscape_id, company=company.company_name)
+            raise TypeError("The company must be a string or a company instance but got: %s" % type(company))
+        else:
+            if type(company) == Company:
+                return self.get(land_id=landscape_id, company=company)
+            if isinstance(company, str):
+                return self.get(land_id=landscape_id, company=company.company_name)
+            raise TypeError("The company must be a string or a company instance but got: %s" % type(company))
 
     def get_landscape_by_company(self, company: Union[Company, str]) -> bool:
         """Return the list of landscape instance that are owned by the given company"""
@@ -26,7 +53,9 @@ class LandscapeManager(models.Manager):
         raise TypeError("lookup_company must be a Company instance or a string of company name")
 
     def get_rent_landscape_by_company(self, company: Union[Company, str]) -> bool:
-        """Return the list of landscape instance that on rent by the given company"""
+        """Return the list of landscape instance that on rent by the given company
+        The param company can be either a string representing company name or a company instance
+        """
         if type(company) == Company:
             return self.filter(company=company, is_rent=True)
         if isinstance(company, str):
@@ -52,27 +81,27 @@ class LandscapeManager(models.Manager):
             return self.get(id=landscape_id)
         return self.get(land_id=landscape_id)
 
-    def landscape_is_available(self, landscape_id: str,
-                               force_primary=False) -> bool:
+    def landscape_is_available(self, landscape_id: Union[str, int],
+                               force_primary: bool = False) -> bool:
         """Return true if landscape is available to purchase (buy/rent)
 
         If you wish to look up by primary_key, simple add force_primary=True,
         default is False
         """
         if force_primary:
-            if isinstance(landscape_id, str):
+            if isinstance(landscape_id, str) or isinstance(landscape_id, int):
                 try:
                     landscape: Landscape = self.get(id=landscape_id)
-                    return landscape.can_be_purchased
+                    return landscape.can_be_purchased()
                 except Exception as e:
                     logger.info(e)
                     raise TypeError("The landscape id cannot be found")
             raise TypeError("The landscape id must be a string")
         else:
-            if isinstance(landscape_id, str):
+            if isinstance(landscape_id, str) or isinstance(landscape_id, int):
                 try:
                     landscape: Landscape = self.get(land_id=landscape_id)
-                    return landscape.can_be_purchased
+                    return landscape.can_be_purchased()
                 except Exception as e:
                     logger.info(e)
                     raise TypeError("The landscape id cannot be found")
@@ -154,8 +183,13 @@ class Landscape(models.Model):
 
     is_buy = models.BooleanField(default=False)
     is_rent = models.BooleanField(default=False)
+
+    is_selling = models.BooleanField(default=True)
+
     created_at = models.DateTimeField(editable=False)
     updated_at = models.DateTimeField(null=True)
+
+    # will be used to detect rent time
     last_collected_money_at = models.DateTimeField(null=True)
 
     objects = LandscapeManager()
@@ -164,8 +198,14 @@ class Landscape(models.Model):
         """Buy the landscape. This function simple will try to
         update properties respectively.
 
+        NOTE: This does not subtract the required cost to obtain the landscape
+        but rather updating properties and save them to the database
+
         Alternatively, you can update it like the way how you normally
         do with django
+
+        This should not be called directly. Consider calling purchase_landscape for buying
+
         """
         if self.id:
             self.is_buy = True
@@ -179,8 +219,13 @@ class Landscape(models.Model):
         """Rent a landscape. This function simple will try to update
         properties respectively.
 
+        NOTE: This does not subtract the required cost to obtain the landscape
+        but rather updating properties and save them to the database
+
         Alternatively, you can update it like the way how you normally
         do with django
+
+        This should not be called directly. Consider calling rent_landscape for renting
         """
         if self.id:
             self.is_buy = False
@@ -204,15 +249,21 @@ class Landscape(models.Model):
             return False
         return not self.is_buy and not self.is_rent
     
-    def company_able_to_purchase(self, company: Company) -> bool:
+    def company_able_to_purchase(self, company: Company, method_acquired: str) -> bool:
         """Return true if this given company instance be able to buy the land
         
         This function will check for balance left in company
         """
-        if type(company) == Company:
-            return company.balance >= self.buy_cost
+        supported_methods_acquired = ['buy', 'rent', 'buy_cost', 'rent_cost']
+        if method_acquired.lower() in supported_methods_acquired and isinstance(method_acquired, str):
+            if not method_acquired.lower().endswith('_cost'):
+                method_acquired = method_acquired.lower() + '_cost'
+            
+            if type(company) == Company:
+                return company.balance >= getattr(self, method_acquired)
+        raise TypeError("method_acquired param must be in supported methods but got %s instead" % method_acquired)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         """Save the object to the database"""
         if not self.id:
             self.created_at = timezone.now()
@@ -223,18 +274,43 @@ class Landscape(models.Model):
         """The function will withdraw a certain amount of money from given company
         
         :param company: The company instance that wish to own this landscape
+
+        This function does not call company_able_to_purchase_method, you must call it manually and before this function
+        or else an exception will be thrown
         """
         if isinstance(company, Company):
             self.company = company
             self.company_name = company.company_name
             company_new_balance = company.balance - self.buy_cost
+            if company_new_balance < 0:
+                raise ValueError("Company balance must be positive")
             company.balance = company_new_balance
             company.save()
             self.buy()
         else:
             raise TypeError("The company param must be an instance of Company but got {} instead".format(type(company)))
-    
-    def required_extra_continent_cost(self, company: Company):
+
+    def rent_landscape(self, company: Company) -> None:
+        """The function will withdraw a certain amount of money from given company
+        
+        :param company: The company instance that wish to own this landscape
+
+        This function does not call company_able_to_purchase_method, you must call it manually and before this function
+        or else an exception will be thrown
+        """
+        if isinstance(company, Company):
+            self.company = company
+            self.company_name = company.company_name
+            company_new_balance = company.balance - self.rent_cost
+            if company_new_balance < 0:
+                raise ValueError("Company balance must be positive")
+            company.balance = company_new_balance
+            company.save()
+            self.rent()
+        else:
+            raise TypeError("The company param must be an instance of Company but got {} instead".format(type(company)))
+
+    def required_extra_continent_cost(self, company: Company) -> bool:
         """
         Return true if the there is an extra cost for owning a land
         outside company registered country
@@ -265,3 +341,7 @@ class Landscape(models.Model):
         if self.required_extra_continent_cost(company) and method_acquired.lower() in supported_methods_acquired:
             return getattr(self, method_acquired.lower())
         return 0
+    
+    def put_on_sale(self, company: Company):
+        if self.company.company_name != company.company_name:
+            pass

@@ -8,8 +8,12 @@ import random
 
 
 class BuildingManager(models.Manager):
-    def create_building(self, building_type: str, building_name: str,
-                        company: Company) -> Building:
+    def create_building(self, building_type: str, building_name: str, company: Company) -> Building:
+        """Call this function to create a building with the given type and name
+        And the company instance that owns the building regardless of acquisition methods
+
+        return Building instance
+        """
         building: Building = self.create(building_type=building_type,
                                          building_name=building_name,
                                          company=company)
@@ -31,7 +35,9 @@ class BuildingManager(models.Manager):
         can never be greater than landscape level
         
         :param landscape: Landscape The landscape instance
+
         :param level: int The building level you wish to generate
+
         :param random_level: bool if it's true, the function will try to generate the random level
         in given range. default to False
         """
