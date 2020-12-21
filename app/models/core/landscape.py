@@ -15,7 +15,34 @@ logger = logging.getLogger(__name__)
 
 
 class LandscapeManager(models.Manager):
-    
+    """
+    The landscape manager.
+    """
+
+    def get_single_landscape_by_company(self, landscape_id: Union[str, int], company: Company,
+                                        force_primary: bool = False) -> Landscape:
+        """
+        This method return the landscape instance with given id and company.
+        The given company must own this landscape
+
+        if force_primary is True then it will look up for index key of the landscape in the database
+        default is False. You will need to make sure that param landscape_id is the actual index key
+        of the landscape not the land_id
+
+        :param company: the company instance or the company name. Both are fine but required
+        """
+        if force_primary:
+            if type(company) == Company:
+                return self.get(id=landscape_id, company=company)
+            if isinstance(company, str):
+                return self.get(id=landscape_id, company=company.company_name)
+            raise TypeError("The company must be a string or a company instance but got: %s" % type(company))
+        else:
+            if type(company) == Company:
+                return self.get(land_id=landscape_id, company=company)
+            if isinstance(company, str):
+                return self.get(land_id=landscape_id, company=company.company_name)
+            raise TypeError("The company must be a string or a company instance but got: %s" % type(company))
 
     def get_landscape_by_company(self, company: Union[Company, str]) -> bool:
         """Return the list of landscape instance that are owned by the given company"""
@@ -26,7 +53,9 @@ class LandscapeManager(models.Manager):
         raise TypeError("lookup_company must be a Company instance or a string of company name")
 
     def get_rent_landscape_by_company(self, company: Union[Company, str]) -> bool:
-        """Return the list of landscape instance that on rent by the given company"""
+        """Return the list of landscape instance that on rent by the given company
+        The param company can be either a string representing company name or a company instance
+        """
         if type(company) == Company:
             return self.filter(company=company, is_rent=True)
         if isinstance(company, str):
@@ -52,8 +81,8 @@ class LandscapeManager(models.Manager):
             return self.get(id=landscape_id)
         return self.get(land_id=landscape_id)
 
-    def landscape_is_available(self, landscape_id: str,
-                               force_primary=False) -> bool:
+    def landscape_is_available(self, landscape_id: Union[str, int],
+                               force_primary: bool = False) -> bool:
         """Return true if landscape is available to purchase (buy/rent)
 
         If you wish to look up by primary_key, simple add force_primary=True,
@@ -63,7 +92,7 @@ class LandscapeManager(models.Manager):
             if isinstance(landscape_id, str):
                 try:
                     landscape: Landscape = self.get(id=landscape_id)
-                    return landscape.can_be_purchased
+                    return landscape.can_be_purchased()
                 except Exception as e:
                     logger.info(e)
                     raise TypeError("The landscape id cannot be found")
@@ -72,7 +101,7 @@ class LandscapeManager(models.Manager):
             if isinstance(landscape_id, str):
                 try:
                     landscape: Landscape = self.get(land_id=landscape_id)
-                    return landscape.can_be_purchased
+                    return landscape.can_be_purchased()
                 except Exception as e:
                     logger.info(e)
                     raise TypeError("The landscape id cannot be found")
@@ -154,6 +183,9 @@ class Landscape(models.Model):
 
     is_buy = models.BooleanField(default=False)
     is_rent = models.BooleanField(default=False)
+
+    is_selling = models.BooleanField(default=True)
+
     created_at = models.DateTimeField(editable=False)
     updated_at = models.DateTimeField(null=True)
 
@@ -309,3 +341,7 @@ class Landscape(models.Model):
         if self.required_extra_continent_cost(company) and method_acquired.lower() in supported_methods_acquired:
             return getattr(self, method_acquired.lower())
         return 0
+    
+    def put_on_sale(self, company: Company):
+        if self.company.company_name != company.company_name:
+            pass
