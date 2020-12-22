@@ -358,3 +358,11 @@ class Landscape(models.Model):
                 self.is_selling = True
                 self.buy_cost = price
                 self.save()
+    
+    def owned_by(self, company: Union[Company, str]) -> bool:
+        """Return True if this landscape is owned by given company"""
+        if isinstance(company, str):
+            return self.company_name == company
+        elif type(company) == Company:
+            return self.company == company
+        raise TypeError("Company must be a string or a Company instance")

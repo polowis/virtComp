@@ -18,7 +18,7 @@ class LandBuy(View):
                     if land.company_name == company.company_name:
                         data = {'error': True, 'message': 'Successfully Purchase Landscape',
                                 'redirect_url': '/company/'}
-                        print('successfully bought')
+                        return JsonResponse(data)
             else:
                 data = {'error': True, 'message': "A company has owned this land"}
                 return JsonResponse(data)

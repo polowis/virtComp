@@ -94,7 +94,17 @@ class LandscapeTestCase(TestCase):
         self.land.purchase_landscape(self.company)
         self.assertEqual(self.company.balance, 1)
         self.assertEqual(self.land.already_bought(), True)
+
+    def test_own_by_landscape_string(self):
+        self.company.balance = self.land.buy_cost + 1
+        self.land.purchase_landscape(self.company)
+        self.assertEqual(self.land.owned_by(self.company.company_name), True)
     
+    def test_own_by_landscape_object(self):
+        self.company.balance = self.land.buy_cost + 1
+        self.land.purchase_landscape(self.company)
+        self.assertEqual(self.land.owned_by(self.company), True)
+
     def test_get_landscape_after_own(self):
         self.company.balance = self.land.buy_cost + 1
         self.land.purchase_landscape(self.company)
