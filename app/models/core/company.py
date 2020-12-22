@@ -72,3 +72,24 @@ class Company(models.Model):
         Return true if the company can buy the given landscape
         """
         return self.balance >= landscape.buy_cost
+    
+
+    def purchase_landscape(self, landscape: app.models.Landscape) -> None:
+        """The function will withdraw a certain amount of money from given company
+        
+        :param company: The company instance that wish to own this landscape
+
+        This function does not call company_able_to_purchase_method, you must call it manually and before this function
+        or else an exception will be thrown
+        """
+        if isinstance(landscape, app.models.Landscape):
+            self.balance -= landscape.buy_cost
+            if self.balance < 0:
+                raise ValueError("Company balance must be positive")
+            else:
+                landscape.company = self
+                landscape.company_name = self.company_name
+                self.save()
+                landscape.buy()
+        else:
+            raise TypeError("The company param must be an instance of Company but got {} instead".format(type(company)))
