@@ -102,4 +102,14 @@ class LandscapeTestCase(TestCase):
         self.assertEqual(self.land.land_id, test_land.land_id)
     
 
+    def test_company_buy_landscape_backward(self):
+        land = Landscape.objects.create_land('asia')
+        self.company.balance = land.buy_cost
+        if land.can_be_purchased():
+            if self.company.can_buy_landscape(land):
+                self.company.purchase_landscape(land)
+                self.assertEqual(land.company_name, self.company.company_name)
+                self.assertEqual(self.company.balance, 0)
+    
+
 
