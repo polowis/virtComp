@@ -15,8 +15,3 @@ class Command(BaseCommand):
         continent: str = options['continent']
         for number_of_land in number_of_lands:
             Landscape.objects.create_multiple_landscape(continent, number_of_land)
-            """
-            for i in range(int(number_of_land)):
-                landscape: Landscape = Landscape.objects.create_land(continent)
-                print("Created landscape with id {} and level {}".format(landscape.land_id, landscape.level))
-            """
