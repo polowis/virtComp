@@ -10,6 +10,9 @@ class LandscapeTestCase(TestCase):
         self.user: User = User.objects.create_user('johnyTest', 'john@example.com', 'johnpassword')
         self.company: Company = Company.objects.create_company('johnCompany', self.user, 'asia')
     
+    def test_bulk_create_landscape(self):
+        Landscape.objects.create_multiple_landscape('europe', 10)
+
     def test_land_manager_is_available(self):
         land_is_available = Landscape.objects.landscape_is_available(self.land.land_id)
         self.assertEqual(land_is_available, True)
@@ -30,32 +33,26 @@ class LandscapeTestCase(TestCase):
     
     def test_land_not_able_to_buy_by_company(self):
         self.company.balance = self.land.buy_cost - 1
-        self.company.save()
         self.assertEqual(self.land.company_able_to_purchase(self.company, 'buy_cost'), False)
     
     def test_land_not_able_to_buy_by_company_without_cost_key(self):
         self.company.balance = self.land.buy_cost - 1
-        self.company.save()
         self.assertEqual(self.land.company_able_to_purchase(self.company, 'buy'), False)
     
     def test_land_not_able_to_buy_by_company_without_cost_key_upper(self):
         self.company.balance = self.land.buy_cost - 1
-        self.company.save()
         self.assertEqual(self.land.company_able_to_purchase(self.company, 'BUY'), False)
     
     def test_land_able_to_buy_by_company(self):
         self.company.balance = self.land.buy_cost + 1
-        self.company.save()
         self.assertEqual(self.land.company_able_to_purchase(self.company, 'buy_cost'), True)
     
     def test_land_able_to_rent_by_company(self):
         self.company.balance = self.land.rent_cost + 1
-        self.company.save()
         self.assertEqual(self.land.company_able_to_purchase(self.company, 'rent_cost'), True)
     
     def test_land_not_able_to_rent_by_company(self):
         self.company.balance = self.land.rent_cost - 1
-        self.company.save()
         self.assertEqual(self.land.company_able_to_purchase(self.company, 'rent_cost'), False)
     
     def test_company_required_extra_cost_to_buy_landscape(self):
@@ -94,14 +91,12 @@ class LandscapeTestCase(TestCase):
     
     def test_buy_landscape(self):
         self.company.balance = self.land.buy_cost + 1
-        self.company.save()
         self.land.purchase_landscape(self.company)
         self.assertEqual(self.company.balance, 1)
         self.assertEqual(self.land.already_bought(), True)
     
     def test_get_landscape_after_own(self):
         self.company.balance = self.land.buy_cost + 1
-        self.company.save()
         self.land.purchase_landscape(self.company)
         test_land = Landscape.objects.get_single_landscape_by_company(self.land.land_id, self.company)
         self.assertEqual(self.land.land_id, test_land.land_id)

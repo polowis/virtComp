@@ -106,6 +106,15 @@ class LandscapeManager(models.Manager):
                     logger.info(e)
                     raise TypeError("The landscape id cannot be found")
             raise TypeError("The landscape id must be a string")
+    
+    def _generate_default_landscape(self, continent: str):
+        level: int = Land.objects.get_random_land_level()
+        land: Land = Land.objects.get_land_by_level(level)
+
+        return Landscape(level=level, buy_cost=land.get_land_cost(), rent_cost=land.get_rent_cost(),
+                         continent_cost=land.get_continent_buy_cost(),
+                         continent_rent=land.get_continent_rent_cost(),
+                         continent=continent.lower())
 
     def create_land(self, continent: str) -> Landscape:
         """Create default land. To retreive supported continents
@@ -117,16 +126,8 @@ class LandscapeManager(models.Manager):
         return Landscape instance
         """
         if continent.lower() in Land.objects.get_supported_continents():
-            level: int = Land.objects.get_random_land_level()
-            land: Land = Land.objects.get_land_by_level(level)
-
-            landscape: Landscape = self.create(level=level,
-                                               buy_cost=land.get_land_cost(),
-                                               rent_cost=land.get_rent_cost(),
-                                               continent_cost=land.get_continent_buy_cost(),
-                                               continent_rent=land.get_continent_rent_cost(),
-                                               continent=continent.lower())
-            landscape.save()
+            landscape: Landscape = self._generate_default_landscape(continent)
+            landscape.save(force_insert=True)
             return landscape
         else:
             raise Exception("Invalid continent name. Please see Land.objects.get_supported_continents()")
@@ -145,8 +146,8 @@ class LandscapeManager(models.Manager):
 
         return None
         """
-        for i in range(int(number_of_land)):
-            self.create_land(continent)
+        lands = [self._generate_default_landscape(continent) for i in range(int(number_of_land))]
+        self.bulk_create(lands)
 
     def get_available_land(self):
         """Return list of Landscape objects that are not owned by any company"""
@@ -186,7 +187,7 @@ class Landscape(models.Model):
 
     is_selling = models.BooleanField(default=True)
 
-    created_at = models.DateTimeField(editable=False)
+    created_at = models.DateTimeField(editable=False, default=timezone.now)
     updated_at = models.DateTimeField(null=True)
 
     # will be used to detect rent time
@@ -210,6 +211,7 @@ class Landscape(models.Model):
         if self.id:
             self.is_buy = True
             self.is_rent = False
+            self.is_selling = False
             self.last_collected_money_at = timezone.now()
             return self.save(*args, **kwargs)
         else:
@@ -230,6 +232,7 @@ class Landscape(models.Model):
         if self.id:
             self.is_buy = False
             self.is_rent = True
+            self.is_selling = False
             self.last_collected_money_at = timezone.now()
             return self.save(*args, **kwargs)
         else:
@@ -245,9 +248,7 @@ class Landscape(models.Model):
 
     def can_be_purchased(self) -> bool:
         """Return true if this landscape can be purchased"""
-        if self.company:
-            return False
-        return not self.is_buy and not self.is_rent
+        return self.is_selling
     
     def company_able_to_purchase(self, company: Company, method_acquired: str) -> bool:
         """Return true if this given company instance be able to buy the land
@@ -342,6 +343,12 @@ class Landscape(models.Model):
             return getattr(self, method_acquired.lower())
         return 0
     
-    def put_on_sale(self, company: Company):
-        if self.company.company_name != company.company_name:
-            pass
+    def put_on_sale(self, company: Company, price: float):
+        """
+        Put this landscape on sale. Currently only support buy method
+        This also means that the given company must own this landscape
+        """
+        if type(company) == Company and isinstance(price, float):
+            if self.company_name == company.company_name:
+                self.is_selling = True
+                self.buy_cost = price
