@@ -108,6 +108,10 @@ class LandscapeManager(models.Manager):
             raise TypeError("The landscape id must be a string")
     
     def _generate_default_landscape(self, continent: str):
+        """Return the landscape instance but DOES NOT SAVE INTO DATABASE
+        
+        consider using create_land() instead
+        """
         level: int = Land.objects.get_random_land_level()
         land: Land = Land.objects.get_land_by_level(level)
 
@@ -343,12 +347,14 @@ class Landscape(models.Model):
             return getattr(self, method_acquired.lower())
         return 0
     
-    def put_on_sale(self, company: Company, price: float):
+    def put_on_sale(self, company: Company, price: float) -> None:
         """
         Put this landscape on sale. Currently only support buy method
         This also means that the given company must own this landscape
         """
         if type(company) == Company and isinstance(price, float):
             if self.company_name == company.company_name:
+                # only is the given company owns this landscape
                 self.is_selling = True
                 self.buy_cost = price
+                self.save()
