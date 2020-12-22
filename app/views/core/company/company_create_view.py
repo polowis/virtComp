@@ -19,11 +19,12 @@ class CompanyCreateView(View):
         company_manager = CompanyAvailability()
         if request.user.is_authenticated:
             company_name = request.POST.get('companyName', None)
+            continent = request.POST.get('continent', 'asia')
             if company_name is None:
                 data = {'message': 'missing company name'}
             if company_manager.can_create_company(company_name):
                 try:
-                    company = Company.objects.create_company(company_name, request.user.username, request.user)
+                    company = Company.objects.create_company(company_name, request.user, continent)
                     company.balance = 300
                     company.save()
                     data = {'error': False, 'redirect_url': '/home/'}

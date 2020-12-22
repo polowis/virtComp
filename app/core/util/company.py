@@ -15,7 +15,7 @@ def get_current_register_company(request: HttpRequest, *args, **kwargs) -> Union
 
     if request.user.is_authenticated:
         cookie_name = 'host_user'
-        cookie = request.get_signed_cookie(cookie_name)
+        cookie = request.get_signed_cookie(cookie_name, None)
         if cookie is not None:
             try:
                 company = Company.objects.get(company_name=cookie)

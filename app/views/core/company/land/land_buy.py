@@ -12,8 +12,13 @@ class LandBuy(View):
         try:
             land: Landscape = Landscape.objects.get(land_id=land_id)
             company: Company = get_current_register_company(request)
-            if not self.land_already_bought(land):
-                self.buy(land, company)
+            if land.can_be_purchased():
+                if company.can_buy_landscape(land):
+                    company.purchase_landscape(land)
+                    if land.company_name == company.company_name:
+                        data = {'error': True, 'message': 'Successfully Purchase Landscape',
+                                'redirect_url': '/company/'}
+                        return JsonResponse(data)
             else:
                 data = {'error': True, 'message': "A company has owned this land"}
                 return JsonResponse(data)
@@ -28,6 +33,3 @@ class LandBuy(View):
             new_balance = company.balance - land.buy_cost
             company.balance = new_balance
             company.save()
-    
-    def land_already_bought(self, land: Landscape) -> bool:
-        return land.company_name is not None
