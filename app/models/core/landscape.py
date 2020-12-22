@@ -353,7 +353,7 @@ class Landscape(models.Model):
         This also means that the given company must own this landscape
         """
         if type(company) == Company and isinstance(price, float):
-            if self.company_name == company.company_name:
+            if self.company_name == company.company_name and self.already_bought():
                 # only is the given company owns this landscape
                 self.is_selling = True
                 self.buy_cost = price

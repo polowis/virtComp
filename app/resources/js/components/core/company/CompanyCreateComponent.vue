@@ -93,6 +93,7 @@ export default {
             {
                 let form = new FormData()
                 form.append('companyName', this.companyName)
+                form.append('continent', this.continent)
                 axios.post('/company/create/', form, {headers: {'Content-Type': 'multipart/form-data'
                 }}).then(response => {
                     let data = response.data

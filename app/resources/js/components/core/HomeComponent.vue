@@ -17,7 +17,7 @@
                 <span class="icon is-small">
                 <i class="fas fa-plus"></i>
                 </span>
-                <span @click.prevent="createCompany()">Create a company</span>
+                <span><a style="color: black" href="/company/create/">Create a company</a></span>
         </a>
         </div>
 
