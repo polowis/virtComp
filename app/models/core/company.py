@@ -92,4 +92,5 @@ class Company(models.Model):
                 self.save()
                 landscape.buy()
         else:
-            raise TypeError("The company param must be an instance of Company but got {} instead".format(type(company)))
+            raise TypeError("The landscape param must be an instance of landscape but "
+                            "got {} instead".format(type(landscape)))
