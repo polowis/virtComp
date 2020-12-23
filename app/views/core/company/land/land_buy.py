@@ -11,8 +11,9 @@ class LandBuy(View):
     def post(self, request: HttpRequest, land_id=None):
         try:
             land: Landscape = Landscape.objects.get(land_id=land_id)
-            company: Company = get_current_register_company(request)
-            if land.can_be_purchased():
+            company: Company = request.company
+            print(company)
+            if land.can_be_purchased() and company is not None:
                 if company.can_buy_landscape(land):
                     company.purchase_landscape(land)
                     if land.company_name == company.company_name:

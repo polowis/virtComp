@@ -21,8 +21,16 @@
                     <p v-if="land.company_name === null" style="color: #00d1b2">Available to buy/rent</p>
                     <div v-if="land.company_name === null">
                         <div class="control">
-                            <button class="button is-primary" @click.prevent="buyLand()">Buy</button>
-                            <button class="button is-primary" @click.prevent="rentLand()">Rent</button>
+                            <button class="button is-primary" @click.prevent="confirmedBuy = true">Buy</button>
+                            <button class="button is-primary" @click.prevent="confirmedRent = true">Rent</button>
+                        </div>
+                        <div class="control" v-if="confirmedBuy" style="margin-top: 20px">
+                            <button class="button is-dark" @click.prevent="buyLand()">Confirm Buy</button>
+                            <button class="button is-danger" @click.prevent="confirmedBuy = false">Cancel</button>
+                        </div>
+                        <div class="control" v-if="confirmedRent" style="margin-top: 20px">
+                            <button class="button is-dark" @click.prevent="rentLand()">Confirm Rent</button>
+                            <button class="button is-danger" @click.prevent="confirmedRent = false">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -40,7 +48,9 @@ export default {
 
     data() {
         return {
-            land: ""
+            land: "",
+            confirmedBuy: false,
+            confirmedRent: false
         }
     },
 
@@ -62,7 +72,7 @@ export default {
             })
         },
 
-        titleCase(str) {
+        titleCase(str="asia") {
             let splitString = str.toLowerCase().split(' ');
             for (let i = 0; i < splitString.length; i++) {
                
