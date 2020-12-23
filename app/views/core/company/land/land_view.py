@@ -1,5 +1,5 @@
 from django.views import View
-from django.http import HttpRequest, JsonResponse, HttpResponse
+from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
 from app.models import Landscape
 import random
@@ -33,13 +33,13 @@ class LandView(UserLoggedInRequiredMixin, View):
 
     def get(self, request: HttpRequest, land_id=None):
         if land_id is None:
-            return HttpResponse(status=404)
+            raise Http404()
         try:
             Landscape.objects.values().get(land_id=land_id)
             return render(request, self.template_name)
         except Exception as e:
             logger.warn(e)
-            return HttpResponse(status=404)
+            raise Http404()
 
     def post(self, request: HttpRequest, land_id=None):
         try:
