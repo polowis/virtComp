@@ -117,11 +117,20 @@ class LandscapeTestCase(TestCase):
         land = Landscape.objects.create_land('asia')
         self.company.balance = land.buy_cost
         if land.can_be_purchased():
-            if self.company.can_buy_landscape(land):
+            if self.company.can_own_landscape(land, 'buy'):
                 self.company.purchase_landscape(land)
                 self.assertEqual(land.company_name, self.company.company_name)
                 self.assertEqual(self.company.balance, 0)
     
+    def test_company_buy_landscape_backward_with_upper_keyword(self):
+        land = Landscape.objects.create_land('asia')
+        self.company.balance = land.buy_cost
+        if land.can_be_purchased():
+            if self.company.can_own_landscape(land, 'BUY'):
+                self.company.purchase_landscape(land)
+                self.assertEqual(land.company_name, self.company.company_name)
+                self.assertEqual(self.company.balance, 0)
+
     def test_company_rent_landscape(self):
         land = Landscape.objects.create_land('asia')
         self.company.balance = land.rent_cost
