@@ -134,7 +134,7 @@ class LandscapeTestCase(TestCase):
         self.company.balance = land.rent_cost
         land.rent_landscape(self.company)
         land.last_collected_money_at = now
-        self.assertEqual(land.needs_pay_rent(), True)
+        self.assertEqual(land.needs_to_pay_rent(), True)
     
     def test_company_needs_to_pay_rent_false(self):
         now = timezone.now() - datetime.timedelta(days=6)
@@ -142,7 +142,7 @@ class LandscapeTestCase(TestCase):
         self.company.balance = land.rent_cost
         land.rent_landscape(self.company)
         land.last_collected_money_at = now
-        self.assertEqual(land.needs_pay_rent(), False)
+        self.assertEqual(land.needs_to_pay_rent(), False)
     
     def test_company_needs_to_pay_rent_on_due(self):
         now = timezone.now() - datetime.timedelta(days=7)
@@ -150,7 +150,7 @@ class LandscapeTestCase(TestCase):
         self.company.balance = land.rent_cost
         land.rent_landscape(self.company)
         land.last_collected_money_at = now
-        self.assertEqual(land.needs_pay_rent(), True)
+        self.assertEqual(land.needs_to_pay_rent(), True)
 
 
     
