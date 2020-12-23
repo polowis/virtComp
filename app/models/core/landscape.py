@@ -9,6 +9,7 @@ from typing import Union
 import logging
 from setting import local_settings as env
 import random
+from datetime import datetime, timedelta
 
 
 logger = logging.getLogger(__name__)
@@ -178,6 +179,7 @@ class Landscape(models.Model):
     company_name = models.CharField(max_length=255, null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     continent = models.CharField(max_length=255)
+
     buy_cost = models.DecimalField(max_digits=20, decimal_places=4)
     rent_cost = models.DecimalField(max_digits=20, decimal_places=4)
 
@@ -366,3 +368,10 @@ class Landscape(models.Model):
         elif type(company) == Company:
             return self.company == company
         raise TypeError("Company must be a string or a Company instance")
+    
+    def needs_pay_rent(self):
+        """Return true if the company needs to pay rent"""
+        if self.is_rent:
+            now: datetime = timezone.now()
+            return now - timedelta(days=7) >= self.last_collected_money_at
+        return False

@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from app.models import Landscape, Land, Company
+from django.utils import timezone
+import datetime
 
 
 class LandscapeTestCase(TestCase):
@@ -111,7 +113,6 @@ class LandscapeTestCase(TestCase):
         test_land = Landscape.objects.get_single_landscape_by_company(self.land.land_id, self.company)
         self.assertEqual(self.land.land_id, test_land.land_id)
     
-
     def test_company_buy_landscape_backward(self):
         land = Landscape.objects.create_land('asia')
         self.company.balance = land.buy_cost
@@ -120,6 +121,38 @@ class LandscapeTestCase(TestCase):
                 self.company.purchase_landscape(land)
                 self.assertEqual(land.company_name, self.company.company_name)
                 self.assertEqual(self.company.balance, 0)
+    
+    def test_company_rent_landscape(self):
+        land = Landscape.objects.create_land('asia')
+        self.company.balance = land.rent_cost
+        land.rent_landscape(self.company)
+        self.assertEqual(land.owned_by(self.company), True)
+    
+    def test_company_needs_to_pay_rent(self):
+        now = timezone.now() - datetime.timedelta(days=8)
+        land = Landscape.objects.create_land('asia')
+        self.company.balance = land.rent_cost
+        land.rent_landscape(self.company)
+        land.last_collected_money_at = now
+        self.assertEqual(land.needs_pay_rent(), True)
+    
+    def test_company_needs_to_pay_rent_false(self):
+        now = timezone.now() - datetime.timedelta(days=6)
+        land = Landscape.objects.create_land('asia')
+        self.company.balance = land.rent_cost
+        land.rent_landscape(self.company)
+        land.last_collected_money_at = now
+        self.assertEqual(land.needs_pay_rent(), False)
+    
+    def test_company_needs_to_pay_rent_on_due(self):
+        now = timezone.now() - datetime.timedelta(days=7)
+        land = Landscape.objects.create_land('asia')
+        self.company.balance = land.rent_cost
+        land.rent_landscape(self.company)
+        land.last_collected_money_at = now
+        self.assertEqual(land.needs_pay_rent(), True)
+
+
     
 
 

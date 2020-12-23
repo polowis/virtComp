@@ -49,7 +49,7 @@ class CompanyManager(models.Manager):
         
         This will ensure that the company name has not been registered and has a valid name
         """
-        return not self.company_is_exists(company_name) and self.has_valid_company_name(company_name)
+        return not self.company_exists(company_name) and self.has_valid_company_name(company_name)
 
 
 class Company(models.Model):
