@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class CompanyManager(models.Manager):
-    def create_company(self, company_name: str, owner_object: User, continent='asia') -> Company:
+    def create_company(self, company_name: str, owner_object: User, continent: str = 'asia') -> Company:
         """Create a company and save them to database. Return Company object
 
         :param company_name: Name of the company
@@ -28,18 +28,28 @@ class CompanyManager(models.Manager):
             return company
         raise Exception("Unable to create company. The company might be already exists")
 
-    def company_is_exists(self, name: str) -> bool:
-        """Return true if company exists"""
+    def has_valid_company_name(self, company_name: str) -> bool:
+        """Return true if the given company name is valid to be registered
+        
+        The ideal name is alphanumeric (no whitespace allows, although, this will be taken into consideration)
+        and lower than 15 characters
+        """
+        return Validator.is_alphanumeric(company_name) and Validator.has_below(company_name, 20)
+
+    def company_exists(self, company_name: str) -> bool:
+        """Return true if the company with the given name already exists"""
         try:
-            self.get(company_name=name)
+            self.get(company_name=company_name)
             return True
-        except Exception as e: # noqa
-            # logger.warn(e)
+        except Company.DoesNotExist:
             return False
     
-    def can_create_company(self, name: str) -> bool:
-        """Return true if the given company name can be created"""
-        return not self.company_is_exists(name) and Validator.is_alphanumeric(name) and Validator.has_below(name, 15)
+    def can_create_company(self, company_name: str) -> bool:
+        """Return true if the given company can be created
+        
+        This will ensure that the company name has not been registered and has a valid name
+        """
+        return not self.company_exists(company_name) and self.has_valid_company_name(company_name)
 
 
 class Company(models.Model):
@@ -67,11 +77,26 @@ class Company(models.Model):
         self.updated_at = timezone.now()
         return super(Company, self).save(*args, **kwargs)
     
-    def can_buy_landscape(self, landscape: app.models.Landscape) -> bool:
+    def can_own_landscape(self, landscape: app.models.Landscape, method_acquired: str) -> bool:
         """
-        Return true if the company can buy the given landscape
+        Return true if the company can buy / rent the given landscape
+
+        This is the function to own the given landscape. Alternatively, consider using
+        Landscape.company_able_to_purchase() method instead
+
+        :param: Landscape
+        
+        :method_acquired: supported_methods_acquired ['buy', 'rent', 'buy_cost', 'rent_cost']
         """
-        return self.balance >= landscape.buy_cost
+
+        supported_methods_acquired = ['buy', 'rent', 'buy_cost', 'rent_cost']
+        if method_acquired.lower() in supported_methods_acquired and isinstance(method_acquired, str):
+            if not method_acquired.lower().endswith('_cost'):
+                method_acquired = method_acquired.lower() + '_cost'
+            
+            if type(landscape) == app.models.Landscape:
+                return self.balance >= getattr(landscape, method_acquired)
+        raise TypeError("method_acquired param must be in supported methods but got %s instead" % method_acquired)
     
 
     def purchase_landscape(self, landscape: app.models.Landscape) -> None:
@@ -79,7 +104,7 @@ class Company(models.Model):
         
         :param company: The company instance that wish to own this landscape
 
-        This function does not call company_able_to_purchase_method, you must call it manually and before this function
+        This function does not call can_buy_landscape method, you must call it manually and before this function
         or else an exception will be thrown
         """
         if isinstance(landscape, app.models.Landscape):
@@ -94,3 +119,25 @@ class Company(models.Model):
         else:
             raise TypeError("The landscape param must be an instance of landscape but "
                             "got {} instead".format(type(landscape)))
+    
+    def rent_landscape(self, landscape: app.models.Landscape) -> None:
+        """The function will withdraw a certain amount of money from given company
+        
+        :param company: The company instance that wish to own this landscape
+
+        This function does not call can_buy_landscape method, you must call it manually and before this function
+        or else an exception will be thrown
+        """
+        if isinstance(landscape, app.models.Landscape):
+            self.balance -= landscape.rent_cost
+            if self.balance < 0:
+                raise ValueError("Company balance must be positive")
+            else:
+                landscape.company = self
+                landscape.company_name = self.company_name
+                self.save()
+                landscape.rent()
+        else:
+            raise TypeError("The landscape param must be an instance of landscape but "
+                            "got {} instead".format(type(landscape)))
+
