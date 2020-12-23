@@ -31,21 +31,23 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name="index.html")),
     path('login/', LoginView.as_view()),
     path('register/', RegisterView.as_view()),
+    path('logout/', LogoutView.as_view()),
     path('home/', HomeView.as_view()),
     path('user/current/', UserView.as_view()),
+    path('company/', CompanyView.as_view()),
     path('company/create/', CompanyCreateView.as_view()),
     path('company/hasavailablename/', CompanyAvailability.as_view()),
+    path('company/signed/', CompanyLoggedInView.as_view()),
+    path('company/current/', CompanyGetView.as_view()),
     path('user/isavailable/', UserAvailability.as_view()),
-    path('api/data/companytype/', CompanyTypeView.as_view()),
     path('user/companies/', CurrentUserCompany.as_view()),
-    path('logout/', LogoutView.as_view()),
-    path('company/', CompanyView.as_view()),
+    path('api/data/companytype/', CompanyTypeView.as_view()),
     path('land/view/', LandAvailable.as_view()),
     path('land/<land_id>/view/', LandView.as_view()),
     path('land/<land_id>/buy/', LandBuy.as_view()),
-    path('company/signed/', CompanyLoggedInView.as_view()),
+    path('land/<land_id>/rent/', LandRent.as_view()),
     path('design/', NewUIView),
-    path('company/current/', CompanyGetView.as_view()),
+    
 
 ]
 
