@@ -50,8 +50,6 @@ class BuildingManager(models.Manager):
             return level
     
 
-
-
 class Building(models.Model):
     building_id = models.CharField(max_length=255, default=generate_unique_id)
     building_type = models.CharField(max_length=255)
