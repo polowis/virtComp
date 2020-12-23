@@ -94,7 +94,7 @@ class LandManager(models.Manager):
                         }
                         obj, created = Land.objects.update_or_create(level=land.level,
                                                                      defaults=default_value)
-            except Exception as e: # noqa
+            except FileNotFoundError:
                 raise FileNotFoundError("The file for csv file was not found")
 
 
