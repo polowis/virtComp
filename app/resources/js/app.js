@@ -10,6 +10,7 @@ Vue.component('corporation-all-view', require('./components/core/corperation/All
 Vue.component('land-all-component', require('./components/core/land/LandAll.vue').default)
 Vue.component('homev2-component', require('./components/core/HomeV2Component.vue').default)
 Vue.component('land-view-component', require('./components/core/land/LandView.vue').default)
+Vue.component('company-view-landscapes', require('./components/core/company/land/CompanyViewLandscape.vue').default)
 
 const app = new Vue({
     el: '#app',
