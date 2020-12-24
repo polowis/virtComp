@@ -7,7 +7,6 @@
                 <table class="table is-hoverable" style="width: 700px; color: #ffffff">
                 <thead>
                     <th>Land ID</th>
-                    <th>Buy Cost</th>
                     <th>Rent Cost</th>
                     <th>Level</th>
                     <th>Continent</th>
@@ -16,6 +15,7 @@
                 <tr v-for="land in this.lands" v-bind:key="land.land_id" class="hover-row">
                     <td style="cursor: pointer; color: #00d1b2"><a :href="'/land/' + land.land_id + '/view/'" style="color: #00d1b2">{{land.land_id}}</a></td>
                     <td v-if="land.is_rent">${{land.rent_cost}}</td>
+                    <td v-else>N/A</td>
                     <td>{{land.level}}</td>
                     <td>{{land.continent}}</td>
                 </tr>
@@ -58,6 +58,7 @@ export default {
 .wrapper-table {
         margin: auto;
         width: 700px;
+        height: 500px;
     }
 .table thead th{
     color: #03a9f4 !important;
