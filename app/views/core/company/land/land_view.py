@@ -12,6 +12,9 @@ logger = logging.getLogger(__name__)
 
 
 class LandAvailable(CompanyLoggedInRequiredMixin, View):
+    """
+    Return view and the list of available lands that are not owned by any company
+    """
     template_name = 'core/land/all.html'
 
     def get(self, request: HttpRequest):
@@ -29,6 +32,7 @@ class LandAvailable(CompanyLoggedInRequiredMixin, View):
 
 
 class LandView(UserLoggedInRequiredMixin, View):
+    """Responsible for display view for land/land_id/view"""
     template_name = 'core/land/view.html'
 
     def get(self, request: HttpRequest, land_id=None):
@@ -49,3 +53,15 @@ class LandView(UserLoggedInRequiredMixin, View):
             logger.warn(e)
             data = {'error': 'Not Found'}
             return JsonResponse(data)
+
+
+class LandCompanyView(View):
+    """Retrieve all the lands from signed company in cookie
+    
+    route: company/land/view
+    """
+    def post(self, request: HttpRequest):
+        company: Company = request.company
+        if company is not None:
+            landscapes = Landscape.objects.get_landscape_by_company(company, force_json=True)
+            return JsonResponse(landscapes, safe=False)
