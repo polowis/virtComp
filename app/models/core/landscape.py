@@ -45,11 +45,18 @@ class LandscapeManager(models.Manager):
                 return self.get(land_id=landscape_id, company=company.company_name)
             raise TypeError("The company must be a string or a company instance but got: %s" % type(company))
 
-    def get_landscape_by_company(self, company: Union[Company, str]) -> bool:
-        """Return the list of landscape instance that are owned by the given company"""
+    def get_landscape_by_company(self, company: Union[Company, str], force_json: bool = False, values_list=None):
+        """Return the list of landscape instance that are owned by the given company
+
+        Set force_json to True to return list of objects
+        """
         if type(company) == Company:
+            if force_json:
+                return list(self.filter(company=company).values())
             return self.filter(company=company)
         if isinstance(company, str):
+            if force_json:
+                return list(self.filter(company=company).values())
             return self.filter(company_name=company)
         raise TypeError("lookup_company must be a Company instance or a string of company name")
 

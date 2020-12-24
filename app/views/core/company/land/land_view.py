@@ -1,5 +1,5 @@
 from django.views import View
-from django.http import HttpRequest, JsonResponse, HttpResponse
+from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
 from app.models import Landscape
 import random
@@ -12,6 +12,9 @@ logger = logging.getLogger(__name__)
 
 
 class LandAvailable(CompanyLoggedInRequiredMixin, View):
+    """
+    Return view and the list of available lands that are not owned by any company
+    """
     template_name = 'core/land/all.html'
 
     def get(self, request: HttpRequest):
@@ -29,17 +32,18 @@ class LandAvailable(CompanyLoggedInRequiredMixin, View):
 
 
 class LandView(UserLoggedInRequiredMixin, View):
+    """Responsible for display view for land/land_id/view"""
     template_name = 'core/land/view.html'
 
     def get(self, request: HttpRequest, land_id=None):
         if land_id is None:
-            return HttpResponse(status=404)
+            raise Http404()
         try:
             Landscape.objects.values().get(land_id=land_id)
             return render(request, self.template_name)
         except Exception as e:
             logger.warn(e)
-            return HttpResponse(status=404)
+            raise Http404()
 
     def post(self, request: HttpRequest, land_id=None):
         try:
@@ -49,3 +53,15 @@ class LandView(UserLoggedInRequiredMixin, View):
             logger.warn(e)
             data = {'error': 'Not Found'}
             return JsonResponse(data)
+
+
+class LandCompanyView(View):
+    """Retrieve all the lands from signed company in cookie
+    
+    route: company/land/view
+    """
+    def post(self, request: HttpRequest):
+        company: Company = request.company
+        if company is not None:
+            landscapes = Landscape.objects.get_landscape_by_company(company, force_json=True)
+            return JsonResponse(landscapes, safe=False)

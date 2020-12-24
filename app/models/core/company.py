@@ -12,7 +12,9 @@ logger = logging.getLogger(__name__)
 
 class CompanyManager(models.Manager):
     def create_company(self, company_name: str, owner_object: User, continent: str = 'asia') -> Company:
-        """Create a company and save them to database. Return Company object
+        """Create a company and save them to database. Return Company object.
+
+        This method does not check for validity. Please call can_create_company method before this
 
         :param company_name: Name of the company
 
@@ -85,7 +87,7 @@ class Company(models.Model):
         Landscape.company_able_to_purchase() method instead
 
         :param: Landscape
-        
+
         :method_acquired: supported_methods_acquired ['buy', 'rent', 'buy_cost', 'rent_cost']
         """
 

@@ -20,11 +20,21 @@
                     <p>Land Continent: {{this.titleCase(land.continent)}}</p>
                     <p v-if="land.company_name === null" style="color: #00d1b2">Available to buy/rent</p>
                     <div v-if="land.company_name === null">
-                        <div class="control">
-                            <button class="button is-primary" @click.prevent="buyLand()">Buy</button>
-                            <button class="button is-primary" @click.prevent="rentLand()">Rent</button>
+                        <div class="control" v-if="confirmedBuy == false && confirmedRent == false">
+                            <button class="button is-primary" @click.prevent="confirmedBuy = true">Buy</button>
+                            <button class="button is-primary" @click.prevent="confirmedRent = true">Rent</button>
+                        </div>
+                        <div class="control" v-if="confirmedBuy" >
+                            <button class="button is-dark" @click.prevent="buyLand()">Confirm Buy</button>
+                            <button class="button is-danger" @click.prevent="resetStatus()">Cancel</button>
+                        </div>
+                        <div class="control" v-if="confirmedRent" >
+                            <button class="button is-dark" @click.prevent="rentLand()">Confirm Rent</button>
+                            <button class="button is-danger" @click.prevent="resetStatus()">Cancel</button>
                         </div>
                     </div>
+                    <p v-if="callbackError && callbackMessage.length > 0" style="color: #f14668; margin-top: 10px;">{{this.callbackMessage}}</p>
+                    <p v-if="!callbackError && callbackMessage.length > 0" style="color: #00d1b2; margin-top: 10px;">{{this.callbackMessage}}</p>
                 </div>
             </div>
 
@@ -40,11 +50,15 @@ export default {
 
     data() {
         return {
-            land: ""
+            land: "",
+            confirmedBuy: false,
+            confirmedRent: false,
+            callbackMessage: "",
+            callbackError: false
         }
     },
 
-    created() {
+    mounted() {
         this.fetchLandDetail()
     },
 
@@ -57,12 +71,31 @@ export default {
         },
 
         buyLand() {
-            axios.post(`/land/${this.land.land_id}/buy`).then(response => {
-
+            axios.post(`/land/${this.land.land_id}/buy/`).then(response => {
+                let data = response.data
+                this.callbackError = data.error
+                this.callbackMessage = data.message
+                this.fetchLandDetail()
             })
         },
 
-        titleCase(str) {
+        rentLand() {
+            axios.post(`/land/${this.land.land_id}/rent/`).then(response => {
+                let data = response.data
+                this.callbackError = data.error
+                this.callbackMessage = data.message
+                this.fetchLandDetail()
+            })
+        },
+
+        resetStatus() {
+            this.callbackError = false
+            this.callbackMessage = ""
+            this.confirmedBuy = false
+            this.confirmedRent = false
+        },
+
+        titleCase(str="asia") {
             let splitString = str.toLowerCase().split(' ');
             for (let i = 0; i < splitString.length; i++) {
                
