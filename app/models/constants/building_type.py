@@ -87,6 +87,16 @@ class BuildingType(models.Model):
     def get_buy_cost(self, level: int = 0) -> float:
         """
         This will return the amount of money to buy this type of building
+        for level 0
+
+        Companies are now allowed to create a building and buy it with over default level.
+        It must start with level 0
+        """
+        return self.buy_cost
+    
+    def get_rent_cost(self, level: int = 0) -> float:
+        """
+        This will return the amount of money to buy this type of building
         for the given level
 
         :param level: The level of the building
@@ -94,9 +104,17 @@ class BuildingType(models.Model):
         if the level is a negative number, it will be considered as default value
         """
         if level <= 0:
-            return self.buy_cost
+            return self.rent_cost
         else:
             if isinstance(level, int):
-                return self.buy_cost * self.cost_growth * level
+                return self.rent_cost * self.cost_growth * level
             raise TypeError("Level must be an integer but got {}".format(type(level)))
+    
+    def get_cost(self, method_acquired: str, level: int):
+        """Return the matched cost rent or buy. This function assume that
+        the method_acquired has already passed the validation process
+
+        only the following methods are supported: ['buy', 'rent']
+        """
+        return getattr(self, f'get_{method_acquired}_cost')(level)
 

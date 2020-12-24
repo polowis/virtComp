@@ -8,17 +8,27 @@ import random
 
 
 class BuildingManager(models.Manager):
-    def create_building(self, building_type: str, building_name: str, company: Company) -> Building:
+    def create_building(self, building_type: str, building_name: str, company: Company,
+                        method_acquired: str, level: int) -> Building:
         """Call this function to create a building with the given type and name
         And the company instance that owns the building regardless of acquisition methods
 
+        There are two things to consider when owning building, create a building and owning it.
+        This function should only be used to own a building that has never been created
+
         return Building instance
         """
-        building: Building = self.create(building_type=building_type,
-                                         building_name=building_name,
-                                         company=company)
+        supported_methods_acquired = ['buy', 'rent']
 
-        return building
+        building_details: BuildingType = BuildingType.objects.get_building_by_type(building_type)
+
+        if method_acquired.lower() in supported_methods_acquired:
+            self._construct_building(building_details, level, company, method_acquired.lower())
+            building: Building = self.create(building_type=building_type,
+                                             building_name=building_name,
+                                             company=company)
+
+            return building
     
     def get_building_buy_cost(self, building: BuildingType, level: int):
         """This method returns the cost of buying this type of building given the level"""
@@ -48,6 +58,21 @@ class BuildingManager(models.Manager):
             return random.choice([i for i in range(0, level + 1)])
         else:
             return level
+    
+    def _construct_building(self, building: BuildingType, level: int, company: Company,
+                            method_acquired: str):
+        """
+        Do not call this method directly
+
+        Use create_building() instead.
+        
+        """
+        cost = building.get_cost(method_acquired.lower())
+        company.balance -= cost
+        if company.balance < 0:
+            raise ValueError("Company balance must be positive")
+        company.save()
+        
     
 
 class Building(models.Model):
