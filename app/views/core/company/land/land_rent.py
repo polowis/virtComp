@@ -9,7 +9,7 @@ class LandRent(View):
             land: Landscape = Landscape.objects.get(land_id=land_id)
             company: Company = request.company
             if land.can_be_purchased() and company is not None:
-                if company.can_own_landscape(land, 'buy'):
+                if company.can_own_landscape(land, 'rent'):
                     company.rent_landscape(land)
                     if land.company_name == company.company_name:
                         data = {'error': False, 'message': 'Successfully Rent Landscape',
