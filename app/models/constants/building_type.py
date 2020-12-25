@@ -2,6 +2,7 @@ from __future__ import annotations
 from django.db import models
 from typing import Union
 from app.models.core.exception import NegativeLevel
+import csv
 
 
 class BuildingTypeCSVRow(object):
@@ -28,27 +29,27 @@ class BuildingTypeCSVRow(object):
         return self.row[0]
 
     @property
-    def building_cost(self) -> float:
+    def buy_cost(self) -> float:
         return self.row[1]
     
     @property
-    def building_rent(self) -> float:
+    def rent_cost(self) -> float:
         return self.row[2]
     
     @property
-    def upgrade_cost(self) -> float:
+    def cost_growth(self) -> float:
         return self.row[3]
     
     @property
-    def upgrade_cost_growth(self) -> Union[float, int]:
+    def upgrade_growth(self) -> Union[float, int]:
         return self.row[4]
 
     @property
-    def max_employees(self) -> int:
+    def base_employees(self) -> int:
         return self.row[5]
     
     @property
-    def max_employees_growth(self) -> int:
+    def employees_growth(self) -> int:
         return self.row[6]
     
     @property
@@ -56,7 +57,7 @@ class BuildingTypeCSVRow(object):
         return self.row[7]
     
     @property
-    def base_storage_growth(self) -> Union[float, int]:
+    def storage_growth(self) -> Union[float, int]:
         return self.row[8]
     
     @property
@@ -72,6 +73,22 @@ class BuildingTypeCSVRow(object):
         follow the required format.
         """
         return len(row) == 11
+    
+    def as_dict(self) -> dict:
+        default_value = {
+            'buy_cost': self.buy_cost,
+            'rent_cost': self.rent_cost,
+            'cost_growth': self.cost_growth,
+            'upgrade_growth': self.upgrade_growth,
+            'base_employees': self.base_employees,
+            'employees_growth': self.employees_growth,
+            'base_storage': self.base_storage,
+            'storage_growth': self.storage_growth,
+            'can_sell': self.can_sell,
+            'can_produce': self.can_produce,
+
+        }
+        return default_value
 
 
 
@@ -83,8 +100,22 @@ class BuildingTypeManager(models.Manager):
             return self.get(category=building_type)
         raise TypeError(f"Building type must be a string but got {type(building_type)}")
     
-    def load_building_type(self, path_to_csv_file='csv_data/buildingType.csv', force_2d=False):
-        pass
+    def load_building_type(self, path_to_csv_file='./csv_data/buildingType.csv', force_2d=False):
+        """Load csv data from given path. It must contains header
+        
+        """
+        if isinstance(path_to_csv_file, str):
+            try:
+                with open(path_to_csv_file) as f:
+                    reader = csv.reader(f)
+                    next(reader, None)
+                    for row in reader:
+                        buildingType: BuildingTypeCSVRow = BuildingTypeCSVRow(row)
+                        data: dict = buildingType.as_dict()
+                        obj, created = BuildingType.objects.update_or_create(name=buildingType.category,
+                                                                             defaults=data)
+            except FileNotFoundError:
+                raise FileNotFoundError("The file for csv file was not found")
 
 
 class BuildingType(models.Model):
@@ -130,6 +161,7 @@ class BuildingType(models.Model):
     # determine if this type of building is being able to sell items to
     # customers
     can_sell = models.BooleanField()
+    can_produce = models.BooleanField()
 
     objects = BuildingTypeManager()
 
