@@ -1,6 +1,95 @@
 from __future__ import annotations
 from django.db import models
+from typing import Union
 from app.models.core.exception import NegativeLevel
+import csv
+
+
+class BuildingTypeCSVRow(object):
+    """The CSV class for handling BuildingType data
+    
+    DO NOT PASS HEADER
+    """
+    def __init__(self, row: list):
+        if isinstance(row, list) and self._has_correct_format(row):
+            self.row = row
+        else:
+            raise TypeError("row must be a list with length of 11")
+
+    def _convert_bool_value(self, value: str) -> bool:
+        """Convert to boolean object"""
+        if value.lower() in ['true', '1', 'yes']:
+            return True
+        
+        if value.lower() in ['false', '0', 'no']:
+            return False
+
+    @property
+    def category(self) -> str:
+        return self.row[0]
+
+    @property
+    def buy_cost(self) -> float:
+        return self.row[1]
+    
+    @property
+    def rent_cost(self) -> float:
+        return self.row[2]
+    
+    @property
+    def cost_growth(self) -> float:
+        return self.row[3]
+    
+    @property
+    def upgrade_growth(self) -> Union[float, int]:
+        return self.row[4]
+
+    @property
+    def base_employees(self) -> int:
+        return self.row[5]
+    
+    @property
+    def employees_growth(self) -> int:
+        return self.row[6]
+    
+    @property
+    def base_storage(self) -> int:
+        return self.row[7]
+    
+    @property
+    def storage_growth(self) -> Union[float, int]:
+        return self.row[8]
+    
+    @property
+    def can_sell(self) -> bool:
+        return self._convert_bool_value(self.row[9])
+    
+    @property
+    def can_produce(self) -> bool:
+        return self._convert_bool_value(self.row[10])
+    
+    def _has_correct_format(self, row) -> bool:
+        """This will return true if the given list of rows
+        follow the required format.
+        """
+        return len(row) == 11
+    
+    def as_dict(self) -> dict:
+        default_value = {
+            'buy_cost': self.buy_cost,
+            'rent_cost': self.rent_cost,
+            'cost_growth': self.cost_growth,
+            'upgrade_growth': self.upgrade_growth,
+            'base_employees': self.base_employees,
+            'employees_growth': self.employees_growth,
+            'base_storage': self.base_storage,
+            'storage_growth': self.storage_growth,
+            'can_sell': self.can_sell,
+            'can_produce': self.can_produce,
+
+        }
+        return default_value
+
 
 
 class BuildingTypeManager(models.Manager):
@@ -11,8 +100,22 @@ class BuildingTypeManager(models.Manager):
             return self.get(category=building_type)
         raise TypeError(f"Building type must be a string but got {type(building_type)}")
     
-    def load_building_type(self, path_to_csv_file='csv_data/buildingType.csv'):
-        pass
+    def load_building_type(self, path_to_csv_file='./csv_data/buildingType.csv', force_2d=False):
+        """Load csv data from given path. It must contains header
+        
+        """
+        if isinstance(path_to_csv_file, str):
+            try:
+                with open(path_to_csv_file) as f:
+                    reader = csv.reader(f)
+                    next(reader, None)
+                    for row in reader:
+                        buildingType: BuildingTypeCSVRow = BuildingTypeCSVRow(row)
+                        data: dict = buildingType.as_dict()
+                        obj, created = BuildingType.objects.update_or_create(name=buildingType.category,
+                                                                             defaults=data)
+            except FileNotFoundError:
+                raise FileNotFoundError("The file for csv file was not found")
 
 
 class BuildingType(models.Model):
@@ -58,6 +161,7 @@ class BuildingType(models.Model):
     # determine if this type of building is being able to sell items to
     # customers
     can_sell = models.BooleanField()
+    can_produce = models.BooleanField()
 
     objects = BuildingTypeManager()
 
