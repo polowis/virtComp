@@ -1,6 +1,78 @@
 from __future__ import annotations
 from django.db import models
+from typing import Union
 from app.models.core.exception import NegativeLevel
+
+
+class BuildingTypeCSVRow(object):
+    """The CSV class for handling BuildingType data
+    
+    DO NOT PASS HEADER
+    """
+    def __init__(self, row: list):
+        if isinstance(row, list) and self._has_correct_format(row):
+            self.row = row
+        else:
+            raise TypeError("row must be a list with length of 11")
+
+    def _convert_bool_value(self, value: str) -> bool:
+        """Convert to boolean object"""
+        if value.lower() in ['true', '1', 'yes']:
+            return True
+        
+        if value.lower() in ['false', '0', 'no']:
+            return False
+
+    @property
+    def category(self) -> str:
+        return self.row[0]
+
+    @property
+    def building_cost(self) -> float:
+        return self.row[1]
+    
+    @property
+    def building_rent(self) -> float:
+        return self.row[2]
+    
+    @property
+    def upgrade_cost(self) -> float:
+        return self.row[3]
+    
+    @property
+    def upgrade_cost_growth(self) -> Union[float, int]:
+        return self.row[4]
+
+    @property
+    def max_employees(self) -> int:
+        return self.row[5]
+    
+    @property
+    def max_employees_growth(self) -> int:
+        return self.row[6]
+    
+    @property
+    def base_storage(self) -> int:
+        return self.row[7]
+    
+    @property
+    def base_storage_growth(self) -> Union[float, int]:
+        return self.row[8]
+    
+    @property
+    def can_sell(self) -> bool:
+        return self._convert_bool_value(self.row[9])
+    
+    @property
+    def can_produce(self) -> bool:
+        return self._convert_bool_value(self.row[10])
+    
+    def _has_correct_format(self, row) -> bool:
+        """This will return true if the given list of rows
+        follow the required format.
+        """
+        return len(row) == 11
+
 
 
 class BuildingTypeManager(models.Manager):
@@ -11,7 +83,7 @@ class BuildingTypeManager(models.Manager):
             return self.get(category=building_type)
         raise TypeError(f"Building type must be a string but got {type(building_type)}")
     
-    def load_building_type(self, path_to_csv_file='csv_data/buildingType.csv'):
+    def load_building_type(self, path_to_csv_file='csv_data/buildingType.csv', force_2d=False):
         pass
 
 
