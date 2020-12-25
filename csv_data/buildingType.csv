@@ -1,0 +1,57 @@
+catergory,building_cost,building_rent,cost_growth,upgrade_cost_growth,base_employee,employee_growth,base_storage,base_storage_growth,can_sell,can_produce
+restaurant,438,12,2.5,3.5,10,2,120,0.3,TRUE,TRUE
+real estate office,401.5,11,2.5,3.5,5,2,110,0.3,TRUE,FALSE
+market,511,14,2.5,3.5,20,2,140,0.3,TRUE,FALSE
+cattle farm,620.5,17,2.5,3.5,35,2,170,0.3,FALSE,TRUE
+vegetable farm,547.5,15,2.5,3.5,25,2,150,0.3,FALSE,TRUE
+farm forestry,511,14,2.5,3.5,15,2,140,0.3,FALSE,TRUE
+orchard farm,584,16,2.5,3.5,30,2,160,0.3,FALSE,TRUE
+petrol station,547.5,15,2.5,3.5,25,2,150,0.3,TRUE,FALSE
+tech retailer,401.5,11,2.5,3.5,5,2,110,0.3,TRUE,FALSE
+hydraulic fracturing company,657,18,2.5,3.5,40,2,180,0.3,FALSE,TRUE
+underground mine,803,22,2.5,3.5,60,2,220,0.3,FALSE,TRUE
+epic mine,839.5,23,2.5,3.5,65,2,230,0.3,FALSE,TRUE
+supreme mine,912.5,25,2.5,3.5,75,2,250,0.3,FALSE,TRUE
+ancient mine,876,24,2.5,3.5,70,2,240,0.3,FALSE,TRUE
+jewellery store ,401.5,11,2.5,3.5,5,2,110,0.3,TRUE,FALSE
+bakery,401.5,11,2.5,3.5,5,2,110,0.3,TRUE,TRUE
+vehicle manufacturer,620.5,17,2.5,3.5,35,2,170,0.3,FALSE,TRUE
+vehicle store,401.5,11,2.5,3.5,5,2,110,0.3,TRUE,FALSE
+cosmetic manufacturing factory,547.5,15,2.5,3.5,25,2,150,0.3,FALSE,TRUE
+cosmetic store,511,14,2.5,3.5,20,2,140,0.3,TRUE,FALSE
+canned food suppliers,584,16,2.5,3.5,30,2,160,0.3,FALSE,TRUE
+clothes manufacturing factory,620.5,17,2.5,3.5,35,2,170,0.3,FALSE,TRUE
+wine industry ,511,14,2.5,3.5,20,2,140,0.3,FALSE,TRUE
+beverage manufacturer,474.5,13,2.5,3.5,15,2,130,0.3,FALSE,TRUE
+department store ,584,16,2.5,3.5,30,2,160,0.3,TRUE,FALSE
+stationary manufacturer ,620.5,17,2.5,3.5,35,2,170,0.3,FALSE,TRUE
+wool production factory ,547.5,15,2.5,3.5,25,2,150,0.3,FALSE,TRUE
+carpet factory ,438,12,2.5,3.5,10,2,120,0.3,FALSE,TRUE
+wood production factory ,474.5,13,2.5,3.5,15,2,130,0.3,FALSE,TRUE
+plastic manufacturer ,547.5,15,2.5,3.5,25,2,150,0.3,FALSE,TRUE
+milk processing plant,474.5,13,2.5,3.5,15,2,130,0.3,FALSE,TRUE
+meat processing plant,474.5,13,2.5,3.5,15,2,130,0.3,FALSE,TRUE
+glass manufacturer ,511,14,2.5,3.5,20,2,140,0.3,FALSE,TRUE
+coffee shop,401.5,11,2.5,3.5,5,2,110,0.3,TRUE,TRUE
+book store,401.5,11,2.5,3.5,5,2,110,0.3,TRUE,FALSE
+shoe store,401.5,11,2.5,3.5,5,2,110,0.3,TRUE,FALSE
+shoe manufacturer,547.5,15,2.5,3.5,25,2,150,0.3,FALSE,TRUE
+printers,438,12,2.5,3.5,10,2,120,0.3,FALSE,TRUE
+polymer plant,438,12,2.5,3.5,10,2,120,0.3,FALSE,TRUE
+oil refinery ,511,14,2.5,3.5,20,2,140,0.3,FALSE,TRUE
+furniture plant,657,18,2.5,3.5,40,2,180,0.3,FALSE,TRUE
+textile mill,584,16,2.5,3.5,30,2,160,0.3,FALSE,TRUE
+metal mill,693.5,19,2.5,3.5,45,2,190,0.3,FALSE,TRUE
+ceramic manufacturer,547.5,15,2.5,3.5,25,2,150,0.3,FALSE,TRUE
+clothing store,401.5,11,2.5,3.5,5,2,110,0.3,TRUE,FALSE
+gardening store,401.5,11,2.5,3.5,5,2,110,0.3,TRUE,TRUE
+petroleum manufacturer ,547.5,15,2.5,3.5,25,2,150,0.3,FALSE,TRUE
+metal manufacturer ,584,16,2.5,3.5,30,2,160,0.3,FALSE,TRUE
+paper manufacturer ,474.5,13,2.5,3.5,15,2,130,0.3,FALSE,TRUE
+toys manufacturer ,547.5,15,2.5,3.5,25,2,150,0.3,FALSE,TRUE
+household goods manufacturer ,584,16,2.5,3.5,30,2,160,0.3,FALSE,TRUE
+bike store,401.5,11,2.5,3.5,5,2,110,0.3,TRUE,FALSE
+original tools and equipment manufacturer ,511,14,2.5,3.5,20,2,140,0.3,FALSE,TRUE
+storage unit,438,12,2.5,3.5,10,2,300,0.9,FALSE,FALSE
+toys store,401.5,11,2.5,3.5,5,2,110,0.3,TRUE,FALSE
+hardware store,511,14,2.5,3.5,20,2,140,0.3,TRUE,FALSE
