@@ -184,3 +184,10 @@ class Building(models.Model):
     last_collected_money_at = models.DateTimeField()
 
     objects = BuildingManager()
+
+    @property
+    def model(self) -> BuildingType:
+        """
+        Return BuildingType instance
+        """
+        return BuildingType.objects.get_building_by_type(self.building_type)
