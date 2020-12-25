@@ -231,3 +231,26 @@ class Building(models.Model):
             self.created_at = timezone.now()
             self.updated_at = timezone.now()
             return super().save(*args, **kwargs)
+    
+    def belongs_to(self, landscape: Landscape):
+        """Return true if this building belongs to the given landscape instance"""
+        if isinstance(landscape, Landscape):
+            try:
+                building_landscape = self.landscape
+                return landscape == building_landscape
+            except ObjectDoesNotExist:
+                return False
+    
+    def owned_by(self, company: Union[Company, str]):
+        """Return true if this building owned by given company
+        
+        This method check if landscape attribute exists then
+        called the owned_by method from landscape instance
+
+        Return False if not found and not match
+        """
+        try:
+            building_landscape: Landscape = self.landscape
+            return building_landscape.owned_by(company)
+        except ObjectDoesNotExist:
+            return False
