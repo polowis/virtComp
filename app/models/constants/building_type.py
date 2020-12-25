@@ -97,7 +97,7 @@ class BuildingTypeManager(models.Manager):
         """Return BuildingType instance, raise error if not found"""
 
         if isinstance(building_type, str):
-            return self.get(category=building_type)
+            return self.get(name=building_type.lower())
         raise TypeError(f"Building type must be a string but got {type(building_type)}")
     
     def load_building_type(self, path_to_csv_file='./csv_data/buildingType.csv', force_2d=False):
