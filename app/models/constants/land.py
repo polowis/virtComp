@@ -2,6 +2,7 @@ from __future__ import annotations
 from django.db import models
 import random
 import csv
+from typing import Union
 
 
 class LandCSVRow(object):
@@ -74,11 +75,14 @@ class LandManager(models.Manager):
         continent_list: list = self.get_supported_continents()
         return random.choice(continent_list)
     
-    def load_land(self, path_to_csv_file: str = './csv_data/landData.csv') -> None:
+    def load_land(self, path_to_csv_file: Union[str, list[list]] = './csv_data/landData.csv', force_2d=False) -> None:
         """Load the land in given csv file.
         
-        TODO: Allows to pass dictionary of lists
+        TODO: Allows to pass 2D array
         """
+        if force_2d:
+            self.load_land_from_2d_array(path_to_csv_file)
+            return
         if isinstance(path_to_csv_file, str):
             try:
                 with open(path_to_csv_file) as f:
@@ -97,6 +101,23 @@ class LandManager(models.Manager):
             except FileNotFoundError:
                 raise FileNotFoundError("The file for csv file was not found")
 
+    def load_land_from_2d_array(self, objects):
+        """
+        Load the land from 2d array. It must not contains headers and
+        has to follow the order
+
+        level,buy_cost,rent_cost,max_land_cost,min_land_cost
+        """
+        for row in objects:
+            land: LandCSVRow = LandCSVRow(row)
+            default_value: dict = {
+                'cost': land.buy_cost,
+                'rent': land.rent_cost,
+                'max_land_cost': land.max_land_cost,
+                'min_land_cost': land.min_land_cost
+            }
+            obj, created = Land.objects.update_or_create(level=land.level,
+                                                         defaults=default_value)
 
 
 class Land(models.Model):
