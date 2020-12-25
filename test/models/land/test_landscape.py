@@ -160,6 +160,22 @@ class LandscapeTestCase(TestCase):
         land.rent_landscape(self.company)
         land.last_collected_money_at = now
         self.assertEqual(land.needs_to_pay_rent(), True)
+    
+    def test_company_overdue_landscape(self):
+        now = timezone.now() - datetime.timedelta(days=30)
+        land = Landscape.objects.create_land('asia')
+        self.company.balance = land.rent_cost
+        land.rent_landscape(self.company)
+        land.last_collected_money_at = now
+        self.assertEqual(land.rent_overdue(), True)
+    
+    def test_company_not_overdue_landscape(self):
+        now = timezone.now() - datetime.timedelta(days=7)
+        land = Landscape.objects.create_land('asia')
+        self.company.balance = land.rent_cost
+        land.rent_landscape(self.company)
+        land.last_collected_money_at = now
+        self.assertEqual(land.rent_overdue(), False)
 
 
     
