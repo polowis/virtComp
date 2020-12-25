@@ -1,5 +1,6 @@
 from __future__ import annotations
 from django.db import models
+from app.models.core.exception import NegativeLevel
 
 
 class BuildingTypeManager(models.Manager):
@@ -9,6 +10,9 @@ class BuildingTypeManager(models.Manager):
         if isinstance(building_type, str):
             return self.get(category=building_type)
         raise TypeError(f"Building type must be a string but got {type(building_type)}")
+    
+    def load_building_type(self, path_to_csv_file='csv_data/buildingType.csv'):
+        pass
 
 
 class BuildingType(models.Model):
@@ -87,16 +91,38 @@ class BuildingType(models.Model):
     def get_buy_cost(self, level: int = 0) -> float:
         """
         This will return the amount of money to buy this type of building
+        for level 0
+
+        Companies are now allowed to create a building and buy it with over default level.
+        It must start with level 0
+        """
+        return self.buy_cost
+    
+    def get_rent_cost(self, level: int = 0) -> float:
+        """
+        This will return the amount of money to buy this type of building
         for the given level
 
         :param level: The level of the building
 
         if the level is a negative number, it will be considered as default value
         """
+
+        # if the given level negative, return the raw cost
         if level <= 0:
-            return self.buy_cost
+            return self.rent_cost
         else:
             if isinstance(level, int):
-                return self.buy_cost * self.cost_growth * level
-            raise TypeError("Level must be an integer but got {}".format(type(level)))
+                return self.rent_cost * self.cost_growth * level
+            raise NegativeLevel(level)
+    
+    def get_cost(self, method_acquired: str, level: int):
+        """Return the matched cost rent or buy. This function assume that
+        the method_acquired has already passed the validation process
+
+        only the following methods are supported: ['buy', 'rent']
+
+        raise NegativeLevel() if the given level is negative
+        """
+        return getattr(self, f'get_{method_acquired}_cost')(level)
 

@@ -405,3 +405,25 @@ class Landscape(models.Model):
             now: datetime = timezone.now()
             return now - timedelta(days=30) >= self.last_collected_money_at
         return False
+
+    def can_create_rent_building(self, level: int):
+        """
+        Return true if can create a building that is on rent on this landscape
+        """
+        # check if no building on this land
+        if not hasattr(self, 'building'):
+            return 0 <= level <= self.level
+    
+    def can_create_building(self, level: int):
+        """
+        Return true if can construct a building and buy.
+
+        Regardless of method of acquiring. This always return True.
+
+        The level must be 0 but will return true as we will assume the level is 0
+        """
+        # check if no building on this land
+        if not hasattr(self, 'building'):
+            return level == 0
+    
+
