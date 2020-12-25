@@ -1,5 +1,6 @@
 from __future__ import annotations
 from django.db import models
+from app.models.core.exception import NegativeLevel
 
 
 class BuildingTypeManager(models.Manager):
@@ -103,18 +104,22 @@ class BuildingType(models.Model):
 
         if the level is a negative number, it will be considered as default value
         """
+
+        # if the given level negative, return the raw cost
         if level <= 0:
             return self.rent_cost
         else:
             if isinstance(level, int):
                 return self.rent_cost * self.cost_growth * level
-            raise TypeError("Level must be an integer but got {}".format(type(level)))
+            raise NegativeLevel(level)
     
     def get_cost(self, method_acquired: str, level: int):
         """Return the matched cost rent or buy. This function assume that
         the method_acquired has already passed the validation process
 
         only the following methods are supported: ['buy', 'rent']
+
+        raise NegativeLevel() if the given level is negative
         """
         return getattr(self, f'get_{method_acquired}_cost')(level)
 
