@@ -170,7 +170,7 @@ class Migration(migrations.Migration):
                 ('buy_cost', models.DecimalField(decimal_places=4, max_digits=20, null=True)),
                 ('landscape', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='app.landscape')),
                 ('created_at', models.DateTimeField(editable=False)),
-                ('updated_at', models.DateTimeField()),
+                ('updated_at', models.DateTimeField(null=True)),
                 ('last_collected_money_at', models.DateTimeField()),
                 ('company', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app.company')),
             ],

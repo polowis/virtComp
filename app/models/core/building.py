@@ -17,7 +17,9 @@ class BuildingBuilder(object):
     This is just for constructing the building. For buying the building.
     Please see alternative method
 
-    It will include the cost of constructing the building
+    It will include the cost of constructing the building. 
+
+    Usage: call construct_building()
 
     Constructor: Landscape instance. The land to constructing the building on top
     """
@@ -70,6 +72,8 @@ class BuildingBuilder(object):
                 return self.create_building()
             except ValueError:
                 raise UnableToConstructBuilding()
+        else:
+            raise UnableToConstructBuilding()
     
     def process_transaction(self, method_acquired: str):
         """
@@ -101,6 +105,7 @@ class BuildingBuilder(object):
         details: dict = {
             'building_type': self.building_type,
             'building_name': self.building_name,
+            'landscape': self.landscape,
             'company': self.landscape.company,
             'current_level': self.level,
             'max_storage': self.buildingType_instance.get_max_storage(self.level),
@@ -150,6 +155,8 @@ class BuildingManager(models.Manager):
             # if the given landscape is on rent and method of acquiring is buy
             if landscape.on_rent() and method_acquired == 'buy':
                 raise CannotBuyBuildingOnRentLandscape()
+                
+            # construct the building
             builder: BuildingBuilder = BuildingBuilder(landscape, level, building_type, building_name)
             return builder.construct_building(company, method_acquired)
     
@@ -210,7 +217,7 @@ class Building(models.Model):
 
 
     created_at = models.DateTimeField(editable=False)
-    updated_at = models.DateTimeField()
+    updated_at = models.DateTimeField(null=True)
     last_collected_money_at = models.DateTimeField()
 
     objects = BuildingManager()
@@ -225,12 +232,12 @@ class Building(models.Model):
     def save(self, *args, **kwargs) -> None:
         try:
             self.landscape
+            if not self.created_at:
+                self.created_at = timezone.now()
             self.updated_at = timezone.now()
             return super().save(*args, **kwargs)
         except ObjectDoesNotExist:
-            self.created_at = timezone.now()
-            self.updated_at = timezone.now()
-            return super().save(*args, **kwargs)
+            raise UnableToConstructBuilding("Cannot construct building on unknown landscape")
     
     def belongs_to(self, landscape: Landscape):
         """Return true if this building belongs to the given landscape instance"""
@@ -240,6 +247,7 @@ class Building(models.Model):
                 return landscape == building_landscape
             except ObjectDoesNotExist:
                 return False
+        return False
     
     def owned_by(self, company: Union[Company, str]):
         """Return true if this building owned by given company
