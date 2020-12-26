@@ -17,7 +17,7 @@ class BuildingBuilder(object):
     This is just for constructing the building. For buying the building.
     Please see alternative method
 
-    It will include the cost of constructing the building. 
+    It will include the cost of constructing the building.
 
     Usage: call construct_building()
 
