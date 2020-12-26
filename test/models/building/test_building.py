@@ -24,6 +24,16 @@ class BuildingPurchasingTestCase(TestCase):
         
         self.assertEqual(building.building_name, 'myfirstbuilding')
     
+    def test_buy_building_with_higher_level_than_0(self):
+        self.company.balance = self.land.buy_cost + 1
+        self.land.purchase_landscape(self.company)
+        restaurant: BuildingType = BuildingType.objects.get_building_by_type('restaurant')
+        self.company.balance = restaurant.get_buy_cost(1)
+        with self.assertRaises(UnableToConstructBuilding):
+            Building.objects.create_building("restaurant", 'myfirstbuilding', self.company,
+                                             'buy', 1, self.land)
+        
+    
     def test_buy_building_is_buy_status(self):
         self.company.balance = self.land.buy_cost + 1
         self.land.purchase_landscape(self.company)
