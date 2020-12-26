@@ -8,6 +8,8 @@ import random
 from app.models.core.exception import CannotBuyBuildingOnRentLandscape
 from app.models.core.exception import NegativeLevel, UnableToConstructBuilding
 from typing import Union
+from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class BuildingBuilder(object):
@@ -15,17 +17,22 @@ class BuildingBuilder(object):
     This is just for constructing the building. For buying the building.
     Please see alternative method
 
-    It will include the cost of constructing the building
+    It will include the cost of constructing the building.
+
+    Usage: call construct_building()
 
     Constructor: Landscape instance. The land to constructing the building on top
     """
-    def __init__(self, landscape: Landscape, level: int, building_type: str):
+    def __init__(self, landscape: Landscape, level: int, building_type: str, building_name: str):
         """
         Constructor: Landscape instance. The land to constructing the building on top
         """
         self.landscape = landscape
         self.level = level
         self.building_type = building_type
+        self.building_name = building_name
+        self.buildingType_instance = None
+        self.method_acquired = None
 
     def can_build(self, company: Company, method_acquired: str) -> bool:
         """
@@ -37,6 +44,7 @@ class BuildingBuilder(object):
 
         This method does not check for anything else
         """
+        self.method_acquired = method_acquired
         if self.landscape.owned_by(company):
             if method_acquired == 'rent':
                 return self.landscape.can_create_rent_building(self.level)
@@ -61,9 +69,11 @@ class BuildingBuilder(object):
         if self.can_build(company, method_acquired):
             try:
                 self.process_transaction(method_acquired)
-                self.create_building()
+                return self.create_building()
             except ValueError:
                 raise UnableToConstructBuilding()
+        else:
+            raise UnableToConstructBuilding()
     
     def process_transaction(self, method_acquired: str):
         """
@@ -75,8 +85,10 @@ class BuildingBuilder(object):
         """
         building_type: BuildingType = self.get_building_details()
         if building_type is not None:
+            self.buildingType_instance = building_type
             try:
                 cost = building_type.get_cost(method_acquired.lower(), self.level)
+                self.cost = cost
                 company = self.landscape.company
                 company.balance -= cost
                 if company.balance < 0:
@@ -85,14 +97,34 @@ class BuildingBuilder(object):
             except NegativeLevel:
                 raise ValueError("The level must be negative")
 
+    def get_building_details_as_dict(self) -> dict:
+        """
+        Return the dictionary of buildingtyp details
+        If you're looking for an instance, refer to get_building_details() instead
+        """
+        details: dict = {
+            'building_type': self.building_type,
+            'building_name': self.building_name,
+            'landscape': self.landscape,
+            'company': self.landscape.company,
+            'current_level': self.level,
+            'max_storage': self.buildingType_instance.get_max_storage(self.level),
+            'max_employees': self.buildingType_instance.get_max_employees(self.level),
+            'is_rent': self.method_acquired == 'rent',
+            'is_buy': self.method_acquired == 'buy',
+            #  the price that when first bought this building regardless of method of acquiring
+            'buy_cost': self.cost,
+            'rent_cost': self.cost if self.method_acquired == 'rent' else None,
+            'last_collected_money_at': timezone.now()
+        }
+        return details
+
     def create_building(self) -> Building:
         """Create the building and save to the database.
         Do not call this method directly.
         """
-        building: Building = Building.objects.create(building_type=self.building_type,
-                                                     building_name=self.building_name,
-                                                     company=self.landscape.company,
-                                                     level=self.level)
+        details = self.get_building_details_as_dict()
+        building: Building = Building.objects.create(**details)
         return building
 
 
@@ -123,7 +155,9 @@ class BuildingManager(models.Manager):
             # if the given landscape is on rent and method of acquiring is buy
             if landscape.on_rent() and method_acquired == 'buy':
                 raise CannotBuyBuildingOnRentLandscape()
-            builder: BuildingBuilder = BuildingBuilder(landscape, level, building_type)
+                
+            # construct the building
+            builder: BuildingBuilder = BuildingBuilder(landscape, level, building_type, building_name)
             return builder.construct_building(company, method_acquired)
     
     def get_building_buy_cost(self, building: BuildingType, level: int):
@@ -168,19 +202,22 @@ class Building(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     # the storage field for this building
-    current_storage = models.IntegerField()
+    current_storage = models.IntegerField(default=0)
     max_storage = models.IntegerField()
 
-    current_employee = models.IntegerField(default=0)
-    max_employee = models.IntegerField()
+    current_employees = models.IntegerField(default=0)
+    max_employees = models.IntegerField()
 
     is_buy = models.BooleanField(default=False)
     is_rent = models.BooleanField(default=False)
-    rent_cost = models.DecimalField(max_digits=20, decimal_places=4)
-    buy_cost = models.DecimalField(max_digits=20, decimal_places=4)
+    rent_cost = models.DecimalField(max_digits=20, decimal_places=4, null=True)
+    buy_cost = models.DecimalField(max_digits=20, decimal_places=4, null=True)
 
-    landscape = models.OneToOneField(Landscape, on_delete=models.CASCADE,
-                                     primary_key=True)
+    landscape = models.OneToOneField(Landscape, on_delete=models.CASCADE, primary_key=True)
+
+
+    created_at = models.DateTimeField(editable=False)
+    updated_at = models.DateTimeField(null=True)
     last_collected_money_at = models.DateTimeField()
 
     objects = BuildingManager()
@@ -191,3 +228,37 @@ class Building(models.Model):
         Return BuildingType instance
         """
         return BuildingType.objects.get_building_by_type(self.building_type)
+    
+    def save(self, *args, **kwargs) -> None:
+        try:
+            self.landscape
+            if not self.created_at:
+                self.created_at = timezone.now()
+            self.updated_at = timezone.now()
+            return super().save(*args, **kwargs)
+        except ObjectDoesNotExist:
+            raise UnableToConstructBuilding("Cannot construct building on unknown landscape")
+    
+    def belongs_to(self, landscape: Landscape):
+        """Return true if this building belongs to the given landscape instance"""
+        if isinstance(landscape, Landscape):
+            try:
+                building_landscape = self.landscape
+                return landscape == building_landscape
+            except ObjectDoesNotExist:
+                return False
+        return False
+    
+    def owned_by(self, company: Union[Company, str]):
+        """Return true if this building owned by given company
+        
+        This method check if landscape attribute exists then
+        called the owned_by method from landscape instance
+
+        Return False if not found and not match
+        """
+        try:
+            building_landscape: Landscape = self.landscape
+            return building_landscape.owned_by(company)
+        except ObjectDoesNotExist:
+            return False
