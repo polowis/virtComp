@@ -191,6 +191,11 @@ class BuildingManager(models.Manager):
     
 
 class Building(models.Model):
+    """
+    The Building model for handling anything related to building (a building of a company)
+
+    DO NOT USE BuildingType class. But this class instead
+    """
     building_id = models.CharField(max_length=255, default=generate_unique_id)
     building_type = models.CharField(max_length=255)
     building_name = models.CharField(max_length=255)
