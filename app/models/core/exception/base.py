@@ -30,6 +30,14 @@ class IncorrectOnwer(Exception):
 
 
 class UnableToConstructBuilding(Exception):
+    """Throws if unable to construct a building"""
     def __init__(self, message: str = 'Unable to construct building'):
+        self.message = message
+        super().__init__(self.message)
+
+
+class UnableToOwnLandscape(Exception):
+    """Throws if unable to own a landscape"""
+    def __init__(self, message: str = 'Unable to rent landscape'):
         self.message = message
         super().__init__(self.message)

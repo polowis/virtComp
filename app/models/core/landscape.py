@@ -10,6 +10,7 @@ import logging
 from setting import local_settings as env
 import random
 from datetime import datetime, timedelta
+from app.models.core.exception import UnableToOwnLandscape
 
 
 logger = logging.getLogger(__name__)
@@ -295,9 +296,13 @@ class Landscape(models.Model):
         if isinstance(company, Company):
             self.company = company
             self.company_name = company.company_name
-            company_new_balance = company.balance - self.buy_cost
+            if self.required_extra_continent_cost(company):
+                extra_cost = self.get_extra_contient_cost(company, 'buy')
+                company_new_balance = company.balance - (self.buy_cost + extra_cost)
+            else:
+                company_new_balance = company.balance - self.buy_cost
             if company_new_balance < 0:
-                raise ValueError("Company balance must be positive")
+                raise UnableToOwnLandscape("Company balance does not meet the requirements")
             company.balance = company_new_balance
             company.save()
             self.buy()
@@ -315,9 +320,13 @@ class Landscape(models.Model):
         if isinstance(company, Company):
             self.company = company
             self.company_name = company.company_name
-            company_new_balance = company.balance - self.rent_cost
+            if self.required_extra_continent_cost(company):
+                extra_cost = self.get_extra_contient_cost(company, 'rent')
+                company_new_balance = company.balance - (self.rent + extra_cost)
+            else:
+                company_new_balance = company.balance - self.rent_cost
             if company_new_balance < 0:
-                raise ValueError("Company balance must be positive")
+                raise UnableToOwnLandscape("Company balance does not meet the requirements")
             company.balance = company_new_balance
             company.save()
             self.rent()
@@ -351,6 +360,11 @@ class Landscape(models.Model):
 
         # preventing access to other attributes
         supported_methods_acquired = ['continent_cost', 'continent_rent']
+
+        if method_acquired.lower() == 'buy':
+            method_acquired = 'continent_cost'
+        if not method_acquired.lower().startswith('continent_'):
+            method_acquired = 'continent_' + method_acquired.lower()
 
         if self.required_extra_continent_cost(company) and method_acquired.lower() in supported_methods_acquired:
             return getattr(self, method_acquired.lower())
