@@ -10,6 +10,7 @@ from app.models.core.exception import NegativeLevel, UnableToConstructBuilding
 from typing import Union
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
+from datetime import datetime, timedelta
 
 
 class BuildingBuilder(object):
@@ -267,3 +268,33 @@ class Building(models.Model):
             return building_landscape.owned_by(company)
         except ObjectDoesNotExist:
             return False
+    
+    def needs_to_pay_rent(self):
+        """Return true if the company needs to pay rent for this building"""
+        if self.is_rent:
+            now: datetime = timezone.now()
+            return now - timedelta(days=7) >= self.last_collected_money_at
+        return False
+    
+    def pay_rent(self, company: Company) -> None:
+        """Pay the required rent. This method calls needs_to_pay_rent method directly
+        to check if the building needs to be paid. This is to ensure that user do not pay
+        too soon or too late.
+        """
+        if self.needs_to_pay_rent():
+            # Only the same owner can pay the rent
+            if self.company == company:
+                company.balance -= self.rent_cost
+                if company.balance < 0:
+                    raise ValueError("Insufficient amount of money to pay")
+                company.save()
+                self.last_collected_money_at = timezone.now()
+    
+    def rent_overdue(self):
+        """
+        Return true if the rent is overdue. This will be usually one month (30) days
+        """
+        if self.is_rent:
+            now: datetime = timezone.now()
+            return now - timedelta(days=30) >= self.last_collected_money_at
+        return False
