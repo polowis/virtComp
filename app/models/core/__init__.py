@@ -9,9 +9,12 @@ from .transaction import __all__ as transaction_model
 
 from .exception import __all__ as exceptions
 
+from .agent import * # noqa
+from .agent import __all__ as agent_model
+
 from .landscape import Landscape
 
 from .building import Building
 
-__all__ = exceptions + transaction_model
+__all__ = exceptions + transaction_model + agent_model
 __all__ += ['Company', 'Landscape', 'Building']
