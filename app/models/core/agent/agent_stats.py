@@ -1,6 +1,8 @@
 from django.db import models
 from app.models.core.agent import AgentCustomer
 import random
+from django.utils import timezone
+from app.models.core.agent import AgentStatsTracker
 
 
 def random_score():
@@ -34,13 +36,27 @@ class AgentWeightConfig(object):
 agent_weight = AgentWeightConfig()
 
 
-class AgentStatsManager(models.Model):
+class AgentStatsManager(models.Manager):
     def create_stats(self, agent):
         """Create stats for given FRESH agent instance
         
         All stats are calculated at random
         """
-        return self.create(agent=agent)
+        return self.create(agent=agent, **self.stats_generator())
+    
+    def stats_generator(self):
+        values: dict = {
+            'qualification': random_score(),
+            'productivity': random_score(),
+            'communication': random_score(),
+            'creativity': random_score(),
+            'leadership': random_score(),
+            'learning': random_score(),
+        }
+        return values
+
+
+
 
 
 class AgentStats(models.Model):
@@ -55,51 +71,65 @@ class AgentStats(models.Model):
     leadership = models.IntegerField(default=random_score)
     learning = models.IntegerField(default=random_score)
 
-    # the data afterward
-    current_qualification = models.IntegerField(default=qualification)
-    current_productivity = models.IntegerField(default=productivity)
-    current_communication = models.IntegerField(default=communication)
-    current_creativity = models.IntegerField(default=creativity)
-    current_leadership = models.IntegerField(default=leadership)
-    current_learning = models.IntegerField(default=learning)
-
     stress = models.IntegerField(default=0)
     emotion = models.IntegerField(default=100)
 
-    salary = models.DecimalField(max_digits=20, decimal_places=4)
+    salary = models.DecimalField(max_digits=20, decimal_places=4, default=0)
     hour_of_work_per_day = models.IntegerField(default=0)
 
     is_rest = models.BooleanField(default=True)
     is_employed = models.BooleanField(default=False)
 
+    updated_at = models.DateTimeField()
+
+    objects = models.Manager()
+    attribute = AgentStatsManager()
+
+    def save(self, *args, **kwargs):
+        self.updated_at = timezone.now()
+        AgentStatsTracker.objects.create_tracker(self.attributes_to_dict())
+        return super().save(*args, **kwargs)
 
     @property
     def qualification_score(self) -> float:
-        return self.current_qualification * self.score_weight('qualification')
+        return self.qualification * self.score_weight('qualification')
     
     @property
     def productivity_score(self):
-        return self.current_productivity * self.score_weight('productivity')
+        return self.productivity * self.score_weight('productivity')
     
     @property
     def communication_score(self):
-        return self.current_communication * self.score_weight('communication')
+        return self.communication * self.score_weight('communication')
     
     @property
     def creativity_score(self):
-        return self.current_creativity * self.score_weight('creativity')
+        return self.creativity * self.score_weight('creativity')
     
     @property
     def leadership_score(self):
-        return self.current_leadership * self.score_weight('leadership')
+        return self.leadership * self.score_weight('leadership')
     
     @property
     def learning_score(self):
-        return self.current_learning * self.score_weight('learning')
+        return self.learning * self.score_weight('learning')
 
     def score_weight(self, key):
         """Get the score weight from given key"""
         return agent_weight.get_weight(key)
+    
+    def attributes_to_dict(self):
+        """return main attributes of agent as dictionary"""
+        values = {
+            'qualification': self.qualification,
+            'productivity': self.productivity,
+            'communication': self.communication,
+            'learning': self.learning,
+            'leadership': self.leadership,
+            'creativity': self.creativity,
+        }
+
+        return values
     
     @property
     def perfomance_score(self):
