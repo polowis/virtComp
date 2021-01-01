@@ -1,7 +1,59 @@
 from __future__ import annotations
 from django.db import models
 import math
-from typing import Union
+from typing import Union, Dict
+import csv
+
+
+class PlaceRow(object):
+    """The constant place row must be correctly format as follow
+    
+    x,y,name,group,continent
+
+    where x and y denote the coordinates of the place (present in number format either int or float)
+    """
+    def __init__(self, row: list):
+        if self._has_correct_format(row):
+            self.row = row
+        else:
+            raise TypeError("The imported row is incorrectly formatted")
+    
+    @property
+    def x(self) -> Union[int, float]:
+        return self.row[0]
+    
+    @property
+    def y(self) -> Union[int, float]:
+        return self.row[1]
+    
+    @property
+    def name(self) -> str:
+        return self.row[2]
+    
+    @property
+    def group(self) -> str:
+        return self.row[3]
+    
+    @property
+    def continent(self) -> str:
+        return self.row[4]
+    
+    def _has_correct_format(self, row) -> bool:
+        """This will return true if the given list of rows
+        follow the required format.
+        """
+        return len(row) == 5
+    
+    def as_dict(self) -> Dict[str, str]:
+        """Return a dictionary of corresponding fields"""
+        default_value: dict = {
+            'x': self.x,
+            'y': self.y,
+            'group': self.group,
+            'continent': self.continent,
+        }
+
+        return default_value
 
 
 class PlaceManager(models.Manager):
@@ -25,6 +77,22 @@ class PlaceManager(models.Manager):
         scale_factor = 50  # the scale factor to match real distance
         distance = math.sqrt((place1.x - place2.x)**2 + (place1.y - place2.y)**2)
         return math.floor(distance * scale_factor) if force_round else distance * scale_factor
+    
+    def load_data(self, data: Union[str, list[list]] = "./csv_data/place.csv"):
+        """Load the place data from a CSV file or as a 2d array. Both are accepted.
+        If the places names are already presented, it will update the data respectively
+        """
+        if isinstance(data, str):  # assume that if the given data is in string format, then it must be the path
+            try:
+                with open(data) as f:
+                    reader = csv.reader(f)
+                    next(reader, None)
+                    for row in reader:
+                        place: PlaceRow = PlaceRow(row)
+                        default_value = place.as_dict()
+                        obj, created = self.update_or_create(name=place.name, defaults=default_value)
+            except Exception as e:
+                raise Exception(e)
 
 
 class Place(models.Model):
