@@ -60,7 +60,7 @@ x,y,place_name,place_type,continent
 23,67,chamadolt,village ,alantica
 17,92,jamarine,village ,alantica
 34,99,radenwald,suburb,alantica
-6.89,58,macken,suburb,alantica
+7,58,macken,suburb,alantica
 62,93,nocturne,village ,alantica
 73,37,olthandor,village ,alantica
 96,68,bradfield,suburb,alantica
@@ -87,7 +87,7 @@ x,y,place_name,place_type,continent
 8,104,springwyn,suburb,alantica
 4,84,southmallow,village ,alantica
 89,122,courtdale,town,alantica
-1.8,130,fairford ,suburb,alantica
+2,130,fairford ,suburb,alantica
 90,27,ostholt,village ,alantica
 125,20,coldwynne,city ,alantica
 56,104,linfort ,suburb,alantica
@@ -95,7 +95,7 @@ x,y,place_name,place_type,continent
 49,57,drypass,centre,alantica
 111,38,goldwyn,suburb,alantica
 100,30,greenfog ,suburb,alantica
-59,2.5,oldfort ,suburb,alantica
+59,5,oldfort ,suburb,alantica
 109,123,silver oaks,town,alantica
 72,58,eastway ,suburb,alantica
 118,52,rockmount ,town,alantica
