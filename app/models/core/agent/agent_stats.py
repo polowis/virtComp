@@ -2,7 +2,7 @@ from django.db import models
 from app.models.core.agent import AgentCustomer
 import random
 from django.utils import timezone
-from app.models.core.agent import AgentStatsTracker
+from .agent_tracker import AgentStatsTracker
 
 
 def random_score():
