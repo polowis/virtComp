@@ -2,7 +2,7 @@ from __future__ import annotations
 from django.db import models
 from app.core.util.base import generate_unique_id
 from app.models.core import Company
-from app.models.core import Landscape
+from .landscape import Landscape
 from app.models.constants import BuildingType
 import random
 from app.models.core.exception import CannotBuyBuildingOnRentLandscape
