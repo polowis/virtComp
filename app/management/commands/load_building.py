@@ -10,6 +10,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             BuildingType.objects.load_building_type(self.default_path)
+            print('successfully loaded buildingType')
         except Exception as e:
             raise CommandError(e)
     

@@ -1,15 +1,15 @@
 from django.core.management.base import BaseCommand, CommandError
-from app.models.constants.land import Land
-    
+from app.models.constants import Place
+
 
 class Command(BaseCommand):
     help = 'Load a CSV file to database'
 
-    default_path = './csv_data/landData.csv'
+    default_path = './csv_data/place.csv'
     
     def handle(self, *args, **options):
         try:
-            Land.objects.load_land(self.default_path)
-            print('successfully loaded land')
+            Place.objects.load_data(self.default_path)
+            print('Successfully loaded place')
         except Exception as e:
             raise CommandError(e)

@@ -72,7 +72,7 @@ class LandscapeManager(models.Manager):
 
         raise TypeError("lookup_company must be a Company instance or a string of company name")
     
-    def get_supported_continents(self):
+    def get_supported_continents(self) -> dict:
         """Return the list of supported continents from Land class"""
         return Land.objects.get_supported_continents()
 
