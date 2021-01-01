@@ -23,6 +23,8 @@ class Product(models.Model):
     which means if it reaches this number, uses will need to create another product instead
 
     We also allow users to update the product quantity so they do not have to create a new one again
+
+    NOTE: this is for sale purpose. To store purpose, please see ProductStored model instead.
     """
 
     # the unique id of the product record. NOTE: this is the id of recorded row not the product id itself
@@ -93,7 +95,9 @@ class Product(models.Model):
         will be destroyed. Update the deleted_at field not the bought_at field
 
         To know whether the item will be withdrawed or added. the number of quantity will tell
-        if it increases -> adding. else withdrawing
+        if it increases -> adding. else withdrawing. If withdrawing, it needs to specify the storage object to store
+        items. if none is specify, the method will choose the first storage object in the list raise error if that 
+        storage does not have enough space
         """
         pass
     
