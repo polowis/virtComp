@@ -34,7 +34,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=20, decimal_places=4)
 
     # the number of products in this group
-    quantity = models.DecimalField(max_digits=20, decimal_places=4)
+    quantity = models.IntegerField()
 
     # the discount number must be a decimal number and must not has percentage sign
     # example: convert 10% -> 0.1
@@ -96,7 +96,7 @@ class Product(models.Model):
 
         To know whether the item will be withdrawed or added. the number of quantity will tell
         if it increases -> adding. else withdrawing. If withdrawing, it needs to specify the storage object to store
-        items. if none is specify, the method will choose the first storage object in the list raise error if that 
+        items. if none is specify, the method will choose the first storage object in the list raise error if that
         storage does not have enough space
         """
         pass
