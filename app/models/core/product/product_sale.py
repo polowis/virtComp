@@ -43,7 +43,7 @@ class Product(models.Model):
 
     # the products name
     name = models.CharField(max_length=255)
-    item_object = models.ForeignKey()
+    item_object = models.ForeignKey(Item, on_delete=models.CASCADE)
 
     # the company in which this product belongs to
     company_name = models.CharField(max_length=30)
