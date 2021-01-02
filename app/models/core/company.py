@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class CompanyManager(models.Manager):
-    def create_company(self, company_name: str, owner_object: User, 
+    def create_company(self, company_name: str, owner_object: User,
                        continent: str = Land.objects.default_continent()) -> Company:
         """Create a company and save them to database. Return Company object.
 
