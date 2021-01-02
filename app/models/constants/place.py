@@ -104,11 +104,19 @@ class PlaceManager(models.Manager):
         """
         return self.all().values('name')
 
-    def get_random_place(self) -> str:
-        """Return the random place name as string"""
-        places = self.get_supported_place()
+    def get_random_place(self, continent: str) -> str:
+        """Return the random place name as string from a given continent"""
+        places = list(self.filter(continent=continent).values('name'))
         chosen_place = places[math.floor(random.random() * len(places))]
         return chosen_place['name']
+    
+    def belongs_to(self, place_name: str, continent: str):
+        """Check if the given place belongs to the correct given continent"""
+        try:
+            place: Place = self.get(name=place_name)
+            return place.continent == continent
+        except Place.DoesNotExist:
+            return False
 
 
 class Place(models.Model):
