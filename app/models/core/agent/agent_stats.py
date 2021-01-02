@@ -121,6 +121,7 @@ class AgentStats(models.Model):
     def attributes_to_dict(self):
         """return main attributes of agent as dictionary"""
         values = {
+            'agent': self.agent,
             'qualification': self.qualification,
             'productivity': self.productivity,
             'communication': self.communication,

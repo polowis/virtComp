@@ -1,101 +1,101 @@
 x,y,place_name,place_type,continent
-20,15,wingston,city ,alantica
-50,10,openronfa,village ,alantica
+20,15,wingston,city,alantica
+50,10,openronfa,village,alantica
 30,6,sandcaster,suburb,alantica
-25,40,edinbury,village ,alantica
+25,40,edinbury,village,alantica
 30,25,wolford,suburb,alantica
 40,15,merton,suburb,alantica
 14,4,millstone,town,alantica
 23,7,coldwallow,town,alantica
-13,12,grasshorn,village ,alantica
-5,20,darkwater,village ,alantica
+13,12,grasshorn,village,alantica
+5,20,darkwater,village,alantica
 11,23,deepbell,town,alantica
 7,30,swampcavern,town,alantica
 20,28,ravent,town,alantica
 10,50,wetyard,suburb,alantica
-50,45,rainforde ,city ,alantica
-60,60,bontaret,village ,alantica
+50,45,rainforde,city,alantica
+60,60,bontaret,village,alantica
 45,35,oakstead,suburb,alantica
-28,17,wyndham ,suburb,alantica
+28,17,wyndham,suburb,alantica
 35,20,amberly,suburb,alantica
 9,16,bridgecast,town,alantica
 37,80,oakcreek,town,alantica
-5,68,connerton ,suburb,alantica
+5,68,connerton,suburb,alantica
 20,60,asbel,suburb,alantica
 75,89,redwood,suburb,alantica
 39,55,rebelan,suburb,alantica
-80,23,napolis ,village ,alantica
-65,85,golden witnes,town,alantica
-69,70,woodberry,village ,alantica
+80,23,napolis,village,alantica
+65,85,goldenwitnes,town,alantica
+69,70,woodberry,village,alantica
 55,76,wisteraid,village,alantica
-28,90,scotten ridge,suburb,alantica
-12,77,lavendale,city ,alantica
+28,90,scottenridge,suburb,alantica
+12,77,lavendale,city,alantica
 29,75,riverhils,suburb,alantica
 16,42,springfield,suburb,alantica
 2,37,braderwood,town,alantica
 36,33,baymont,suburb,alantica
-34,46,elisona,village ,alantica
-41,29,edgewood hills,suburb,alantica
+34,46,elisona,village,alantica
+41,29,edgewoodhills,suburb,alantica
 29,53,bridgeside,town,alantica
 60,18,pinecrest,town,alantica
 74,5,bellingham,suburb,alantica
-68,28,brenterwood hills,suburb,alantica
-44,65,montrus,village ,alantica
-75,43,foxfield,city ,alantica
+68,28,brenterwoodhills,suburb,alantica
+44,65,montrus,village,alantica
+75,43,foxfield,city,alantica
 58,32,abersy,suburb,alantica
 85,16,throsbey,suburb,alantica
-83,78,oak creek,city ,alantica
+83,78,oakcreek,city,alantica
 82,63,costern,suburb,alantica
 90,7,witnerose,suburb,alantica
 88,56,primrose,town,alantica
 91,73,oakleaf,town,alantica
-65,38,coastflied,city ,alantica
+65,38,coastflied,city,alantica
 67,49,cautaland,town,alantica
 89,39,bayshore,town,alantica
 84,95,meadowood,town,alantica
 47,88,swanview,town,alantica
 44,98,willscoltland,suburb,alantica
-20,83,camber ridge,city ,alantica
+20,83,camberridge,city,alantica
 10,87,bovenue,suburb,alantica
-23,67,chamadolt,village ,alantica
-17,92,jamarine,village ,alantica
+23,67,chamadolt,village,alantica
+17,92,jamarine,village,alantica
 34,99,radenwald,suburb,alantica
 7,58,macken,suburb,alantica
-62,93,nocturne,village ,alantica
-73,37,olthandor,village ,alantica
+62,93,nocturne,village,alantica
+73,37,olthandor,village,alantica
 96,68,bradfield,suburb,alantica
 100,17,rothernue,suburb,alantica
 100,100,raffdonford,town,alantica
-98,87,wolfenburg,village ,alantica
-109,9,royalfield,city ,alantica
+98,87,wolfenburg,village,alantica
+109,9,royalfield,city,alantica
 108,90,cattrickbay,suburb,alantica
 28,108,vulcanyard,town,alantica
-18,104,armmacrest,village ,alantica
-3,101,catania,village ,alantica
+18,104,armmacrest,village,alantica
+3,101,catania,village,alantica
 66,104,foaront,town,alantica
-45,105,mac clark ,suburb,alantica
+45,105,macclark,suburb,alantica
 98,47,breuwin,suburb,alantica
 104,62,blington,suburb,alantica
-109,28,woodlight ,village ,alantica
-8,118,westcoast ,suburb,alantica
-10,110,hawkton ,suburb,alantica
-18,112,northriver,village ,alantica
-105,108,whitecrest ,suburb,alantica
-108,78,swyncoast,city ,alantica
-120,8,westerby ,suburb,alantica
-18,122,lightgriffin ,village ,alantica
+109,28,woodlight,village,alantica
+8,118,westcoast,suburb,alantica
+10,110,hawkton,suburb,alantica
+18,112,northriver,village,alantica
+105,108,whitecrest,suburb,alantica
+108,78,swyncoast,city,alantica
+120,8,westerby,suburb,alantica
+18,122,lightgriffin,village,alantica
 8,104,springwyn,suburb,alantica
-4,84,southmallow,village ,alantica
+4,84,southmallow,village,alantica
 89,122,courtdale,town,alantica
-2,130,fairford ,suburb,alantica
-90,27,ostholt,village ,alantica
-125,20,coldwynne,city ,alantica
-56,104,linfort ,suburb,alantica
+2,130,fairford,suburb,alantica
+90,27,ostholt,village,alantica
+125,20,coldwynne,city,alantica
+56,104,linfort,suburb,alantica
 65,133,norwich,town,alantica
 49,57,drypass,centre,alantica
 111,38,goldwyn,suburb,alantica
-100,30,greenfog ,suburb,alantica
-59,5,oldfort ,suburb,alantica
-109,123,silver oaks,town,alantica
-72,58,eastway ,suburb,alantica
-118,52,rockmount ,town,alantica
+100,30,greenfog,suburb,alantica
+59,5,oldfort,suburb,alantica
+109,123,silveroaks,town,alantica
+72,58,eastway,suburb,alantica
+118,52,rockmount,town,alantica

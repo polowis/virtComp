@@ -2,6 +2,11 @@ from django.db import models
 from django.utils import timezone
 
 
+class TransactionManager(models.Manager):
+    def create_transaction(self):
+        pass
+
+
 class Transaction(models.Model):
     date = models.DateTimeField(default=timezone.now)
     total = models.DecimalField(max_digits=20, decimal_places=4)

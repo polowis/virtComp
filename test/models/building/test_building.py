@@ -8,9 +8,9 @@ class BuildingPurchasingTestCase(TestCase):
     def setUp(self):
         Land.objects.load_land('csv_data/landData.csv')
         BuildingType.objects.load_building_type('csv_data/buildingType.csv')
-        self.land: Landscape = Landscape.objects.create_land('asia')
+        self.land: Landscape = Landscape.objects.create_land()
         self.user: User = User.objects.create_user('johnyTest', 'john@example.com', 'johnpassword')
-        self.company: Company = Company.objects.create_company('johnCompany', self.user, 'asia')
+        self.company: Company = Company.objects.create_company('johnCompany', self.user)
         self.company.balance = self.land.buy_cost + 1
         self.land.purchase_landscape(self.company)
     
@@ -65,7 +65,7 @@ class BuildingPurchasingTestCase(TestCase):
         self.assertEqual(building.belongs_to(self.land), True)
     
     def test_not_belongs_to(self):
-        test_land = Landscape.objects.create_land('asia')
+        test_land = Landscape.objects.create_land()
         self.company.balance = test_land.buy_cost + 1
         test_land.purchase_landscape(self.company)
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('restaurant')

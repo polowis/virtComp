@@ -5,8 +5,9 @@ from app.core.util.base import generate_unique_id
 
 
 class AgentManager(models.Manager):
-    def create_agent(self, name) -> AgentCustomer:
-        agent = self.create(name='')
+    def create_agent(self, values) -> AgentCustomer:
+        """create agent customer"""
+        agent = self.create(**values)
         return agent
 
 
@@ -15,7 +16,7 @@ class AgentCustomer(models.Model):
     name = models.CharField(max_length=255)
     age = models.IntegerField()
     continent = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
+    place = models.CharField(max_length=255)
     company_name = models.CharField(max_length=255, null=True)
     created_at = models.DateTimeField(editable=False)
     updated_at = models.DateTimeField(editable=False)

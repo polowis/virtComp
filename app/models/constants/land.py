@@ -50,8 +50,8 @@ class LandManager(models.Manager):
         return self.get(level=level)
 
     def get_supported_continents(self) -> list:
-        return ['asia', 'south america', 'north america', 'europe',
-                'oceania', 'africa']
+        return ['alantica', 'strovania', 'niaclausias', 'tastania', 'adionoris'
+                'gonaucrit']
 
     def get_probability(self) -> list:
         """
@@ -100,6 +100,10 @@ class LandManager(models.Manager):
                                                                      defaults=default_value)
             except FileNotFoundError:
                 raise FileNotFoundError("The file for csv file was not found")
+    
+    def default_continent(self):
+        """Return the default land in case there is a missing continent"""
+        return self.get_supported_continents()[0]  # return the first continent in the list
 
     def load_land_from_2d_array(self, objects):
         """
