@@ -137,11 +137,12 @@ class NameGenerator(object):
     
     def print_overall_stats(self):
         """Print the overall stats observing this dataset"""
-        print(self.corpus_size, "unique words\n")
-        print(len(self.chars), "characters, including the \\n:")
-        print(self.chars)
-        print("\nFirst five sample words:")
-        print(self.wordlist[:5])
+        if self._debug:
+            print(self.corpus_size, "unique words\n")
+            print(len(self.chars), "characters, including the \\n:")
+            print(self.chars)
+            print("\nFirst five sample words:")
+            print(self.wordlist[:5])
     
     def fit(self):
         """Fitting model"""
