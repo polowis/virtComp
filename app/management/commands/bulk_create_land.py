@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from app.models import Landscape
 
 
@@ -13,5 +13,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         number_of_lands = options['number_of_lands']
         continent: str = options['continent']
-        for number_of_land in number_of_lands:
-            Landscape.objects.create_multiple_landscape(continent, number_of_land)
+        try:
+            Landscape.objects.create_multiple_landscape(continent, number_of_lands)
+        except Exception as e:
+            raise CommandError(e)
+        
