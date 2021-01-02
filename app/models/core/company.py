@@ -6,12 +6,14 @@ from django.contrib.auth.models import User
 from app.core.util.base import generate_unique_id
 from app.core.validator.base import Validator
 import logging
+from app.models.constants import Land
 logger = logging.getLogger(__name__)
 
 
 
 class CompanyManager(models.Manager):
-    def create_company(self, company_name: str, owner_object: User, continent: str = 'asia') -> Company:
+    def create_company(self, company_name: str, owner_object: User, 
+                       continent: str = Land.objects.default_continent()) -> Company:
         """Create a company and save them to database. Return Company object.
 
         This method does not check for validity. Please call can_create_company method before this
@@ -62,7 +64,7 @@ class Company(models.Model):
     company_name = models.CharField(max_length=255)
     owner_name = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    continent = models.CharField(max_length=255, default='asia')
+    continent = models.CharField(max_length=255, default=Land.objects.default_continent())
     balance = models.DecimalField(default=0, max_digits=20, decimal_places=4)
     popularity = models.IntegerField(default=0)
     reputation = models.IntegerField(default=0)

@@ -8,12 +8,12 @@ import datetime
 class LandscapeTestCase(TestCase):
     def setUp(self):
         Land.objects.load_land('csv_data/landData.csv')
-        self.land: Landscape = Landscape.objects.create_land('asia')
+        self.land: Landscape = Landscape.objects.create_land()
         self.user: User = User.objects.create_user('johnyTest', 'john@example.com', 'johnpassword')
-        self.company: Company = Company.objects.create_company('johnCompany', self.user, 'asia')
+        self.company: Company = Company.objects.create_company('johnCompany', self.user)
     
     def test_bulk_create_landscape(self):
-        Landscape.objects.create_multiple_landscape('europe', 10)
+        Landscape.objects.create_multiple_landscape('alantica', 10)
 
     def test_land_manager_is_available(self):
         land_is_available = Landscape.objects.landscape_is_available(self.land.land_id)
@@ -28,7 +28,7 @@ class LandscapeTestCase(TestCase):
         self.assertEqual(self.land.land_id, test_land.land_id)
 
     def test_land_is_created(self):
-        self.assertEqual(self.land.continent, 'asia')
+        self.assertEqual(self.land.continent, 'alantica')
     
     def test_land_able_to_buy(self):
         self.assertEqual(self.land.can_be_purchased(), True)
@@ -58,17 +58,17 @@ class LandscapeTestCase(TestCase):
         self.assertEqual(self.land.company_able_to_purchase(self.company, 'rent_cost'), False)
     
     def test_company_required_extra_cost_to_buy_landscape(self):
-        extra_cost_land = Landscape.objects.create_land('europe')
+        extra_cost_land = Landscape.objects.create_land('strovania')
         self.assertEqual(extra_cost_land.required_extra_continent_cost(self.company), True)
 
     def test_extra_continent_buy_cost_normal_case(self):
-        extra_cost_land = Landscape.objects.create_land('europe')
+        extra_cost_land = Landscape.objects.create_land('strovania')
         self.assertEqual(
             extra_cost_land.get_extra_contient_cost(self.company, 'continent_cost'), extra_cost_land.continent_cost
         )
     
     def test_extra_continent_buy_cost_uppercased(self):
-        extra_cost_land = Landscape.objects.create_land('europe')
+        extra_cost_land = Landscape.objects.create_land('strovania')
         self.assertEqual(
             extra_cost_land.get_extra_contient_cost(self.company, 'CONTINENT_COST'), extra_cost_land.continent_cost
         )
@@ -77,13 +77,13 @@ class LandscapeTestCase(TestCase):
         self.assertEqual(self.land.get_extra_contient_cost(self.company, 'continent_cost'), 0)
     
     def test_extra_continent_rent_cost_normal_case(self):
-        extra_cost_land = Landscape.objects.create_land('europe')
+        extra_cost_land = Landscape.objects.create_land('strovania')
         self.assertEqual(
             extra_cost_land.get_extra_contient_cost(self.company, 'continent_rent'), extra_cost_land.continent_rent
         )
     
     def test_extra_continent_rent_cost_upper_case(self):
-        extra_cost_land = Landscape.objects.create_land('europe')
+        extra_cost_land = Landscape.objects.create_land('strovania')
         self.assertEqual(
             extra_cost_land.get_extra_contient_cost(self.company, 'CONTINENT_RENT'), extra_cost_land.continent_rent
         )
@@ -114,7 +114,7 @@ class LandscapeTestCase(TestCase):
         self.assertEqual(self.land.land_id, test_land.land_id)
     
     def test_company_buy_landscape_backward(self):
-        land = Landscape.objects.create_land('asia')
+        land = Landscape.objects.create_land()
         self.company.balance = land.buy_cost
         if land.can_be_purchased():
             if self.company.can_own_landscape(land, 'buy'):
@@ -123,7 +123,7 @@ class LandscapeTestCase(TestCase):
                 self.assertEqual(self.company.balance, 0)
     
     def test_company_buy_landscape_backward_with_upper_keyword(self):
-        land = Landscape.objects.create_land('asia')
+        land = Landscape.objects.create_land()
         self.company.balance = land.buy_cost
         if land.can_be_purchased():
             if self.company.can_own_landscape(land, 'BUY'):
@@ -132,14 +132,14 @@ class LandscapeTestCase(TestCase):
                 self.assertEqual(self.company.balance, 0)
 
     def test_company_rent_landscape(self):
-        land = Landscape.objects.create_land('asia')
+        land = Landscape.objects.create_land()
         self.company.balance = land.rent_cost
         land.rent_landscape(self.company)
         self.assertEqual(land.owned_by(self.company), True)
     
     def test_company_needs_to_pay_rent(self):
         now = timezone.now() - datetime.timedelta(days=8)
-        land = Landscape.objects.create_land('asia')
+        land = Landscape.objects.create_land()
         self.company.balance = land.rent_cost
         land.rent_landscape(self.company)
         land.last_collected_money_at = now
@@ -147,7 +147,7 @@ class LandscapeTestCase(TestCase):
     
     def test_company_needs_to_pay_rent_false(self):
         now = timezone.now() - datetime.timedelta(days=6)
-        land = Landscape.objects.create_land('asia')
+        land = Landscape.objects.create_land()
         self.company.balance = land.rent_cost
         land.rent_landscape(self.company)
         land.last_collected_money_at = now
@@ -155,7 +155,7 @@ class LandscapeTestCase(TestCase):
     
     def test_company_needs_to_pay_rent_on_due(self):
         now = timezone.now() - datetime.timedelta(days=7)
-        land = Landscape.objects.create_land('asia')
+        land = Landscape.objects.create_land()
         self.company.balance = land.rent_cost
         land.rent_landscape(self.company)
         land.last_collected_money_at = now
@@ -163,7 +163,7 @@ class LandscapeTestCase(TestCase):
     
     def test_company_overdue_landscape(self):
         now = timezone.now() - datetime.timedelta(days=30)
-        land = Landscape.objects.create_land('asia')
+        land = Landscape.objects.create_land()
         self.company.balance = land.rent_cost
         land.rent_landscape(self.company)
         land.last_collected_money_at = now
@@ -171,7 +171,7 @@ class LandscapeTestCase(TestCase):
     
     def test_company_not_overdue_landscape(self):
         now = timezone.now() - datetime.timedelta(days=7)
-        land = Landscape.objects.create_land('asia')
+        land = Landscape.objects.create_land()
         self.company.balance = land.rent_cost
         land.rent_landscape(self.company)
         land.last_collected_money_at = now

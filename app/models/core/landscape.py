@@ -129,7 +129,7 @@ class LandscapeManager(models.Manager):
                          continent_rent=land.get_continent_rent_cost(),
                          continent=continent.lower())
 
-    def create_land(self, continent: str) -> Landscape:
+    def create_land(self, continent: str = Land.objects.default_continent()) -> Landscape:
         """Create default land. To retreive supported continents
 
         You may use Land.objects.get_supported_continents() method
@@ -145,14 +145,10 @@ class LandscapeManager(models.Manager):
         else:
             raise Exception("Invalid continent name. Please see Land.objects.get_supported_continents()")
 
-    def create_multiple_landscape(self, continent: str,
-                                  number_of_land: int) -> None:
+    def create_multiple_landscape(self, continent: str, number_of_land: int) -> None:
         """
         generate multiple landscape.
         This methods falls back to create_land method.
-
-        This method will try to convert number_of_land into a number.
-        Make sure that the continent provide is supported by virtComp
 
         :param continent: the contient you wish to create a landscape for
         :param number_of_land: the number of landscape to create
