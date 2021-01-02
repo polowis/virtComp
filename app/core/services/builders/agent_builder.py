@@ -35,7 +35,7 @@ class AgentBuilder(object):
         """Create many agents. This can improve performance by only load the model once
         But the continent must be specified can cannot generate on its own.
         """
-        for agent in int(number_of_agents):
+        for agent in range(int(number_of_agents)):
             self.name = self.generator.generate_word(1)[0]
             self.place = Place.objects.get_random_place(self.continent)
             self.age = self.get_random_age()

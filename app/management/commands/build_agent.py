@@ -17,8 +17,7 @@ class Command(BaseCommand):
         number_of_agents: int = options.get('number_of_agents', 10)
         continent: str = options.get('continent', self.default_continent)
         try:
-            for agent in range(number_of_agents):
-                builder = AgentBuilder(continent=continent)
-                builder.build()
+            builder = AgentBuilder(continent=continent)
+            builder.build_many_agents(number_of_agents)
         except Exception as e:
             raise CommandError(e)
