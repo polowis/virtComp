@@ -11,7 +11,6 @@ class AgentStatsTrackerManager(models.Manager):
 
 class AgentStatsTracker(models.Model):
     agent = models.ForeignKey(AgentCustomer, on_delete=models.CASCADE)
-    
     qualification = models.IntegerField()
     productivity = models.IntegerField()
     communication = models.IntegerField()
