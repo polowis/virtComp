@@ -30,6 +30,22 @@ class AgentBuilder(object):
                 print("Agent created at ", agent.__dict__)
             return agent
         raise Exception("Invalid Location. The place must be inside the specifed continent")
+    
+    def build_many_agents(self, number_of_agents) -> None:
+        """Create many agents. This can improve performance by only load the model once
+        But the continent must be specified can cannot generate on its own.
+        """
+        for agent in int(number_of_agents):
+            self.name = self.generator.generate_word(1)[0]
+            self.place = Place.objects.get_random_place(self.continent)
+            self.age = self.get_random_age()
+            agent: AgentCustomer = AgentCustomer.objects.create_agent(
+                self.attribute_as_dict())
+            AgentStats.attribute.create_stats(agent)
+            if self.debug:
+                print("Agent created at ", agent.__dict__)
+
+
 
     @property
     def name(self) -> str:
@@ -73,7 +89,7 @@ class AgentBuilder(object):
         """Generate agent name"""
         return self.generator.generate_word(1)[0]
     
-    def get_random_age(self, start: int, end: int) -> int:
+    def get_random_age(self, start: int = 15, end: int = 40) -> int:
         """return random age in given range"""
         return random.randint(start, end)
     
