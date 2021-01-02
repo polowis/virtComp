@@ -1,6 +1,7 @@
 from __future__ import annotations
 from django.db import models
 import math
+import random
 from typing import Union, Dict
 import csv
 
@@ -93,6 +94,21 @@ class PlaceManager(models.Manager):
                         obj, created = self.update_or_create(name=place.name, defaults=default_value)
             except Exception as e:
                 raise Exception(e)
+    
+    def get_supported_place(self) -> list[dict]:
+        """Get supported place name
+        
+        Return a list containing the dictionary as formatted below:
+
+        [{'name': 'place_name'}]
+        """
+        return self.all().values('name')
+
+    def get_random_place(self) -> str:
+        """Return the random place name as string"""
+        places = self.get_supported_place()
+        chosen_place = places[math.floor(random.random() * len(places))]
+        return chosen_place['name']
 
 
 class Place(models.Model):
