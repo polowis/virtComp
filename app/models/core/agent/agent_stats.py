@@ -61,7 +61,7 @@ class AgentStatsManager(models.Manager):
 
 class AgentStats(models.Model):
     """The Agent_Stats model"""
-    agent = models.OneToOneField(AgentCustomer, on_delete=models.CASCADE, primary_key=True, related_name="agent")
+    agent = models.OneToOneField(AgentCustomer, on_delete=models.CASCADE, primary_key=True)
 
     # the original data
     qualification = models.IntegerField(default=random_score)

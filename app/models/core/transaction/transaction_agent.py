@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils import timezone
 import datetime
-from app.models import AgentCustomer, Company
+from app.models.core import Company
+from app.models.core.agent import AgentCustomer
 
 
 class AgentTransactionManager(models.Manager):
@@ -19,11 +20,11 @@ class AgentTransactionManager(models.Manager):
 class AgentTransaction(models.Model):
     """The Agent transaction model to deal with anything related to Transaction"""
     payment_id = models.IntegerField()
-    agent_id = models.IntegerField()
-    agent = models.ForeignKey(AgentCustomer)
-    company_id = models.CharField(max_length=255)
-    company = models.ForeignKey(Company)
-    continent = models.CharField()
+    customer_id = models.IntegerField()
+    agent = models.ForeignKey(AgentCustomer, on_delete=models.CASCADE)
+    producer_id = models.CharField(max_length=255)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    continent = models.CharField(max_length=255)
     total = models.DecimalField(max_digits=20, decimal_places=4)
     created_at = models.DateTimeField(editable=False)
 
