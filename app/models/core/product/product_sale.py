@@ -3,6 +3,8 @@ from app.models.core import Company
 from django.utils import timezone
 from app.core.util.base import generate_unique_id
 from app.models.constants import Item
+from django.db.models import Avg
+from typing import Union
 
 
 class ProductManager(models.Manager):
@@ -12,6 +14,15 @@ class ProductManager(models.Manager):
     def get_product_by_id(self, record_id: str):
         """Make sure to catch obj.DoesNotExist exception when calling this method"""
         return self.get(record_id=record_id)
+    
+    def get_average_price(self, item: Union[Item, str]):
+        """
+        Return the average price of an item in the market
+        
+        """
+        if isinstance(item, str):
+            return self.filter(name=item).aggregate(Avg('price'))
+        return self.filter(name=item.name).aggregate(Avg('price'))
 
 
 class Product(models.Model):
@@ -33,8 +44,7 @@ class Product(models.Model):
     # cost per unit
     price = models.DecimalField(max_digits=20, decimal_places=4)
 
-    # the number of products in this group
-    quantity = models.IntegerField()
+    quality = models.DecimalField(max_digits=10, decimal_places=2)
 
     # the discount number must be a decimal number and must not has percentage sign
     # example: convert 10% -> 0.1

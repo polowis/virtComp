@@ -144,4 +144,7 @@ class Company(models.Model):
         else:
             raise TypeError("The landscape param must be an instance of landscape but "
                             "got {} instead".format(type(landscape)))
+    
+    def hire(self, agent):
+        pass
 

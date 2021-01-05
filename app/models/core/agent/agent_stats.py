@@ -74,12 +74,6 @@ class AgentStats(models.Model):
     stress = models.IntegerField(default=0)
     emotion = models.IntegerField(default=100)
 
-    salary = models.DecimalField(max_digits=20, decimal_places=4, default=0)
-    hour_of_work_per_day = models.IntegerField(default=0)
-
-    is_rest = models.BooleanField(default=True)
-    is_employed = models.BooleanField(default=False)
-
     updated_at = models.DateTimeField()
 
     objects = models.Manager()
