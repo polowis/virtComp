@@ -44,6 +44,7 @@ class AgentBuilder(object):
             AgentStats.attribute.create_stats(agent)
             if self.debug:
                 print("Agent created at ", agent.__dict__)
+                print("Agent stats: ", agent.agentstats.__dict__)
 
 
 

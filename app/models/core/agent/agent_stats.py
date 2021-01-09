@@ -61,7 +61,7 @@ class AgentStatsManager(models.Manager):
 
 class AgentStats(models.Model):
     """The Agent_Stats model"""
-    agent = models.OneToOneField(AgentCustomer, on_delete=models.CASCADE, primary_key=True, related_name="agent")
+    agent = models.OneToOneField(AgentCustomer, on_delete=models.CASCADE, primary_key=True)
 
     # the original data
     qualification = models.IntegerField(default=random_score)
@@ -73,12 +73,6 @@ class AgentStats(models.Model):
 
     stress = models.IntegerField(default=0)
     emotion = models.IntegerField(default=100)
-
-    salary = models.DecimalField(max_digits=20, decimal_places=4, default=0)
-    hour_of_work_per_day = models.IntegerField(default=0)
-
-    is_rest = models.BooleanField(default=True)
-    is_employed = models.BooleanField(default=False)
 
     updated_at = models.DateTimeField()
 

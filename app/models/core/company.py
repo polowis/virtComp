@@ -144,4 +144,16 @@ class Company(models.Model):
         else:
             raise TypeError("The landscape param must be an instance of landscape but "
                             "got {} instead".format(type(landscape)))
+    
+    def hire(self, agent):
+        pass
+
+    def fire(self, agent) -> None:
+        """
+        Fire the given agent out of the company
+        """
+        agent.company_name = None
+        agent.building = None
+        agent.save()
+        
 

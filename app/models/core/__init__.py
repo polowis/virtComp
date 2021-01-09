@@ -18,6 +18,7 @@ from .agent import __all__ as agent_model
 from .landscape import Landscape
 
 from .building import Building
+from .continent import Continent
 
 __all__ = exceptions + transaction_model + agent_model + product_model
-__all__ += ['Company', 'Landscape', 'Building']
+__all__ += ['Company', 'Landscape', 'Building', 'Continent']
