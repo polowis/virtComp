@@ -148,3 +148,12 @@ class Company(models.Model):
     def hire(self, agent):
         pass
 
+    def fire(self, agent) -> None:
+        """
+        Fire the given agent out of the company
+        """
+        agent.company_name = None
+        agent.building = None
+        agent.save()
+        
+
