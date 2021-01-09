@@ -3,7 +3,7 @@ from django.db import models
 from django.utils import timezone
 from app.core.util.base import generate_unique_id
 from django.db.models import Avg
-from app.models.core import Building
+from ..building import Building
 
 
 class AgentManager(models.Manager):
