@@ -28,6 +28,7 @@ class AgentCustomer(models.Model):
 
     is_rest = models.BooleanField(default=True)
     is_employed = models.BooleanField(default=False)
+    is_producing = models.BooleanField(default=False)
     created_at = models.DateTimeField(editable=False)
     updated_at = models.DateTimeField(editable=False)
 

@@ -12,6 +12,7 @@ class ProductBuilder(object):
         """
         self.agents: List[AgentCustomer] = agents or []
         self.item: Item = None
+        self.producing_time = self.get_producing_time(self.item.time_to_produce)
     
     def set_item(self, item: Item):
         if isinstance(item, Item):
@@ -27,7 +28,7 @@ class ProductBuilder(object):
         """
         if isinstance(item, Item):
             product = ProductProducing.objects.create_proccess(
-                time=self.get_producing_time()
+                time=self.producing_time
             )
         else:
             item = self._get_item_instance(item)
@@ -75,3 +76,16 @@ class ProductBuilder(object):
     def get_average_agents_productivity(self):
         """Return the average productivity of agents in the given cohort"""
         return sum([agent.agentstats.productivity for agent in self.agents]) / len(self.agents)
+    
+    def update_worker_status(self, status=True) -> None:
+        """Set the worker status. If the given status is true, the worker
+        will be set to is_producing, false otherwise.
+
+        This method will call bulk_update to update the status of worker
+
+        You will need to call this method again after finished producing.
+        """
+        for agent in self.agents:
+            agent.is_producing = True
+        AgentCustomer.objetcs.bulk_update(self.agents, ['is_producing'])
+        
