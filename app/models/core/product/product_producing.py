@@ -3,6 +3,7 @@ from app.models.constants import Item
 from ..building import Building
 from django.utils import timezone
 import datetime
+import random
 
 
 class ProductProducingManager(models.Manager):
@@ -34,10 +35,21 @@ class ProductProducing(models.Model):
     objects = ProductProducingManager()
 
     def is_finished(self):
-        return self.is_completed or timezone.now() > self.end_time
+        """Check if the product has finished. Doing this will also try to
+        update the process
+        """
+        if not self.is_completed:
+            self.is_completed = timezone.now() > self.end_time
+        return self.is_completed
     
     def move_to(self, building):
         """This function will be used to move the item into storage after
         finishing
         """
         pass
+
+    def update_success(self) -> None:
+        if self.is_success is None:
+            success_score = random.randint(1, 100)
+            self.is_success = success_score < self.item.prob_per_attempt
+        return
