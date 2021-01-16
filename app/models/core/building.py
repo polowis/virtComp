@@ -11,6 +11,7 @@ from typing import Union
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, timedelta
+from app.models.constants import Item
 
 
 class BuildingBuilder(object):
@@ -298,3 +299,12 @@ class Building(models.Model):
             now: datetime = timezone.now()
             return now - timedelta(days=30) >= self.last_collected_money_at
         return False
+    
+    def can_produce(self, item: Item) -> bool:
+        """return true if this type of building can produce the item
+        this will check for building location and type
+
+        The item provided must be the item instance but not the string
+        """
+        return (item.belongs_to_continent(str(self.landscape.continent))
+                and item.belongs_to_building_type(str(self.building_type))) # noqa  

@@ -130,9 +130,18 @@ class Item(models.Model):
 
     objects = ItemManager()
 
-    def building_to_dict(self):
+    def building_to_dict(self) -> dict:
         """return the dictionary contains the building type that can produce the item"""
         return str(self.building_type).split(",")
     
-    def continent_to_dict(self):
+    def continent_to_dict(self) -> dict:
+        """retuurn the dictionary contains the continents """
         return str(self.continent).split(",")
+    
+    def belongs_to_continent(self, continent: str) -> bool:
+        """Return true if this item belongs to this continent"""
+        return continent.lower() in self.continent_to_dict
+    
+    def belongs_to_building_type(self, building_type: str) -> bool:
+        """return true if this item belongs to this building type"""
+        return building_type.lower() in self.building_type_to_dict
