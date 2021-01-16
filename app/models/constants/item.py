@@ -96,7 +96,7 @@ class ItemLoader(object):
                 next(reader, None)  # skip header
                 for row in reader:
                     item = ItemCSVRow(row)
-                    obj, created = Item.objects.update_or_create(name=item.name, default_value=item.to_dict())
+                    obj, created = Item.objects.update_or_create(name=item.name, defaults=item.to_dict())
         except Exception as e:
             raise Exception(e)
 

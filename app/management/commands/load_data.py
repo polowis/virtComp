@@ -7,7 +7,7 @@ import time
 class Command(BaseCommand):
     help = 'Load all data from csv file to database'
 
-    command_list = ['load_land', 'load_building', 'load_place']
+    command_list = ['load_land', 'load_building', 'load_place', 'load_item']
 
     
     def handle(self, *args, **options):
