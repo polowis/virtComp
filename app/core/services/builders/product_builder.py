@@ -6,19 +6,30 @@ from app.models.core.agent import AgentCustomer
 
 
 class ProductBuilder(object):
-    def __init__(self, agents: List[AgentCustomer] = None):
+    def __init__(self, item: Item = None, building: Building = None, agents: List[AgentCustomer] = None):
         """
+        Item: The item instance (this should be the constant item not the produced item)
+        Building: The building instance this item should be produced at
         Agent: list of agents that should be building this product
         """
         self.agents: List[AgentCustomer] = agents or []
-        self.item: Item = None
+        self.item: Item = item
+        self.building: Building = building
         self.producing_time = self.get_producing_time(self.item.time_to_produce)
     
     def set_item(self, item: Item):
+        """Set the item"""
         if isinstance(item, Item):
             self.item = item
             return self
         raise TypeError("item must be an instance of Item but got %s" % type(item))
+
+    def set_building(self, building: Building):
+        """Set the building"""
+        if isinstance(building, Building):
+            self.building = building
+            return self
+        raise TypeError("building must be an instance of Building but got %s" % type(building))
 
     def produce_item(self, item: Union[str, Item]):
         """Handle produce item process. The item must be valid and
@@ -30,6 +41,7 @@ class ProductBuilder(object):
             product = ProductProducing.objects.create_proccess(
                 time=self.producing_time
             )
+            return product
         else:
             item = self._get_item_instance(item)
             if item is None:
@@ -88,4 +100,7 @@ class ProductBuilder(object):
         for agent in self.agents:
             agent.is_producing = True
         AgentCustomer.objetcs.bulk_update(self.agents, ['is_producing'])
-        
+    
+    def is_valid(self):
+        """Return true if isvald to produce"""
+        return self.building.can_produce(self.item)
