@@ -1,10 +1,11 @@
+from __future__ import annotations
 from django.db import models
 from app.models.constants import Item
 from ..building import Building
 from django.utils import timezone
 import datetime
 import random
-from app.models.core.agents import AgentCustomer
+from ..agent.agent import AgentCustomer
 
 
 class ProductProducingManager(models.Manager):
@@ -17,11 +18,6 @@ class ProductProducingManager(models.Manager):
         self.create(name=item_name, item=item, expected_quality=expected_quality, start_time=start_time,
                     end_time=end_time)
 
-
-class AgentProducing(models.Model):
-    """The agent produce the particular item"""
-    agent = models.ForeignKey(AgentCustomer, on_delete=models.CASCADE)
-    producing_process = models.ForeignKey(ProductProducingManager, on_delete=models.CASCADE)
 
 
 class ProductProducing(models.Model):
@@ -60,3 +56,9 @@ class ProductProducing(models.Model):
             success_score = random.randint(1, 100)
             self.is_success = success_score < self.item.prob_per_attempt
         return
+
+
+class AgentProducing(models.Model):
+    """The agent produce the particular item"""
+    agent = models.ForeignKey(AgentCustomer, on_delete=models.CASCADE)
+    producing_process = models.ForeignKey(ProductProducing, on_delete=models.CASCADE)
