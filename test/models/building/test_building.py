@@ -161,4 +161,13 @@ class BuildingPurchasingTestCase(TestCase):
                                                     'rent', 0, self.land)
         
         self.assertEqual(building.is_buy, False)
+    
+    def test_build_fake_building(self):
+        self.company.balance = self.land.buy_cost + 1
+        self.land.purchase_landscape(self.company)
+        restaurant: BuildingType = BuildingType.objects.get_building_by_type('market')
+        self.company.balance = restaurant.get_rent_cost(0)
+        with self.assertRaises(UnableToConstructBuilding):
+            Building.objects.create_building("fakebuilding", 'myfirstbuilding', self.company,
+                                             'buy', 1, self.land)
         
