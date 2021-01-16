@@ -88,4 +88,8 @@ class ProductBuilder(object):
         for agent in self.agents:
             agent.is_producing = True
         AgentCustomer.objetcs.bulk_update(self.agents, ['is_producing'])
+    
+    def is_valid(self):
+        """Return true if isvald to produce"""
+
         
