@@ -41,6 +41,7 @@ class ProductBuilder(object):
             product = ProductProducing.objects.create_proccess(
                 time=self.producing_time
             )
+            return product
         else:
             item = self._get_item_instance(item)
             if item is None:

@@ -4,6 +4,7 @@ from ..building import Building
 from django.utils import timezone
 import datetime
 import random
+from app.models.core.agents import AgentCustomer
 
 
 class ProductProducingManager(models.Manager):
@@ -17,8 +18,14 @@ class ProductProducingManager(models.Manager):
                     end_time=end_time)
 
 
+class AgentProducing(models.Model):
+    """The agent produce the particular item"""
+    agent = models.ForeignKey(AgentCustomer, on_delete=models.CASCADE)
+    producing_process = models.ForeignKey(ProductProducingManager, on_delete=models.CASCADE)
+
 
 class ProductProducing(models.Model):
+    """Product producing process"""
     name = models.CharField(max_length=255)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
 
