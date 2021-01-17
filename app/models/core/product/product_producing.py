@@ -64,7 +64,7 @@ class ProductProducing(models.Model):
             process.agent.save()
 
 
-class AgentProducingManager(models.Model):
+class AgentProducingManager(models.Manager):
     def create_producing_agent(self, agent=AgentCustomer, process=ProductProducing):
         agent_process = self.create(agent=agent, producing_process=process, process_id=process.id)
         return agent_process

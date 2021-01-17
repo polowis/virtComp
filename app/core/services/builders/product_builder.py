@@ -6,11 +6,19 @@ from app.models.core.agent import AgentCustomer
 
 
 class ProductBuilder(object):
+    """
+    Product builder class. It will not create a product but instead creating a process which later will be used to
+    creeate final product
+
+    This should pass owner validation first before calling this class as it will not check for owner validity
+    """
     def __init__(self, item: Item = None, building: Building = None, agents: List[AgentCustomer] = None):
         """
         Item: The item instance (this should be the constant item not the produced item)
         Building: The building instance this item should be produced at
         Agent: list of agents that should be building this product
+
+        
         """
         self.agents: List[AgentCustomer] = agents or []
         self.item: Item = item
@@ -39,6 +47,8 @@ class ProductBuilder(object):
         """
         if isinstance(item, Item):
             product_process = ProductProducing.objects.create_proccess(
+                item=self.item,
+                expected_quality=self.item.raw_quality,
                 time=self.producing_time
             )
             for agent in self.agents:
@@ -49,6 +59,7 @@ class ProductBuilder(object):
             item = self._get_item_instance(item)
             if item is None:
                 raise ValueError('Item Cannot be none')
+            
     
     def _get_item_instance(self, item_name):
         try:
