@@ -1,5 +1,5 @@
 from app.models.constants import Item
-from app.models.core.product import ProductProducing
+from app.models.core.product import ProductProducing, AgentProducing
 from app.models.core import Building
 from typing import Union, List
 from app.models.core.agent import AgentCustomer
@@ -38,10 +38,13 @@ class ProductBuilder(object):
         raise ValueError exception if the item is not valid
         """
         if isinstance(item, Item):
-            product = ProductProducing.objects.create_proccess(
+            product_process = ProductProducing.objects.create_proccess(
                 time=self.producing_time
             )
-            return product
+            for agent in self.agents:
+                AgentProducing.objects.create_producing_agent(agent=agent, process=product_process)
+            self.update_worker_status()
+            return product_process
         else:
             item = self._get_item_instance(item)
             if item is None:

@@ -17,3 +17,5 @@ class BuildingItemProducingTestCase(TestCase):
         self.company.balance = building.get_rent_cost(0)
         self.test_building = Building.objects.create_building("supreme mine", 'mymine', self.company,
                                                               'rent', 0, self.land)
+    
+    
