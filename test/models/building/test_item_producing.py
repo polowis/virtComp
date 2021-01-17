@@ -19,6 +19,6 @@ class BuildingItemProducingTestCase(TestCase):
                                                          'rent', 0, self.land)
     
     def test_building_can_produce(self):
-        item = Item.objects.get(name='diamond')
+        item = Item.objects.get(name='diamond')  # assuming diamond is produced from surpeme mine
         self.assertEqual(self.building.can_produce(item), True)
     
