@@ -1,7 +1,7 @@
 from app.models.constants import Item
 from app.models.core.product import ProductProducing, AgentProducing
 from app.models.core import Building
-from typing import Union, List
+from typing import List
 from app.models.core.agent import AgentCustomer
 
 
@@ -30,6 +30,12 @@ class ProductBuilder(object):
         if isinstance(item, Item):
             self.item = item
             return self
+        elif isinstance(item, str):
+            item = self._get_item_instance(item)
+            if self.item is None:
+                raise TypeError('Item must be a valid name')
+            self.item = item
+            return self
         raise TypeError("item must be an instance of Item but got %s" % type(item))
 
     def set_building(self, building: Building):
@@ -39,13 +45,13 @@ class ProductBuilder(object):
             return self
         raise TypeError("building must be an instance of Building but got %s" % type(building))
 
-    def produce_item(self, item: Union[str, Item]):
+    def produce_item(self):
         """Handle produce item process. The item must be valid and
         cannot be none. Update
 
         raise ValueError exception if the item is not valid
         """
-        if isinstance(item, Item):
+        if isinstance(self.item, Item) and self.is_valid():
             product_process = ProductProducing.objects.create_proccess(
                 item=self.item,
                 expected_quality=self.item.raw_quality,
@@ -56,7 +62,7 @@ class ProductBuilder(object):
             self.update_worker_status()
             return product_process
         else:
-            item = self._get_item_instance(item)
+            item = self._get_item_instance(self.item)
             if item is None:
                 raise ValueError('Item Cannot be none')
             
