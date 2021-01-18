@@ -61,7 +61,7 @@ class ProductProducing(models.Model):
     def update_agents(self):
         processes = AgentProducing.objects.filter(process_id=self.id)
         for process in processes:
-            process.agent.is_working = False
+            process.agent.is_producing = False
             process.agent.save()
 
 
