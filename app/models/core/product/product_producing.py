@@ -55,6 +55,7 @@ class ProductProducing(models.Model):
         if self.is_success is None:
             success_score = random.randint(1, 100)
             self.is_success = success_score < self.item.prob_per_attempt
+            self.update_agents()
         return
     
     def update_agents(self):
