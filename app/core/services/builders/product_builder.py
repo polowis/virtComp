@@ -123,4 +123,14 @@ class ProductBuilder(object):
     
     def is_valid(self):
         """Return true if isvald to produce"""
-        return self.building.can_produce(self.item)
+        return self.building.can_produce(self.item) and self.agents_are_free_to_produce()
+    
+    def agents_are_free_to_produce(self):
+        """Return true if all agents in the collection are able to produce
+        The not working status must be true
+        """
+        for agent in self.agents:
+            if agent.is_producing is True:
+                return False
+        return True
+        
