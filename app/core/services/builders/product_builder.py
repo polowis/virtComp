@@ -11,6 +11,7 @@ class ProductBuilder(object):
     creeate final product
 
     This should pass owner validation first before calling this class as it will not check for owner validity
+    as well as agent validity to see if the agents belong to the building
     """
     def __init__(self, item: Item = None, building: Building = None, agents: List[AgentCustomer] = None):
         """

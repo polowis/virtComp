@@ -41,3 +41,9 @@ class UnableToOwnLandscape(Exception):
     def __init__(self, message: str = 'Unable to rent landscape'):
         self.message = message
         super().__init__(self.message)
+    
+
+class UnableToAssignEmployee(Exception):
+    def __init__(self, message: str = 'Unable to assign employee'):
+        self.message = message
+        super().__init__(self.message)
