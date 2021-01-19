@@ -1,16 +1,25 @@
 from app.models.constants import Item
-from app.models.core.product import ProductProducing
+from app.models.core.product import ProductProducing, AgentProducing
 from app.models.core import Building
-from typing import Union, List
+from typing import List
 from app.models.core.agent import AgentCustomer
 
 
 class ProductBuilder(object):
+    """
+    Product builder class. It will not create a product but instead creating a process which later will be used to
+    creeate final product
+
+    This should pass owner validation first before calling this class as it will not check for owner validity
+    as well as agent validity to see if the agents belong to the building
+    """
     def __init__(self, item: Item = None, building: Building = None, agents: List[AgentCustomer] = None):
         """
         Item: The item instance (this should be the constant item not the produced item)
         Building: The building instance this item should be produced at
         Agent: list of agents that should be building this product
+
+        
         """
         self.agents: List[AgentCustomer] = agents or []
         self.item: Item = item
@@ -22,6 +31,12 @@ class ProductBuilder(object):
         if isinstance(item, Item):
             self.item = item
             return self
+        elif isinstance(item, str):
+            item = self._get_item_instance(item)
+            if self.item is None:
+                raise TypeError('Item must be a valid name')
+            self.item = item
+            return self
         raise TypeError("item must be an instance of Item but got %s" % type(item))
 
     def set_building(self, building: Building):
@@ -31,21 +46,27 @@ class ProductBuilder(object):
             return self
         raise TypeError("building must be an instance of Building but got %s" % type(building))
 
-    def produce_item(self, item: Union[str, Item]):
+    def produce_item(self):
         """Handle produce item process. The item must be valid and
         cannot be none. Update
 
         raise ValueError exception if the item is not valid
         """
-        if isinstance(item, Item):
-            product = ProductProducing.objects.create_proccess(
+        if isinstance(self.item, Item) and self.is_valid():
+            product_process = ProductProducing.objects.create_proccess(
+                item=self.item,
+                expected_quality=self.item.raw_quality,
                 time=self.producing_time
             )
-            return product
+            for agent in self.agents:
+                AgentProducing.objects.create_producing_agent(agent=agent, process=product_process)
+            self.update_worker_status()
+            return product_process
         else:
-            item = self._get_item_instance(item)
+            item = self._get_item_instance(self.item)
             if item is None:
                 raise ValueError('Item Cannot be none')
+            
     
     def _get_item_instance(self, item_name):
         try:
@@ -103,4 +124,14 @@ class ProductBuilder(object):
     
     def is_valid(self):
         """Return true if isvald to produce"""
-        return self.building.can_produce(self.item)
+        return self.building.can_produce(self.item) and self.agents_are_free_to_produce()
+    
+    def agents_are_free_to_produce(self):
+        """Return true if all agents in the collection are able to produce
+        The not working status must be true
+        """
+        for agent in self.agents:
+            if agent.is_producing is True:
+                return False
+        return True
+        

@@ -307,4 +307,4 @@ class Building(models.Model):
         The item provided must be the item instance but not the string
         """
         return (item.belongs_to_continent(str(self.landscape.continent))
-                and item.belongs_to_building_type(str(self.building_type))) # noqa  
+                and item.belongs_to_building_type(str(self.building_type)))  # noqa  

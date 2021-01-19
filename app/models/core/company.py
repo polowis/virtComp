@@ -7,6 +7,7 @@ from app.core.util.base import generate_unique_id
 from app.core.validator.base import Validator
 import logging
 from app.models.constants import Land
+from app.models.core.exception import UnableToAssignEmployee
 logger = logging.getLogger(__name__)
 
 
@@ -146,7 +147,28 @@ class Company(models.Model):
                             "got {} instead".format(type(landscape)))
     
     def hire(self, agent):
-        pass
+        """Hire the given agent.
+        The agent will be assigned to the company but however not distributed to building
+        If the agent has not distributed to any building, the agent will not be able to earn money
+
+        Make sure to call Company.distribute() method directly.
+        """
+        agent.company_name = self.company_name
+        agent.save()
+        return
+    
+    def distribute(self, agent, building) -> None:
+        """
+        Distribute the agent to building
+
+        TODO: Check for maximum employees
+        """
+        if building.company_name == self.company_name:  # check if building is owned by the company
+            if agent.company_name == self.company_name:  # check if agent in this company
+                agent.building = building
+                agent.save()
+                return
+        raise UnableToAssignEmployee()
 
     def fire(self, agent) -> None:
         """

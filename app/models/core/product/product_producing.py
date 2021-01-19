@@ -55,10 +55,26 @@ class ProductProducing(models.Model):
         if self.is_success is None:
             success_score = random.randint(1, 100)
             self.is_success = success_score < self.item.prob_per_attempt
+            self.update_agents()
         return
+    
+    def update_agents(self):
+        processes = AgentProducing.objects.filter(process_id=self.id)
+        for process in processes:
+            process.agent.is_producing = False
+            process.agent.save()
+
+
+class AgentProducingManager(models.Manager):
+    def create_producing_agent(self, agent=AgentCustomer, process=ProductProducing):
+        agent_process = self.create(agent=agent, producing_process=process, process_id=process.id)
+        return agent_process
 
 
 class AgentProducing(models.Model):
     """The agent produce the particular item"""
+    process_id = models.IntegerField()
     agent = models.ForeignKey(AgentCustomer, on_delete=models.CASCADE)
     producing_process = models.ForeignKey(ProductProducing, on_delete=models.CASCADE)
+
+    objects = AgentProducingManager()
