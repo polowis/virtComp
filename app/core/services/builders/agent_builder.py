@@ -46,8 +46,6 @@ class AgentBuilder(object):
                 print("Agent created at ", agent.__dict__)
                 print("Agent stats: ", agent.agentstats.__dict__)
 
-
-
     @property
     def name(self) -> str:
         return self._name or self.generate_agent_name()

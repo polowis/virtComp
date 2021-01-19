@@ -49,7 +49,6 @@ class NameGenerator(object):
         if config is not None:
             self.load_config(config)
 
-
         # Keep only unique words:
         self.wordlist = sorted(set(wordlist))
         # Terminate each word with a newline:
@@ -68,7 +67,6 @@ class NameGenerator(object):
         self.idx_to_char = np.array(self.chars)
 
         self.print_overall_stats()
-    
     
     def debug(self, value: bool = True) -> NameGenerator:
         """
@@ -101,7 +99,6 @@ class NameGenerator(object):
         self._hidden_dim = value
         return self
     
-
     def read_file_content(self, path):
         """Read the content in the file and return list of words that are alphabetical"""
         text_contents = open(path).read().replace('\n', ' ')
@@ -218,8 +215,6 @@ class NameGenerator(object):
         generator.model = model
         return generator
         
-
-    
     def proccess_output(self, model: Sequential) -> str:
         """
         This is the core function to generate word

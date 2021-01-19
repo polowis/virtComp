@@ -222,7 +222,6 @@ class Building(models.Model):
 
     landscape = models.OneToOneField(Landscape, on_delete=models.CASCADE, primary_key=True)
 
-
     created_at = models.DateTimeField(editable=False)
     updated_at = models.DateTimeField(null=True)
     last_collected_money_at = models.DateTimeField()

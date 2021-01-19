@@ -1,6 +1,4 @@
 
-
-
 class CannotBuyBuildingOnRentLandscape(Exception):
     """
     Raise if unable to buy building on rent landscape

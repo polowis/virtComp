@@ -69,7 +69,6 @@ class Product(models.Model):
 
     objects = ProductManager()
 
-
     def save(self, *args, **kwargs):
         """Save this object to database"""
         if not self.id:

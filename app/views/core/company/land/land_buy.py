@@ -3,7 +3,6 @@ from django.http import HttpRequest, JsonResponse, Http404
 from app.models import Landscape, Company
 
 
-
 class LandBuy(View):
     def post(self, request: HttpRequest, land_id=None):
         try:

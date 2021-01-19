@@ -20,7 +20,6 @@ class ExchangeSystem(object):
             pass
         return self.update_continent_cpi(cpi)
 
-        
     def update_continent_cpi(self, new_cpi):
         self.continent.update_cpi(new_cpi)
         

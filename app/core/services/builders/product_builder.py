@@ -67,7 +67,6 @@ class ProductBuilder(object):
             if item is None:
                 raise ValueError('Item Cannot be none')
             
-    
     def _get_item_instance(self, item_name):
         try:
             item = Item.objects.get(name=item_name)
@@ -81,7 +80,6 @@ class ProductBuilder(object):
     
     def continent_can_produce(self, continent: str, item: Item):
         pass
-
 
     def get_producing_time(self, base_time):
         """Return the expected time to produce from this given agent(s)"""
@@ -101,7 +99,6 @@ class ProductBuilder(object):
             return self
         raise TypeError("Agent must be an instance of AgentCustomer but got %s" % type(agent))
         
-    
     def get_average_agents_qualification(self):
         """Return the average qualification of agents in the given cohort"""
         return sum([agent.agentstats.qualification for agent in self.agents]) / len(self.agents)

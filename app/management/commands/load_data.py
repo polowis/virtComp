@@ -9,7 +9,6 @@ class Command(BaseCommand):
 
     command_list = ['load_land', 'load_building', 'load_place', 'load_item']
 
-    
     def handle(self, *args, **options):
         start = time.time()
         try:

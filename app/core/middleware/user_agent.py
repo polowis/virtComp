@@ -16,12 +16,10 @@ class UserAgentMiddleware(object):
         request.user_agent = UserAgent(request.META.get('HTTP_USER_AGENT'))
 
 
-
 class UserAgent(object):
     def __init__(self, ua_string: str):
         self.user_agent = ua_string
 
-    
     def is_mobile(self):
         pattern = re.compile(r".*(palm|blackberry|nokia|phone|midp|mobi|symbian|chtml|ericsson|minimo|audiovox|motorola|samsung|telit|upg1|windows ce|ucweb|astel|plucker|x320|x240|j2me|sgh|portable|sprint|docomo|kddi|softbank|android|mmp|pdxgw|netfront|xiino|vodafone|portalmmm|sagem|mot-|sie-|ipod|up\\.b|webos|amoi|novarra|cdm|alcatel|pocket|ipad|iphone|mobileexplorer|mobile)", re.IGNORECASE) # noqa
         if pattern.match(self.user_agent):

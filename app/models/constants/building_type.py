@@ -91,7 +91,6 @@ class BuildingTypeCSVRow(object):
         return default_value
 
 
-
 class BuildingTypeManager(models.Manager):
     def get_building_by_type(self, building_type: str) -> BuildingType:
         """Return BuildingType instance, raise error if not found"""
@@ -164,7 +163,6 @@ class BuildingType(models.Model):
     can_produce = models.BooleanField()
 
     objects = BuildingTypeManager()
-
 
     def get_max_employees(self, level: int = 0) -> float:
         """Return the max employees for this type of building given the level

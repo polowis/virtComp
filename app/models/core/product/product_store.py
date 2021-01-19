@@ -24,7 +24,6 @@ class ProducedItemManager(models.Manager):
         return self.filter(product=product, building=building).aggregate(Count('quantity'))
 
 
-
 class ProducedItem(models.Model):
     """The products stored in each building"""
     record_id = models.CharField(max_length=255, default=generate_unique_id)

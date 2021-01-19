@@ -2,7 +2,6 @@ from django.db import models
 from app.models.core.transaction import Transaction
 
 
-
 class TransactionDetails(models.Model):
     """Each transaction details responsible for managing ONLY ONE type of product"""
     payment_id = models.IntegerField()  # index (pk) key linked to transaction table

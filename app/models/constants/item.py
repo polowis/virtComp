@@ -87,7 +87,6 @@ class ItemLoader(object):
     def __init__(self, path):
         self.path = path
     
-
     def load(self):
         """Load data"""
         try:
@@ -105,7 +104,6 @@ class ItemManager(models.Manager):
     def get_items_by_continent(self, continent: str):
         return self.filter(continent=continent)
     
-
     def load_items(self, path: str = './csv_data/item.csv'):
         if isinstance(path, str):
             loader = ItemLoader(path)

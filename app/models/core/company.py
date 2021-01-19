@@ -11,7 +11,6 @@ from app.models.core.exception import UnableToAssignEmployee
 logger = logging.getLogger(__name__)
 
 
-
 class CompanyManager(models.Manager):
     def create_company(self, company_name: str, owner_object: User,
                        continent: str = Land.objects.default_continent()) -> Company:
@@ -103,7 +102,6 @@ class Company(models.Model):
                 return self.balance >= getattr(landscape, method_acquired)
         raise TypeError("method_acquired param must be in supported methods but got %s instead" % method_acquired)
     
-
     def purchase_landscape(self, landscape: app.models.Landscape) -> None:
         """The function will withdraw a certain amount of money from given company
         

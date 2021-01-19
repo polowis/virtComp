@@ -56,9 +56,6 @@ class AgentStatsManager(models.Manager):
         return values
 
 
-
-
-
 class AgentStats(models.Model):
     """The Agent_Stats model"""
     agent = models.OneToOneField(AgentCustomer, on_delete=models.CASCADE, primary_key=True)

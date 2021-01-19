@@ -7,7 +7,6 @@ class Validation(object):
         self.request = request
         self.context = context
     
-
     def get_context_keys_as_list(self) -> list:
         return list(self.context.keys())
     

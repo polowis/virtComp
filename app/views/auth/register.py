@@ -53,7 +53,6 @@ class RegisterView(View):
         return False
 
 
-
 class UserAvailability(View):
     def post(self, request: HttpRequest):
         username = request.POST.get('username', None)
@@ -80,7 +79,6 @@ class UserAvailability(View):
     def email_exists(self, email):
         return User.objects.filter(email=email).exists()
     
-
     def has_exists_email(self, email):
         if self.has_valid_email(email):
             if self.email_exists(email):

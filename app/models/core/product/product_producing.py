@@ -19,7 +19,6 @@ class ProductProducingManager(models.Manager):
                     end_time=end_time)
 
 
-
 class ProductProducing(models.Model):
     """Product producing process"""
     name = models.CharField(max_length=255)

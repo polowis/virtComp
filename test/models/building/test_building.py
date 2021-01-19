@@ -33,7 +33,6 @@ class BuildingPurchasingTestCase(TestCase):
             Building.objects.create_building("restaurant", 'myfirstbuilding', self.company,
                                              'buy', 1, self.land)
         
-    
     def test_buy_building_is_buy_status(self):
         self.company.balance = self.land.buy_cost + 1
         self.land.purchase_landscape(self.company)
@@ -53,7 +52,6 @@ class BuildingPurchasingTestCase(TestCase):
                                                     'buy', 0, self.land)
         
         self.assertEqual(building.is_rent, False)
-    
     
     def test_building_belong_to(self):
         self.company.balance = self.land.buy_cost + 1
