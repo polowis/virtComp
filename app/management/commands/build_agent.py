@@ -14,10 +14,10 @@ class Command(BaseCommand):
                             default=self.default_continent)
     
     def handle(self, *args, **options):
-        number_of_agents: int = options.get('number_of_agents', 10)
+        number_of_agents: int = options.get('number_of_agent', [10])
         continent: str = options.get('continent', self.default_continent)
         try:
             builder = AgentBuilder(continent=continent)
-            builder.build_many_agents(number_of_agents)
+            builder.build_many_agents(number_of_agents[0])
         except Exception as e:
             raise CommandError(e)
