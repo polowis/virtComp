@@ -3,6 +3,7 @@ from ..citizen.name_generator import NameGenerator
 from app.models.constants import Land, Place
 import math
 import random
+from typing import List
 
 
 class AgentBuilder(object):
@@ -31,20 +32,28 @@ class AgentBuilder(object):
             return agent
         raise Exception("Invalid Location. The place must be inside the specifed continent")
     
-    def build_many_agents(self, number_of_agents) -> None:
+    def build_many_agents(self, number_of_agents, name_agents: List[str] = None) -> None:
         """Create many agents. This can improve performance by only load the model once
         But the continent must be specified can cannot generate on its own.
         """
-        for agent in range(int(number_of_agents)):
-            self.name = self.generator.generate_word(1)[0]
+        for num in range(int(number_of_agents)):
+            if name_agents is not None:  # if the provided list is an actual list
+                try:
+                    agent_name = name_agents[num]
+                except KeyError:
+                    agent_name = None
+            else:  # if the provided list is empty or not provided
+                agent_name = None
+
+            self.name = self.generator.generate_word(1)[0] if agent_name is None else agent_name
             self.place = Place.objects.get_random_place(self.continent)
             self.age = self.get_random_age()
             agent: AgentCustomer = AgentCustomer.objects.create_agent(
                 self.attribute_as_dict())
             AgentStats.attribute.create_stats(agent)
             if self.debug:
-                print("Agent created at ", agent.__dict__)
-                print("Agent stats: ", agent.agentstats.__dict__)
+                print("Agent created at ", agent.__dict__, '\n')
+                print("Agent stats: ", agent.agentstats.__dict__, '\n')
 
     @property
     def name(self) -> str:
