@@ -12,8 +12,8 @@ class AgentBuilder(object):
     Please do not use AgentCustomer.objects.create_agent() as this method does not
     do any validity check but only save to the database
     """
-    def __init__(self, **kwargs):
-        self.generator = NameGenerator.load()
+    def __init__(self, use_generator=True, **kwargs):
+        self.generator = NameGenerator.load() if use_generator else None
         self.generator._debug = False
         self._name = kwargs.get('name', None)
         self._continent = kwargs.get('continent', None)
@@ -95,6 +95,8 @@ class AgentBuilder(object):
     
     def generate_agent_name(self):
         """Generate agent name"""
+        if self.generator is None:
+            raise TypeError("No generator available, enable to true to use default generator")
         return self.generator.generate_word(1)[0]
     
     def get_random_age(self, start: int = 15, end: int = 40) -> int:
