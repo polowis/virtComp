@@ -1,5 +1,4 @@
 from app.models.core.agent import AgentCustomer, AgentStats
-from ..citizen.name_generator import NameGenerator
 from app.models.constants import Land, Place
 import math
 import random
@@ -13,6 +12,8 @@ class AgentBuilder(object):
     do any validity check but only save to the database
     """
     def __init__(self, use_generator=True, **kwargs):
+        if use_generator:
+            from ..citizen.name_generator import NameGenerator
         self.generator = NameGenerator.load() if use_generator else None
         self._name = kwargs.get('name', None)
         self._continent = kwargs.get('continent', None)
