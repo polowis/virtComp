@@ -14,7 +14,6 @@ class AgentBuilder(object):
     """
     def __init__(self, use_generator=True, **kwargs):
         self.generator = NameGenerator.load() if use_generator else None
-        self.generator._debug = False
         self._name = kwargs.get('name', None)
         self._continent = kwargs.get('continent', None)
         self._place = kwargs.get('place', None)
@@ -91,7 +90,7 @@ class AgentBuilder(object):
     def generate_random_continent(self):
         """Generate random continent"""
         supported_continent = Land.objects.get_supported_continents()
-        return supported_continent[math.floor(random.random * len(supported_continent))]
+        return supported_continent[math.floor(random.random() * len(supported_continent))]
     
     def generate_agent_name(self):
         """Generate agent name"""
