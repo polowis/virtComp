@@ -31,10 +31,11 @@ class AgentBuilder(object):
             return agent
         raise Exception("Invalid Location. The place must be inside the specifed continent")
     
-    def build_many_agents(self, number_of_agents, name_agents: List[str] = None) -> None:
+    def build_many_agents(self, number_of_agents, name_agents: List[str] = None) -> list:
         """Create many agents. This can improve performance by only load the model once
         But the continent must be specified can cannot generate on its own.
         """
+        result = []
         for num in range(int(number_of_agents)):
             if name_agents is not None:  # if the provided list is an actual list
                 try:
@@ -53,7 +54,9 @@ class AgentBuilder(object):
             if self.debug:
                 print("Agent created at ", agent.__dict__, '\n')
                 print("Agent stats: ", agent.agentstats.__dict__, '\n')
-
+            result.append(agent)
+        return result
+        
     @property
     def name(self) -> str:
         return self._name or self.generate_agent_name()
