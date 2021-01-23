@@ -20,10 +20,28 @@ class CompanyAgent(TestCase):
         Place.objects.load_data('csv_data/place.csv')
 
     def test_hire_an_agent(self):
+        agent = self.create_agent()
+        self.company.hire(agent)
+        self.assertEqual(agent.company_name, self.company.company_name)
+    
+    def purchase_building(self):
+        mine: BuildingType = BuildingType.objects.get_building_by_type('supreme mine')
+        self.company.balance = mine.get_buy_cost()
+        building = Building.objects.create_building(mine.name, 'myfirstbuilding', self.company,
+                                                    'buy', 0, self.land)
+        return building
+    
+    def create_agent(self):
         builder: AgentBuilder = AgentBuilder(use_generator=False)
         builder.name = 'testJohny'
         builder.debug = False
         builder.continent = Land.objects.default_continent()
-        agent = builder.build()
+        return builder.build()
+
+    def test_distribute_agent_after_hiring(self):
+        building = self.purchase_building()
+        agent = self.create_agent()
         self.company.hire(agent)
-        self.assertEqual(agent.company_name, self.company.company_name)
+        self.company.distribute(agent, building)
+
+        self.assertEqual(agent.building, building)
