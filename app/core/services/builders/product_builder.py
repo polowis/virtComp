@@ -24,7 +24,6 @@ class ProductBuilder(object):
         self.agents: List[AgentCustomer] = agents or []
         self.item: Item = item
         self.building: Building = building
-        self.producing_time = self.get_producing_time(self.item.time_to_produce)
     
     def set_item(self, item: Item):
         """Set the item"""
@@ -53,6 +52,7 @@ class ProductBuilder(object):
         raise ValueError exception if the item is not valid
         """
         if isinstance(self.item, Item) and self.is_valid():
+            self.producing_time = self.get_producing_time(self.item.time_to_produce)
             product_process = ProductProducing.objects.create_proccess(
                 item=self.item,
                 expected_quality=self.item.raw_quality,
