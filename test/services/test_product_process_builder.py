@@ -51,6 +51,8 @@ class ProductProcessBuilderTestCase(TestCase):
         product_builder.item = 'limestone'
         product_builder.building = self.building
         product_builder.agents = agents
-        product_builder.produce_item()
+        process = product_builder.produce_item()
+        self.assertEqual(process.name, 'limestone')
+
         
 
