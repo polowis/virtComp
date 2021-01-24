@@ -10,13 +10,14 @@ from ..agent.agent import AgentCustomer
 
 class ProductProducingManager(models.Manager):
     """The producing process manager"""
-    def create_proccess(self, item: Item, expected_quality: float, time: int):
+    def create_proccess(self, item: Item, expected_quality: float, time: int, building: Building):
         """Create the producing process for the given item"""
         start_time = timezone.now()
         end_time = start_time + datetime.timedelta(seconds=time)
         item_name = item.name
-        self.create(name=item_name, item=item, expected_quality=expected_quality, start_time=start_time,
-                    end_time=end_time)
+        process = self.create(name=item_name, item=item, expected_quality=expected_quality, start_time=start_time,
+                              end_time=end_time, building=building)
+        return process
 
 
 class ProductProducing(models.Model):
