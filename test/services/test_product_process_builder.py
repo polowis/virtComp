@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from app.models import Landscape, Land, Company, BuildingType, Place, Item, Building
 from app.core.services.builders.agent_builder import AgentBuilder
 from app.core.services.builders.product_builder import ProductBuilder
+from django.utils import timezone
+import datetime
 
 
 class ProductProcessBuilderTestCase(TestCase):
@@ -14,6 +16,7 @@ class ProductProcessBuilderTestCase(TestCase):
         self.company.balance = self.land.buy_cost
         self.land.purchase_landscape(self.company)
         self.building = self.purchase_building()
+        self.item = self.get_sample_item()
     
     def purchase_building(self):
         mine: BuildingType = BuildingType.objects.get_building_by_type('supreme mine')
@@ -21,6 +24,9 @@ class ProductProcessBuilderTestCase(TestCase):
         building = Building.objects.create_building(mine.name, 'myfirstbuilding', self.company,
                                                     'buy', 0, self.land)
         return building
+
+    def get_sample_item(self):
+        return Item.objects.get(name='limestone')
 
     def load_data(self):
         Land.objects.load_land('csv_data/landData.csv')
@@ -48,11 +54,30 @@ class ProductProcessBuilderTestCase(TestCase):
     def test_product_process_builder(self):
         agents = self.hire_many_agents()
         product_builder = ProductBuilder()
+        product_builder.item = self.item
+        product_builder.building = self.building
+        product_builder.agents = agents
+        process = product_builder.produce_item()
+        self.assertEqual(process.name, self.item.name)
+
+    def test_process_complete(self):
+        agents = self.hire_many_agents()
+        product_builder = ProductBuilder()
         product_builder.item = 'limestone'
         product_builder.building = self.building
         product_builder.agents = agents
         process = product_builder.produce_item()
-        self.assertEqual(process.name, 'limestone')
+        time = timezone.now() + datetime.timedelta(seconds=self.item.raw_producing_time)
+        self.assertEqual(process.is_finished(time), True)
+    
+    def test_process_not_complete(self):
+        agents = self.hire_many_agents()
+        product_builder = ProductBuilder()
+        product_builder.item = 'limestone'
+        product_builder.building = self.building
+        product_builder.agents = agents
+        process = product_builder.produce_item()
+        time = process.end_time - datetime.timedelta(seconds=round(self.item.raw_producing_time / 2))
+        self.assertEqual(process.is_finished(time), False)
 
         
-
