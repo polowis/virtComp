@@ -1,5 +1,5 @@
 name,cost_attempt,prob_per_attempt,"
 quality",employees_needed,quantity_per_attempt,catergory_type,building_type ,continents,unit,electric_cost,water_cost,gas_cost,unlock_at_building_level,raw_producing_time,,,
 diamond,2.00,20,80,6,1,ore,"supreme mine,ancient mine ","alantica,strovania,niaclausias",kg,0.05,0.0095,0,8,10,,,
-limestone,0.08,80,35,2,3,ore,"supreme mine,ancient mine,epic mine","adionoris,niaclausias",kg,0.015,0.0082,0,0,10,,,
+limestone,0.08,80,35,2,3,ore,"supreme mine,ancient mine,epic mine","alantica,adionoris,niaclausias",kg,0.015,0.0082,0,0,10,,,
 apple,0.01,97,42,2,1,ore,orchard farm,"strovania,gonaucrit,tastania,alantica,adionoris,niaclausias",kg,0,0,0,0,10,,, 

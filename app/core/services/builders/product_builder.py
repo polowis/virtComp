@@ -57,7 +57,8 @@ class ProductBuilder(object):
             self.item = self._get_item_instance(self.item)
             if self.item is None:
                 raise ValueError('Item Cannot be none')
-            return self._start_process()
+            if self.is_valid():
+                return self._start_process()
     
     def _start_process(self):
         self.producing_time = self.get_producing_time(self.item.raw_producing_time)
