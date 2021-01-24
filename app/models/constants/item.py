@@ -63,6 +63,10 @@ class ItemCSVRow(object):
     def unlock_at_building_level(self):
         return self.row[13]
     
+    @property
+    def raw_producing_time(self):
+        return self.row[14]
+    
     def to_dict(self):
         values = {
             'cost_attempt': self.cost_attempt,
@@ -77,7 +81,8 @@ class ItemCSVRow(object):
             'electric_cost': self.electric_cost,
             'water_cost': self.water_cost,
             'gas_cost': self.gas_cost,
-            'unlock_at_building_level': self.unlock_at_building_level
+            'unlock_at_building_level': self.unlock_at_building_level,
+            'raw_producing_time': self.raw_producing_time
         }
 
         return values
@@ -125,6 +130,7 @@ class Item(models.Model):
     water_cost = models.DecimalField(max_digits=20, decimal_places=4)
     gas_cost = models.DecimalField(max_digits=20, decimal_places=4)
     unlock_at_building_level = models.IntegerField()
+    raw_producing_time = models.IntegerField()
 
     objects = ItemManager()
 

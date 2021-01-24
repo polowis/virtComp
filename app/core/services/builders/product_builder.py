@@ -24,7 +24,6 @@ class ProductBuilder(object):
         self.agents: List[AgentCustomer] = agents or []
         self.item: Item = item
         self.building: Building = building
-        self.producing_time = self.get_producing_time(self.item.time_to_produce)
     
     def set_item(self, item: Item):
         """Set the item"""
@@ -53,20 +52,27 @@ class ProductBuilder(object):
         raise ValueError exception if the item is not valid
         """
         if isinstance(self.item, Item) and self.is_valid():
-            product_process = ProductProducing.objects.create_proccess(
-                item=self.item,
-                expected_quality=self.item.raw_quality,
-                time=self.producing_time
-            )
-            for agent in self.agents:
-                AgentProducing.objects.create_producing_agent(agent=agent, process=product_process)
-            self.update_worker_status()
-            return product_process
+            return self._start_process()
         else:
-            item = self._get_item_instance(self.item)
-            if item is None:
+            self.item = self._get_item_instance(self.item)
+            if self.item is None:
                 raise ValueError('Item Cannot be none')
-            
+            if self.is_valid():
+                return self._start_process()
+    
+    def _start_process(self):
+        self.producing_time = self.get_producing_time(self.item.raw_producing_time)
+        product_process: ProductProducing = ProductProducing.objects.create_proccess(
+            item=self.item,
+            expected_quality=self.item.raw_quality,
+            time=self.producing_time,
+            building=self.building
+        )
+        for agent in self.agents:
+            AgentProducing.objects.create_producing_agent(agent=agent, process=product_process)
+        self.update_worker_status()
+        return product_process
+        
     def _get_item_instance(self, item_name):
         try:
             item = Item.objects.get(name=item_name)
@@ -87,7 +93,8 @@ class ProductBuilder(object):
         productivity_score = self.get_average_agents_productivity()
         total_score = qualification_score + productivity_score
         time_score = (qualification_score * 1 * 3 * productivity_score * 2) / total_score
-        return self.item.time_to_produce - (time_score / self.item.time_to_produce * 10)
+        raw_time = self.item.raw_producing_time
+        return raw_time - (time_score / raw_time * 10)
     
     def get_expected_quality(self):
         pass
@@ -117,7 +124,7 @@ class ProductBuilder(object):
         """
         for agent in self.agents:
             agent.is_producing = True
-        AgentCustomer.objetcs.bulk_update(self.agents, ['is_producing'])
+        AgentCustomer.objects.bulk_update(self.agents, ['is_producing'])
     
     def is_valid(self):
         """Return true if isvald to produce"""

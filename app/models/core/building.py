@@ -109,6 +109,7 @@ class BuildingBuilder(object):
             'building_name': self.building_name,
             'landscape': self.landscape,
             'company': self.landscape.company,
+            'company_name': self.landscape.company_name,
             'current_level': self.level,
             'max_storage': self.buildingType_instance.get_max_storage(self.level),
             'max_employees': self.buildingType_instance.get_max_employees(self.level),
