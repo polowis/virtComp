@@ -1,6 +1,8 @@
 from __future__ import annotations
 from django.db import models
 import csv
+from app.core.services.loader import Loader
+from setting import local_settings as env
 
 
 class ItemCSVRow(object):
@@ -88,9 +90,18 @@ class ItemCSVRow(object):
         return values
 
 
-class ItemLoader(object):
-    def __init__(self, path):
-        self.path = path
+class ItemLoader(Loader):
+    def __init__(self, path, use_direct_download=env.USE_DIRECT_SHEETS_DOWNLOAD):
+        self.use_direct_download = use_direct_download
+        if self.use_direct_download is True:
+            super().__init__()
+            self.sheet_name = 'item'
+            self.spreadsheetsID = '1-3mrtO5tBDb1_Sn5YKZrp1avQ4chKD-x-U7c-gWpkuo'
+            self.sheetID = '0'
+            self.path = f'{self.file_saved_endpoint}/{self.sheet_name}.csv'
+            self.pull_from_public_sheets()
+        else:
+            self.path = path
     
     def load(self):
         """Load data"""
