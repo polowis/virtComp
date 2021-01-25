@@ -51,7 +51,7 @@ class ProductProcessBuilderTestCase(TestCase):
             self.company.hire(agent)
         return agents
     
-    def test_product_process_builder(self):
+    def test_product_process_builder_with_object(self):
         agents = self.hire_many_agents()
         product_builder = ProductBuilder()
         product_builder.item = self.item
@@ -59,6 +59,15 @@ class ProductProcessBuilderTestCase(TestCase):
         product_builder.agents = agents
         process = product_builder.produce_item()
         self.assertEqual(process.name, self.item.name)
+    
+    def test_product_process_builder_with_string(self):
+        agents = self.hire_many_agents()
+        product_builder = ProductBuilder()
+        product_builder.item = 'limestone'
+        product_builder.building = self.building
+        product_builder.agents = agents
+        process = product_builder.produce_item()
+        self.assertEqual(process.name, 'limestone')
 
     def test_process_complete(self):
         agents = self.hire_many_agents()
