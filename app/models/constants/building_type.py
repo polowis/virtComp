@@ -3,6 +3,8 @@ from django.db import models
 from typing import Union
 from app.models.core.exception import NegativeLevel
 import csv
+from app.core.services.loader import Loader
+from setting import local_settings as env
 
 
 class BuildingTypeCSVRow(object):
@@ -91,6 +93,37 @@ class BuildingTypeCSVRow(object):
         return default_value
 
 
+class BuildingTypeLoader(Loader):
+    def __init__(self, path, use_direct_download=env.USE_DIRECT_SHEETS_DOWNLOAD, abs_path=False):
+        self.use_direct_download = use_direct_download
+        self.abs_path = abs_path
+        if self.use_direct_download is True:
+            super().__init__()
+            self.sheet_name = 'item'
+            self.spreadsheetsID = '1-3mrtO5tBDb1_Sn5YKZrp1avQ4chKD-x-U7c-gWpkuo'
+            self.sheetID = '0'
+            self.path = f'{self.file_saved_endpoint}/{self.sheet_name}.csv'
+
+            self.pull_from_public_sheets()
+        else:
+            self.path = path
+    
+    def load(self):
+        """Load data"""
+        try:
+            with open(self.path) as f:
+                reader = csv.reader(f)
+                next(reader, None)  # skip header
+                for row in reader:
+                    buildingType: BuildingTypeCSVRow = BuildingTypeCSVRow(row)
+                    data: dict = buildingType.as_dict()
+                    obj, created = BuildingType.objects.update_or_create(
+                        name=buildingType.category,
+                        defaults=data)
+        except Exception as e:
+            raise Exception(e)
+
+
 class BuildingTypeManager(models.Manager):
     def get_building_by_type(self, building_type: str) -> BuildingType:
         """Return BuildingType instance, raise error if not found"""
@@ -104,17 +137,8 @@ class BuildingTypeManager(models.Manager):
         
         """
         if isinstance(path_to_csv_file, str):
-            try:
-                with open(path_to_csv_file) as f:
-                    reader = csv.reader(f)
-                    next(reader, None)
-                    for row in reader:
-                        buildingType: BuildingTypeCSVRow = BuildingTypeCSVRow(row)
-                        data: dict = buildingType.as_dict()
-                        obj, created = BuildingType.objects.update_or_create(name=buildingType.category,
-                                                                             defaults=data)
-            except FileNotFoundError:
-                raise FileNotFoundError("The file for csv file was not found")
+            loader = BuildingTypeLoader(path_to_csv_file)
+            loader.load()
 
 
 class BuildingType(models.Model):
