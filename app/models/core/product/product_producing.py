@@ -65,9 +65,10 @@ class ProductProducing(models.Model):
     
     def update_agents(self):
         processes = AgentProducing.objects.filter(process_id=self.id)
-        for process in processes:
-            process.agent.is_producing = False
-            process.agent.save()
+        agents = [process.agent for process in processes]
+        for agent in agents:
+            agent.is_producing = False
+        AgentCustomer.objects.bulk_update(agents, ['is_producing'])
 
 
 class AgentProducingManager(models.Manager):

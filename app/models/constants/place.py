@@ -4,6 +4,8 @@ import math
 import random
 from typing import Union, Dict
 import csv
+from setting import local_settings as env
+from app.core.services.loader import Loader
 
 
 class PlaceRow(object):
@@ -57,6 +59,33 @@ class PlaceRow(object):
         return default_value
 
 
+class PlaceLoader(Loader):
+    def __init__(self, path, use_direct_download=env.USE_DIRECT_SHEETS_DOWNLOAD):
+        self.use_direct_download = use_direct_download
+        if self.use_direct_download is True:
+            super().__init__()
+            self.sheet_name = 'item'
+            self.spreadsheetsID = '1-3mrtO5tBDb1_Sn5YKZrp1avQ4chKD-x-U7c-gWpkuo'
+            self.sheetID = '0'
+            self.path = f'{self.file_saved_endpoint}/{self.sheet_name}.csv'
+
+            self.pull_from_public_sheets()
+        else:
+            self.path = path
+    
+    def load(self):
+        try:
+            with open(self.path) as f:
+                reader = csv.reader(f)
+                next(reader, None)
+                for row in reader:
+                    place: PlaceRow = PlaceRow(row)
+                    default_value = place.as_dict()
+                    obj, created = Place.objects.update_or_create(name=place.name, defaults=default_value)
+        except Exception as e:
+            raise Exception(e)
+
+
 class PlaceManager(models.Manager):
     def create_place(self, x: int, y: int, name: str, group: str, continent: str):
         place = self.create(x, y, name, group, continent)
@@ -79,21 +108,13 @@ class PlaceManager(models.Manager):
         distance = math.sqrt((place1.x - place2.x)**2 + (place1.y - place2.y)**2)
         return math.floor(distance * scale_factor) if force_round else distance * scale_factor
     
-    def load_data(self, data: Union[str, list[list]] = "./csv_data/place.csv"):
+    def load_data(self, path: Union[str, list[list]] = "./csv_data/place.csv"):
         """Load the place data from a CSV file or as a 2d array. Both are accepted.
         If the places names are already presented, it will update the data respectively
         """
-        if isinstance(data, str):  # assume that if the given data is in string format, then it must be the path
-            try:
-                with open(data) as f:
-                    reader = csv.reader(f)
-                    next(reader, None)
-                    for row in reader:
-                        place: PlaceRow = PlaceRow(row)
-                        default_value = place.as_dict()
-                        obj, created = self.update_or_create(name=place.name, defaults=default_value)
-            except Exception as e:
-                raise Exception(e)
+        if isinstance(path, str):  # assume that if the given data is in string format, then it must be the path
+            loader = PlaceLoader(path)
+            loader.load()
     
     def get_supported_place(self) -> list[dict]:
         """Get supported place name
