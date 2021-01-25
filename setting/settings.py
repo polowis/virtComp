@@ -130,4 +130,7 @@ MAXIMUM_lAND_VIEW = 10
 
 # SESSION_COOKIE_SECURE = True
 
+
+# turn this off if you're running test since you do not want to wait pulling things from the internet
 USE_DIRECT_SHEETS_DOWNLOAD = False
+
