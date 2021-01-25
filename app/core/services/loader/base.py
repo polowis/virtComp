@@ -1,5 +1,3 @@
-from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
 import os.path
 import requests
 from app.core.util.color import Logger
@@ -67,20 +65,23 @@ class Loader(object):
         """Will attempt to download the source file"""
         if self.use_oath2 is False:
             return self.pull_from_public_sheets()
-        if os.path.exists(self.credentials_path):
-            flow = InstalledAppFlow.from_client_secrets_file(
-                self.credentials_path, self.scope)
-            self.credentials = flow.run_local_server(port=0)
-
-        service = build('sheets', 'v4', credentials=self.credentials)
-        # Call the Sheets API
-        sheet = service.spreadsheets()
-        result = sheet.values().get(spreadsheetId=self.spreadsheetId, sheetId=self.sheetID).execute()
-        values = result.get('values', [])
-
-        if not values:
-            print('No data found.')
         else:
-            print('Name, Major:')
-            for row in values:
-                print(row)
+            if os.path.exists(self.credentials_path):
+                from googleapiclient.discovery import build
+                from google_auth_oauthlib.flow import InstalledAppFlow
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    self.credentials_path, self.scope)
+                self.credentials = flow.run_local_server(port=0)
+
+            service = build('sheets', 'v4', credentials=self.credentials)
+            # Call the Sheets API
+            sheet = service.spreadsheets()
+            result = sheet.values().get(spreadsheetId=self.spreadsheetId, sheetId=self.sheetID).execute()
+            values = result.get('values', [])
+
+            if not values:
+                print('No data found.')
+            else:
+                print('Name, Major:')
+                for row in values:
+                    print(row)
