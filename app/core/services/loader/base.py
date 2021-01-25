@@ -2,6 +2,9 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 import os.path
 import requests
+from app.core.util.color import Logger
+
+logger = Logger()
 
 
 class Scope(object):
@@ -48,12 +51,12 @@ class Loader(object):
     
     def pull_from_public_sheets(self):
         """This method will try to pull the content from public google sheets"""
-        print('\033[93m' + 'Warning: Pulling from public google sheets...' + '\033[0m')
+        logger.warn('Warning: Pulling from public google sheets...')
         response = requests.get(f'{self.endpoint}/{self.spreadsheetsID}/export?format=csv&gid={self.sheetID}')
         assert response.status_code == 200, 'Wrong status code'
         try:
             open(f'./csv_data/core/{self.sheet_name}.csv', 'wb').write(response.content)
-            print('\033[92m' + 'Successfully pulled' + '\033[0m')
+            logger.info('Successfully pulled data')
         except Exception as e:
             raise Exception(e)
 
