@@ -3,6 +3,8 @@ from django.db import models
 import random
 import csv
 from typing import Union
+from app.core.services.loader import Loader
+from setting import local_settings as env
 
 
 class LandCSVRow(object):
@@ -43,6 +45,43 @@ class LandCSVRow(object):
         follow the required format.
         """
         return len(row) == 5
+    
+    def to_dict(self):
+        default_value: dict = {
+            'cost': self.buy_cost,
+            'rent': self.rent_cost,
+            'max_land_cost': self.max_land_cost,
+            'min_land_cost': self.min_land_cost
+        }
+
+        return default_value
+
+
+class LandLoader(Loader):
+    def __init__(self, path, use_direct_download=env.USE_DIRECT_SHEETS_DOWNLOAD):
+        self.use_direct_download = use_direct_download
+        if self.use_direct_download is True:
+            super().__init__()
+            self.sheet_name = 'land'
+            self.spreadsheetsID = '1-3mrtO5tBDb1_Sn5YKZrp1avQ4chKD-x-U7c-gWpkuo'
+            self.sheetID = '0'
+            self.path = f'{self.file_saved_endpoint}/{self.sheet_name}.csv'
+
+            self.pull_from_public_sheets()
+        else:
+            self.path = path
+    
+    def load(self):
+        try:
+            with open(self.path) as f:
+                reader = csv.reader(f)
+                next(reader, None)
+                for row in reader:
+                    land: LandCSVRow = LandCSVRow(row)
+                    obj, created = Land.objects.update_or_create(level=land.level,
+                                                                 defaults=land.to_dict())
+        except Exception as e:
+            raise Exception(e)
 
 
 class LandManager(models.Manager):
@@ -84,22 +123,8 @@ class LandManager(models.Manager):
             self.load_land_from_2d_array(path_to_csv_file)
             return
         if isinstance(path_to_csv_file, str):
-            try:
-                with open(path_to_csv_file) as f:
-                    reader = csv.reader(f)
-                    next(reader, None)
-                    for row in reader:
-                        land: LandCSVRow = LandCSVRow(row)
-                        default_value: dict = {
-                            'cost': land.buy_cost,
-                            'rent': land.rent_cost,
-                            'max_land_cost': land.max_land_cost,
-                            'min_land_cost': land.min_land_cost
-                        }
-                        obj, created = Land.objects.update_or_create(level=land.level,
-                                                                     defaults=default_value)
-            except FileNotFoundError:
-                raise FileNotFoundError("The file for csv file was not found")
+            loader = LandLoader(path_to_csv_file)
+            loader.load()
     
     def default_continent(self):
         """Return the default land in case there is a missing continent"""
