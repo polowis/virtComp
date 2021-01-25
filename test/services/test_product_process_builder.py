@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from app.models import Landscape, Land, Company, BuildingType, Place, Item, Building
+from app.models import Landscape, Land, Company, BuildingType, Place, Item, Building, AgentCustomer
 from app.core.services.builders.agent_builder import AgentBuilder
 from app.core.services.builders.product_builder import ProductBuilder
 from django.utils import timezone
@@ -79,5 +79,27 @@ class ProductProcessBuilderTestCase(TestCase):
         process = product_builder.produce_item()
         time = process.end_time - datetime.timedelta(seconds=round(self.item.raw_producing_time / 2))
         self.assertEqual(process.is_finished(time), False)
+    
+    def test_agent_updated_working_status(self):
+        agents = self.hire_many_agents()
+        product_builder = ProductBuilder()
+        product_builder.item = 'limestone'
+        product_builder.building = self.building
+        product_builder.agents = agents
+        product_builder.produce_item()
+        self.assertEqual(agents[0].is_producing, True)
+    
+    def test_agent_reset_working_status(self):
+        agents = self.hire_many_agents()
+        product_builder = ProductBuilder()
+        product_builder.item = 'limestone'
+        product_builder.building = self.building
+        product_builder.agents = agents
+        process = product_builder.produce_item()
+        time = timezone.now() + datetime.timedelta(seconds=self.item.raw_producing_time)
+        process.is_finished(time)
+        agent = AgentCustomer.objects.get(id=agents[0].id)
+        self.assertEqual(agent.is_producing, False)
+
 
         
