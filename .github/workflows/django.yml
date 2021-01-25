@@ -34,4 +34,4 @@ jobs:
         cp ./setting/settings.py ./setting/local_settings.py 
     - name: Run Tests
       run: |
-        python manage.py test
+        python manage.py test --parallel 2
