@@ -47,16 +47,19 @@ class Loader(object):
         # the sheet file name. This is not the google sheet name but
         # the file name of which will be stored in the folder core
         self.sheet_name = 'sample'
-        self.file_saved_endpoint = './csv_data/core/'
+        self.file_saved_endpoint = './csv_data/core'
+        self.debug = False
     
     def pull_from_public_sheets(self):
         """This method will try to pull the content from public google sheets"""
-        logger.warn('Warning: Pulling from public google sheets...')
+        if self.debug:
+            logger.warn('Warning: Pulling from public google sheets...')
         response = requests.get(f'{self.endpoint}/{self.spreadsheetsID}/export?format=csv&gid={self.sheetID}')
         assert response.status_code == 200, 'Wrong status code'
         try:
             open(f'./csv_data/core/{self.sheet_name}.csv', 'wb').write(response.content)
-            logger.info('Successfully pulled data')
+            if self.debug:
+                logger.info('Successfully pulled data')
         except Exception as e:
             raise Exception(e)
 
