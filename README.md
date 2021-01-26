@@ -3,7 +3,7 @@
 
 Virtcomp is totally different from other business simulation games. It offers a new and better experience. It is the playground where you actually compete with each other. There would be no advantages over other players, it will just be completely based on your skills. 
 
-# Running virtcomp on your local machine
+## Running virtcomp on your local machine
 Virtcomp uses Django, a popular python web framework. To run virtcomp on your local machine. There are many prequesities:
 
 1. You need to have all the required modules installed (except a fews)
