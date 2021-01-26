@@ -1,6 +1,6 @@
 from django.db import models
 from app.core.util.base import generate_unique_id
-from app.models.core import Building
+from app.models.core.building import Building
 from app.models.constants import Item
 from django.utils import timezone
 from django.db.models import Count

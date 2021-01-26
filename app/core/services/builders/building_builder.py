@@ -1,4 +1,4 @@
-from app.models.core import Landscape, Building, Company
+from app.models import Landscape, Building, Company
 from app.models.constants import BuildingType
 from app.models.core.product import Storage
 from app.models.core.exception import UnableToConstructBuilding, NegativeLevel, CannotBuyBuildingOnRentLandscape
@@ -117,6 +117,7 @@ class BuildingBuilder(object):
             'building_type': self.building_type,
             'building_name': self.building_name,
             'landscape': self.landscape,
+            'company_name': self.landscape.company.company_name,
             'company': self.landscape.company,
             'current_level': self.level,
             'max_storage': self.buildingType_instance.get_max_storage(self.level),

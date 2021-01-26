@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from app.models import Landscape, Land, Company, BuildingType, Place, Item, Building, AgentCustomer
+from app.models import Landscape, Land, Company, BuildingType, Place, Item, AgentCustomer
 from app.core.services.builders.agent_builder import AgentBuilder
 from app.core.services.builders.product_builder import ProductBuilder
+from app.core.services.builders.building_builder import BuildingBuilder
 from django.utils import timezone
 import datetime
 
@@ -21,8 +22,8 @@ class ProductProcessBuilderTestCase(TestCase):
     def purchase_building(self):
         mine: BuildingType = BuildingType.objects.get_building_by_type('supreme mine')
         self.company.balance = mine.get_buy_cost()
-        building = Building.objects.create_building(mine.name, 'myfirstbuilding', self.company,
-                                                    'buy', 0, self.land)
+        building = BuildingBuilder.construct(mine.name, 'myfirstbuilding', self.company,
+                                             'buy', 0, self.land)
         return building
 
     def get_sample_item(self):

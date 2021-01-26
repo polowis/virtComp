@@ -5,14 +5,12 @@ from app.models.core import Company
 from .landscape import Landscape
 from app.models.constants import BuildingType
 import random
-from app.models.core.exception import CannotBuyBuildingOnRentLandscape
 from app.models.core.exception import UnableToConstructBuilding
 from typing import Union
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, timedelta
 from app.models.constants import Item
-from app.core.services.builders.building_builder import BuildingBuilder
 
 
 class BuildingManager(models.Manager):
@@ -37,19 +35,7 @@ class BuildingManager(models.Manager):
 
         """
 
-        supported_methods_acquired = ['buy', 'rent']
-
-        method_acquired = method_acquired.lower()
-
-        if method_acquired in supported_methods_acquired:
-
-            # if the given landscape is on rent and method of acquiring is buy
-            if landscape.on_rent() and method_acquired == 'buy':
-                raise CannotBuyBuildingOnRentLandscape()
-                
-            # construct the building
-            builder: BuildingBuilder = BuildingBuilder(landscape, level, building_type, building_name)
-            return builder.construct_building(company, method_acquired)
+        raise NotImplementedError("Please use BuildingBuilder class instead")
     
     def get_building_buy_cost(self, building: BuildingType, level: int):
         """This method returns the cost of buying this type of building given the level"""

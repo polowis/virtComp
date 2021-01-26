@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from app.models import Landscape, Land, Company, Building, BuildingType
+from app.models import Landscape, Land, Company, BuildingType
 from app.models.core.exception import UnableToConstructBuilding
+from app.core.services.builders.building_builder import BuildingBuilder
 
 
 class BuildingPurchasingTestCase(TestCase):
@@ -19,8 +20,8 @@ class BuildingPurchasingTestCase(TestCase):
         self.land.purchase_landscape(self.company)
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('restaurant')
         self.company.balance = restaurant.get_buy_cost()
-        building = Building.objects.create_building("restaurant", 'myfirstbuilding', self.company,
-                                                    'buy', 0, self.land)
+        building = BuildingBuilder.construct("restaurant", 'myfirstbuilding', self.company,
+                                             'buy', 0, self.land)
         
         self.assertEqual(building.building_name, 'myfirstbuilding')
     
@@ -30,16 +31,16 @@ class BuildingPurchasingTestCase(TestCase):
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('restaurant')
         self.company.balance = restaurant.get_buy_cost(1)
         with self.assertRaises(UnableToConstructBuilding):
-            Building.objects.create_building("restaurant", 'myfirstbuilding', self.company,
-                                             'buy', 1, self.land)
+            BuildingBuilder.construct("restaurant", 'myfirstbuilding', self.company,
+                                      'buy', 1, self.land)
         
     def test_buy_building_is_buy_status(self):
         self.company.balance = self.land.buy_cost + 1
         self.land.purchase_landscape(self.company)
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('restaurant')
         self.company.balance = restaurant.get_buy_cost()
-        building = Building.objects.create_building("restaurant", 'myfirstbuilding', self.company,
-                                                    'buy', 0, self.land)
+        building = BuildingBuilder.construct("restaurant", 'myfirstbuilding', self.company,
+                                             'buy', 0, self.land)
         
         self.assertEqual(building.is_buy, True)
     
@@ -48,8 +49,8 @@ class BuildingPurchasingTestCase(TestCase):
         self.land.purchase_landscape(self.company)
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('restaurant')
         self.company.balance = restaurant.get_buy_cost()
-        building = Building.objects.create_building("restaurant", 'myfirstbuilding', self.company,
-                                                    'buy', 0, self.land)
+        building = BuildingBuilder.construct("restaurant", 'myfirstbuilding', self.company,
+                                             'buy', 0, self.land)
         
         self.assertEqual(building.is_rent, False)
     
@@ -58,8 +59,8 @@ class BuildingPurchasingTestCase(TestCase):
         self.land.purchase_landscape(self.company)
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('restaurant')
         self.company.balance = restaurant.get_buy_cost()
-        building = Building.objects.create_building("restaurant", 'myfirstbuilding', self.company,
-                                                    'buy', 0, self.land)
+        building = BuildingBuilder.construct("restaurant", 'myfirstbuilding', self.company,
+                                             'buy', 0, self.land)
         self.assertEqual(building.belongs_to(self.land), True)
     
     def test_not_belongs_to(self):
@@ -68,8 +69,8 @@ class BuildingPurchasingTestCase(TestCase):
         test_land.purchase_landscape(self.company)
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('restaurant')
         self.company.balance = restaurant.get_buy_cost()
-        building = Building.objects.create_building("restaurant", 'myfirstbuilding', self.company,
-                                                    'buy', 0, test_land)
+        building = BuildingBuilder.construct("restaurant", 'myfirstbuilding', self.company,
+                                             'buy', 0, test_land)
         self.assertEqual(building.belongs_to(self.land), False)
     
     def test_building_own_by(self):
@@ -77,8 +78,8 @@ class BuildingPurchasingTestCase(TestCase):
         self.land.purchase_landscape(self.company)
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('restaurant')
         self.company.balance = restaurant.get_buy_cost()
-        building = Building.objects.create_building("restaurant", 'myfirstbuilding', self.company,
-                                                    'buy', 0, self.land)
+        building = BuildingBuilder.construct("restaurant", 'myfirstbuilding', self.company,
+                                             'buy', 0, self.land)
         
         self.assertEqual(building.owned_by(self.company), True)
     
@@ -87,8 +88,8 @@ class BuildingPurchasingTestCase(TestCase):
         self.land.purchase_landscape(self.company)
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('market')
         self.company.balance = restaurant.get_rent_cost(0)
-        building = Building.objects.create_building("market", 'mymarket', self.company,
-                                                    'rent', 0, self.land)
+        building = BuildingBuilder.construct("market", 'mymarket', self.company,
+                                             'rent', 0, self.land)
         
         self.assertEqual(building.building_name, 'mymarket')
     
@@ -97,8 +98,8 @@ class BuildingPurchasingTestCase(TestCase):
         self.land.purchase_landscape(self.company)
         market: BuildingType = BuildingType.objects.get_building_by_type('market')
         self.company.balance = market.get_rent_cost(self.land.level)
-        building = Building.objects.create_building("market", 'mymarket', self.company,
-                                                    'rent', self.land.level, self.land)
+        building = BuildingBuilder.construct("market", 'mymarket', self.company,
+                                             'rent', self.land.level, self.land)
         
         self.assertEqual(building.building_name, 'mymarket')
     
@@ -108,8 +109,8 @@ class BuildingPurchasingTestCase(TestCase):
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('market')
         self.company.balance = restaurant.get_rent_cost(self.land.level + 1)
         with self.assertRaises(UnableToConstructBuilding):
-            Building.objects.create_building("market", 'mymarket', self.company,
-                                             'rent', self.land.level + 1, self.land)
+            BuildingBuilder.construct("market", 'mymarket', self.company,
+                                      'rent', self.land.level + 1, self.land)
     
     def test_rent_building_at_negative_level_than_land(self):
         self.company.balance = self.land.buy_cost + 1
@@ -117,16 +118,16 @@ class BuildingPurchasingTestCase(TestCase):
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('market')
         self.company.balance = restaurant.get_rent_cost(-1)
         with self.assertRaises(UnableToConstructBuilding):
-            Building.objects.create_building("market", 'mymarket', self.company,
-                                             'rent', -1, self.land)
+            BuildingBuilder.construct("market", 'mymarket', self.company,
+                                      'rent', -1, self.land)
     
     def test_rent_building_belongs_to(self):
         self.company.balance = self.land.buy_cost + 1
         self.land.purchase_landscape(self.company)
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('market')
         self.company.balance = restaurant.get_rent_cost(0)
-        building = Building.objects.create_building("market", 'mymarket', self.company,
-                                                    'rent', 0, self.land)
+        building = BuildingBuilder.construct("market", 'mymarket', self.company,
+                                             'rent', 0, self.land)
         
         self.assertEqual(building.belongs_to(self.land), True)
     
@@ -135,8 +136,8 @@ class BuildingPurchasingTestCase(TestCase):
         self.land.purchase_landscape(self.company)
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('market')
         self.company.balance = restaurant.get_rent_cost(0)
-        building = Building.objects.create_building("market", 'mymarket', self.company,
-                                                    'rent', 0, self.land)
+        building = BuildingBuilder.construct("market", 'mymarket', self.company,
+                                             'rent', 0, self.land)
         
         self.assertEqual(building.owned_by(self.company), True)
     
@@ -145,8 +146,8 @@ class BuildingPurchasingTestCase(TestCase):
         self.land.purchase_landscape(self.company)
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('market')
         self.company.balance = restaurant.get_rent_cost(0)
-        building = Building.objects.create_building("market", 'mymarket', self.company,
-                                                    'rent', 0, self.land)
+        building = BuildingBuilder.construct("market", 'mymarket', self.company,
+                                             'rent', 0, self.land)
         
         self.assertEqual(building.is_rent, True)
     
@@ -155,8 +156,8 @@ class BuildingPurchasingTestCase(TestCase):
         self.land.purchase_landscape(self.company)
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('market')
         self.company.balance = restaurant.get_rent_cost(0)
-        building = Building.objects.create_building("market", 'mymarket', self.company,
-                                                    'rent', 0, self.land)
+        building = BuildingBuilder.construct("market", 'mymarket', self.company,
+                                             'rent', 0, self.land)
         
         self.assertEqual(building.is_buy, False)
     
@@ -166,6 +167,6 @@ class BuildingPurchasingTestCase(TestCase):
         restaurant: BuildingType = BuildingType.objects.get_building_by_type('market')
         self.company.balance = restaurant.get_rent_cost(0)
         with self.assertRaises(UnableToConstructBuilding):
-            Building.objects.create_building("fakebuilding", 'myfirstbuilding', self.company,
-                                             'buy', 1, self.land)
+            BuildingBuilder.construct("fakebuilding", 'myfirstbuilding', self.company,
+                                      'buy', 1, self.land)
         
