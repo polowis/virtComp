@@ -55,12 +55,20 @@ class ProductProducing(models.Model):
         finishing
         """
         pass
+    
+    def update_quality(self):
+        """This method will be used to update the quality of the item when
+        things go unexpectly
+        """
+        pass
 
     def update_success(self) -> None:
         if self.is_success is None:  # if item has not been updated its success
             success_score = random.randint(1, 100)
             self.is_success = success_score < self.item.probability_per_attempt
             self.update_agents()
+            if self.is_success:  # if item is successfully created
+                self.building.storage.add(self.item, self.expected_quality)
         return
     
     def update_agents(self):

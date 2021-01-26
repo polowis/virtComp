@@ -1,5 +1,7 @@
-from app.models import Landscape, Building, BuildingType, Company, Storage
-from app.models.core.exception import UnableToConstructBuilding, NegativeLevel
+from app.models import Landscape, Building, Company
+from app.models.constants import BuildingType
+from app.models.core.product import Storage
+from app.models.core.exception import UnableToConstructBuilding, NegativeLevel, CannotBuyBuildingOnRentLandscape
 from typing import Union
 from django.utils import timezone
 
@@ -25,6 +27,21 @@ class BuildingBuilder(object):
         self.building_name = building_name
         self.buildingType_instance = None
         self.method_acquired = None
+    
+    @classmethod
+    def construct(cls, building_type: str, building_name: str, company: Company,
+                  method_acquired: str, level: int, landscape: Landscape):
+        supported_methods_acquired = ['buy', 'rent']
+
+        method_acquired = method_acquired.lower()
+
+        if method_acquired in supported_methods_acquired:
+
+            # if the given landscape is on rent and method of acquiring is buy
+            if landscape.on_rent() and method_acquired == 'buy':
+                raise CannotBuyBuildingOnRentLandscape()
+            builder: BuildingBuilder = cls(landscape, level, building_type, building_name)
+            return builder.construct_building(company, method_acquired)
 
     def can_build(self, company: Company, method_acquired: str) -> bool:
         """
@@ -100,6 +117,7 @@ class BuildingBuilder(object):
             'building_type': self.building_type,
             'building_name': self.building_name,
             'landscape': self.landscape,
+            'company_name': self.landscape.company.company_name,
             'company': self.landscape.company,
             'current_level': self.level,
             'max_storage': self.buildingType_instance.get_max_storage(self.level),

@@ -1,6 +1,7 @@
 from django.db import models
 from app.models.core.building import Building
 from django.utils import timezone
+from app.models.core.product import ProducedItem
 
 
 class StorageManager(models.Manager):
@@ -24,6 +25,13 @@ class Storage(models.Model):
         self.updated_at = timezone.now()
         return super().save(*args, **kwargs)
     
-    def put(self, item):
-        pass
-
+    def add(self, item, quality):
+        """Add an item to the storage
+        
+        :param item: Item instance
+        :quality: Quality of the item
+        """
+        try:
+            ProducedItem.objects.create_produced_item(item, self.building, quality)
+        except Exception as e:
+            raise Exception(e)
