@@ -35,3 +35,9 @@ class Storage(models.Model):
             ProducedItem.objects.create_produced_item(item, self.building, quality)
         except Exception as e:
             raise Exception(e)
+    
+    def has_item(self, item):
+        """Check if item exists in the storage"""
+        if isinstance(item, str):
+            return ProducedItem.objects.filter(name=item, building=self.building).exists()
+        return ProducedItem.objects.filter(item=item, building=self.building).exists()
