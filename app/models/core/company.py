@@ -113,10 +113,10 @@ class Company(models.Model):
         or else an exception will be thrown
         """
         if isinstance(landscape, app.models.Landscape):
-            self.balance -= landscape.buy_cost
-            if self.balance < 0:
-                raise ValueError("Company balance must be positive")
+            if self._does_not_have_enough_money(landscape.buy_cost):
+                raise ValueError("Company does not have enough money")
             else:
+                self.balance -= landscape.buy_cost
                 landscape.company = self
                 landscape.company_name = self.company_name
                 self.save()
@@ -134,10 +134,10 @@ class Company(models.Model):
         or else an exception will be thrown
         """
         if isinstance(landscape, app.models.Landscape):
-            self.balance -= landscape.rent_cost
-            if self.balance < 0:
-                raise ValueError("Company balance must be positive")
+            if self._does_not_have_enough_money(landscape.rent_cost):
+                raise ValueError("Company does not have enough money")
             else:
+                self.balance -= landscape.rent_cost
                 landscape.company = self
                 landscape.company_name = self.company_name
                 self.save()
@@ -177,5 +177,11 @@ class Company(models.Model):
         agent.company_name = None
         agent.building = None
         agent.save()
+    
+    def _does_not_have_enough_money(self, expected_amount) -> bool:
+        """
+        Return true if the company does not have enough money matching the expected amount
+        """
+        return self.balance < expected_amount
         
 
