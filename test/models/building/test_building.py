@@ -1,19 +1,23 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from app.models import Landscape, Land, Company, BuildingType
+from app.models import Landscape, Land, Company, BuildingType, Place
 from app.models.core.exception import UnableToConstructBuilding
 from app.core.services.builders.building_builder import BuildingBuilder
 
 
 class BuildingPurchasingTestCase(TestCase):
     def setUp(self):
-        Land.objects.load_land('csv_data/landData.csv')
-        BuildingType.objects.load_building_type('csv_data/buildingType.csv')
+        self.load_data()
         self.land: Landscape = Landscape.objects.create_land()
         self.user: User = User.objects.create_user('johnyTest', 'john@example.com', 'johnpassword')
         self.company: Company = Company.objects.create_company('johnCompany', self.user)
         self.company.balance = self.land.buy_cost + 1
         self.land.purchase_landscape(self.company)
+    
+    def load_data(self):
+        Place.objects.load_data('csv_data/place.csv')
+        Land.objects.load_land('csv_data/landData.csv')
+        BuildingType.objects.load_building_type('csv_data/buildingType.csv')
     
     def test_buy_building(self):
         self.company.balance = self.land.buy_cost + 1

@@ -15,7 +15,7 @@ class Command(BaseCommand):
         number_of_lands = options['number_of_lands']
         continent: str = options['continent']
         try:
-            Landscape.objects.create_multiple_landscape(continent, number_of_lands)
+            Landscape.objects.create_multiple_landscape(continent, number_of_lands[0])
         except Exception as e:
             raise CommandError(e)
         

@@ -1,17 +1,21 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from app.models import Landscape, Land, Company
+from app.models import Landscape, Land, Company, Place
 from django.utils import timezone
 import datetime
 
 
 class LandscapeTestCase(TestCase):
     def setUp(self):
-        Land.objects.load_land('csv_data/landData.csv')
+        self.load_data()
         self.land: Landscape = Landscape.objects.create_land()
         self.user: User = User.objects.create_user('johnyTest', 'john@example.com', 'johnpassword')
         self.company: Company = Company.objects.create_company('johnCompany', self.user)
-    
+
+    def load_data(self):
+        Place.objects.load_data('csv_data/place.csv')
+        Land.objects.load_land('csv_data/landData.csv')
+
     def test_bulk_create_landscape(self):
         Landscape.objects.create_multiple_landscape('alantica', 10)
 

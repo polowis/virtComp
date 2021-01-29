@@ -26,7 +26,7 @@ class CompanyManager(models.Manager):
 
         throw exception if unable to create
         """
-        if self.can_create_company(company_name):
+        if self.can_create_company(company_name, continent):
             company = self.create(company_name=company_name, owner_name=owner_object.username,
                                   owner=owner_object, continent=continent)
             return company
@@ -48,12 +48,14 @@ class CompanyManager(models.Manager):
         except Company.DoesNotExist:
             return False
     
-    def can_create_company(self, company_name: str) -> bool:
+    def can_create_company(self, company_name: str, continent: str) -> bool:
         """Return true if the given company can be created
         
         This will ensure that the company name has not been registered and has a valid name
         """
-        return not self.company_exists(company_name) and self.has_valid_company_name(company_name)
+        return (not self.company_exists(company_name)
+                and self.has_valid_company_name(company_name)  # noqa
+                and continent.lower() in Land.objects.get_supported_continents())  # noqa
 
 
 class Company(models.Model):

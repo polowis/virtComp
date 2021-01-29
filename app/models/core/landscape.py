@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from app.models.core import Company
+from app.models.constants import Place
 from django.db import models
 from app.core.util.base import generate_unique_id
 from app.models.constants import Land
@@ -127,7 +128,8 @@ class LandscapeManager(models.Manager):
         return Landscape(level=level, buy_cost=land.get_land_cost(), rent_cost=land.get_rent_cost(),
                          continent_cost=land.get_continent_buy_cost(),
                          continent_rent=land.get_continent_rent_cost(),
-                         continent=continent.lower())
+                         continent=continent.lower(),
+                         place=Place.objects.get_random_place(continent))
 
     def create_land(self, continent: str = Land.objects.default_continent()) -> Landscape:
         """Create default land. To retreive supported continents
@@ -183,6 +185,7 @@ class Landscape(models.Model):
     company_name = models.CharField(max_length=255, null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     continent = models.CharField(max_length=255)
+    place = models.CharField(max_length=255)
 
     buy_cost = models.DecimalField(max_digits=20, decimal_places=4)
     rent_cost = models.DecimalField(max_digits=20, decimal_places=4)
