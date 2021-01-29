@@ -19,12 +19,12 @@
                     <div class="control">
                         <div class="select is-primary">
                         <select v-model="continent">
-                            <option>Asia</option>
-                            <option>North America</option>
-                            <option>South America</option>
-                            <option>Oceania</option>
-                            <option>Europe</option>
-                            <option>Africa</option>
+                            <option>Alantica</option>
+                            <option>Strovania</option>
+                            <option>Niaclausias</option>
+                            <option>Tastania</option>
+                            <option>Adionoris</option>
+                            <option>Gonaucrit</option>
                         </select>
                         </div>
                     </div>
@@ -61,8 +61,9 @@ export default {
             companyName: "",
             companyAvailability: false,
             msg: "",
-            continent: "Asia",
+            continent: "Alantica",
             continentError: false,
+            supportedContinents: ['alantica', 'strovania', 'niaclausias', 'tastania', 'adionoris', 'gonaucrit']
         }
     },
 
@@ -108,7 +109,7 @@ export default {
         },
 
         checkValidContinent() {
-            if(['asia', 'europe', 'south america', 'north america', 'oceania', 'africa'].includes(this.continent.toLowerCase())){
+            if(self.supportedContinents.includes(this.continent.toLowerCase())){
                 this.continentError = false;
             } else{
                 this.continentError = true;
