@@ -31,6 +31,20 @@ class BuildingBuilder(object):
     @classmethod
     def construct(cls, building_type: str, building_name: str, company: Company,
                   method_acquired: str, level: int, landscape: Landscape):
+        """
+        Call this function to create a building with the given type and name
+        And the company instance that owns the building regardless of acquisition methods
+
+        NOTE: The given landscape must owned by the given company
+
+        There are two things to consider when owning building, create a building and owning it.
+        This function should only be used to own a building that has never been created
+
+        throw exception: CannotBuyBuildingOnRentLandscape, UnableToConstructBuilding
+
+        return Building instance
+
+        """
         supported_methods_acquired = ['buy', 'rent']
 
         method_acquired = method_acquired.lower()
