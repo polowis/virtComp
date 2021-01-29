@@ -17,7 +17,7 @@ class ProductProcessBuilderTestCase(TestCase):
         self.company.balance = self.land.buy_cost
         self.land.purchase_landscape(self.company)
         self.building = self.purchase_building()
-        self.item = self.get_sample_item()
+        self.item: Item = self.get_sample_item()
     
     def purchase_building(self):
         mine: BuildingType = BuildingType.objects.get_building_by_type('supreme mine')
@@ -110,6 +110,30 @@ class ProductProcessBuilderTestCase(TestCase):
         process.is_finished(time)
         agent = AgentCustomer.objects.get(id=agents[0].id)
         self.assertEqual(agent.is_producing, False)
+    
+    def test_item_is_successfully_produce(self):
+        agents = self.hire_many_agents()
+        product_builder = ProductBuilder()
+        self.item.probability_per_attempt = 100  # set to 100 to ensure the item always successfully produce
+        product_builder.item = self.item
+        product_builder.building = self.building
+        product_builder.agents = agents
+        process = product_builder.produce_item()
+        time = timezone.now() + datetime.timedelta(seconds=self.item.raw_producing_time)
+        process.is_finished(time)
+        self.assertEqual(process.is_success, True)
+    
+    def test_item_put_in_storage_after_finish(self):
+        agents = self.hire_many_agents()
+        product_builder = ProductBuilder()
+        self.item.probability_per_attempt = 100  # set to 100 to ensure the item always successfully produce
+        product_builder.item = self.item
+        product_builder.building = self.building
+        product_builder.agents = agents
+        process = product_builder.produce_item()
+        time = timezone.now() + datetime.timedelta(seconds=self.item.raw_producing_time)
+        process.is_finished(time)
+        self.assertEqual(self.building.storage.has_item(self.item.name), True)
 
 
         

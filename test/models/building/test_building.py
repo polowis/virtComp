@@ -169,4 +169,11 @@ class BuildingPurchasingTestCase(TestCase):
         with self.assertRaises(UnableToConstructBuilding):
             BuildingBuilder.construct("fakebuilding", 'myfirstbuilding', self.company,
                                       'buy', 1, self.land)
+    
+    def test_build_with_storage(self):
+        mine: BuildingType = BuildingType.objects.get_building_by_type('supreme mine')
+        self.company.balance = mine.get_buy_cost()
+        building = BuildingBuilder.construct(mine.name, 'myfirstbuilding', self.company,
+                                             'buy', 0, self.land)
+        self.assertEqual(building.storage.current_capacity, 0)
         
