@@ -11,6 +11,7 @@ from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, timedelta
 from app.models.constants import Item
+from app.core.db import ModelMixin
 
 
 class BuildingManager(models.Manager):
@@ -67,7 +68,7 @@ class BuildingManager(models.Manager):
             return level
     
 
-class Building(models.Model):
+class Building(models.Model, ModelMixin):
     """
     The Building model for handling anything related to building (a building of a company)
 

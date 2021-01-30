@@ -12,6 +12,7 @@ from setting import local_settings as env
 import random
 from datetime import datetime, timedelta
 from app.models.core.exception import UnableToOwnLandscape
+from app.core.db import ModelMixin
 
 
 logger = logging.getLogger(__name__)
@@ -184,7 +185,7 @@ class LandscapeManager(models.Manager):
             raise Exception("Not available in normal format.")
 
 
-class Landscape(models.Model):
+class Landscape(models.Model, ModelMixin):
     """The base landscape models for create or upgrading anything related to land
     
     To only retrive default and base land details, consider using Land object instead.

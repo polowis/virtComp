@@ -9,6 +9,7 @@ import logging
 from app.models.constants import Land
 from app.models.core.exception import UnableToAssignEmployee
 from typing import Union
+from app.core.db import ModelMixin
 logger = logging.getLogger(__name__)
 
 
@@ -59,7 +60,7 @@ class CompanyManager(models.Manager):
                 and continent.lower() in Land.objects.get_supported_continents())  # noqa
 
 
-class Company(models.Model):
+class Company(models.Model, ModelMixin):
     """
     The company model. Use this class if you want to create a company associated with given user
     """
