@@ -8,6 +8,7 @@ from app.core.validator.base import Validator
 import logging
 from app.models.constants import Land
 from app.models.core.exception import UnableToAssignEmployee
+from typing import Union
 logger = logging.getLogger(__name__)
 
 
@@ -178,10 +179,13 @@ class Company(models.Model):
         agent.building = None
         agent.save()
     
-    def _does_not_have_enough_money(self, expected_amount) -> bool:
+    def _does_not_have_enough_money(self, expected_amount: Union[float, int]) -> bool:
         """
         Return true if the company does not have enough money matching the expected amount
         """
         return self.balance < expected_amount
+    
+    def construct_building(self):
+        pass
         
 
