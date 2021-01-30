@@ -8,6 +8,8 @@ from app.core.validator.base import Validator
 import logging
 from app.models.constants import Land
 from app.models.core.exception import UnableToAssignEmployee
+from typing import Union
+from app.core.db import ModelMixin
 logger = logging.getLogger(__name__)
 
 
@@ -58,7 +60,7 @@ class CompanyManager(models.Manager):
                 and continent.lower() in Land.objects.get_supported_continents())  # noqa
 
 
-class Company(models.Model):
+class Company(models.Model, ModelMixin):
     """
     The company model. Use this class if you want to create a company associated with given user
     """
@@ -113,10 +115,10 @@ class Company(models.Model):
         or else an exception will be thrown
         """
         if isinstance(landscape, app.models.Landscape):
-            self.balance -= landscape.buy_cost
-            if self.balance < 0:
-                raise ValueError("Company balance must be positive")
+            if self._does_not_have_enough_money(landscape.buy_cost):
+                raise ValueError("Company does not have enough money")
             else:
+                self.balance -= landscape.buy_cost
                 landscape.company = self
                 landscape.company_name = self.company_name
                 self.save()
@@ -134,10 +136,10 @@ class Company(models.Model):
         or else an exception will be thrown
         """
         if isinstance(landscape, app.models.Landscape):
-            self.balance -= landscape.rent_cost
-            if self.balance < 0:
-                raise ValueError("Company balance must be positive")
+            if self._does_not_have_enough_money(landscape.rent_cost):
+                raise ValueError("Company does not have enough money")
             else:
+                self.balance -= landscape.rent_cost
                 landscape.company = self
                 landscape.company_name = self.company_name
                 self.save()
@@ -177,5 +179,14 @@ class Company(models.Model):
         agent.company_name = None
         agent.building = None
         agent.save()
+    
+    def _does_not_have_enough_money(self, expected_amount: Union[float, int]) -> bool:
+        """
+        Return true if the company does not have enough money matching the expected amount
+        """
+        return self.balance < expected_amount
+    
+    def construct_building(self):
+        pass
         
 

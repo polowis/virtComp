@@ -12,6 +12,7 @@ from setting import local_settings as env
 import random
 from datetime import datetime, timedelta
 from app.models.core.exception import UnableToOwnLandscape
+from app.core.db import ModelMixin
 
 
 logger = logging.getLogger(__name__)
@@ -52,15 +53,25 @@ class LandscapeManager(models.Manager):
 
         Set force_json to True to return list of objects
         """
+        protected_values = Landscape.protected_values
         if type(company) == Company:
             if force_json:
-                return list(self.filter(company=company).values())
+                return list(self.filter(company=company).values(*protected_values))
             return self.filter(company=company)
         if isinstance(company, str):
             if force_json:
-                return list(self.filter(company=company).values())
+                return list(self.filter(company=company).values(*protected_values))
             return self.filter(company_name=company)
         raise TypeError("lookup_company must be a Company instance or a string of company name")
+
+    def get_landscape_as_dict(self, land_id: str, protected_values: list = None):
+        """
+        Return the landscape instance as dict.
+        If protected_values is provided, it will return only the fields specified otherwise
+        it will use the default settings from landscape model
+        """
+        protected_values = tuple(protected_values) if protected_values else Landscape.protected_values
+        return Landscape.objects.values(*protected_values).get(land_id=land_id)
 
     def get_rent_landscape_by_company(self, company: Union[Company, str]) -> bool:
         """Return the list of landscape instance that on rent by the given company
@@ -174,7 +185,7 @@ class LandscapeManager(models.Manager):
             raise Exception("Not available in normal format.")
 
 
-class Landscape(models.Model):
+class Landscape(models.Model, ModelMixin):
     """The base landscape models for create or upgrading anything related to land
     
     To only retrive default and base land details, consider using Land object instead.
@@ -207,6 +218,9 @@ class Landscape(models.Model):
     last_collected_money_at = models.DateTimeField(null=True)
 
     objects = LandscapeManager()
+
+    protected_values = ('land_id', 'company_name', 'level', 'continent', 'place', 'buy_cost', 'rent_cost',
+                        'continent_cost', 'continent_rent', 'is_buy', 'is_rent', 'is_selling')
 
     def buy(self, *args, **kwargs):
         """Buy the landscape. This function simple will try to
