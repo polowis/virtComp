@@ -7,6 +7,7 @@ import random
 from setting import local_settings as env
 from app.core.mixin.base import *
 import logging
+from django.http import Http404
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +46,7 @@ class LandView(UserLoggedInRequiredMixin, View):
         if land_id is None:
             raise Http404()
         try:
-            Landscape.objects.values().get(land_id=land_id)
+            Landscape.objects.get_landscape_as_dict(land_id)
             return render(request, self.template_name)
         except Exception as e:
             logger.warn(e)
@@ -53,7 +54,7 @@ class LandView(UserLoggedInRequiredMixin, View):
 
     def post(self, request: HttpRequest, land_id=None):
         try:
-            land = Landscape.objects.values().get(land_id=land_id)
+            land = Landscape.objects.get_landscape_as_dict(land_id)
             return JsonResponse(land, safe=False)
         except Exception as e:
             logger.warn(e)
