@@ -1,4 +1,5 @@
-from app.models import Landscape, Building, Company
+from app.models import Landscape, Building
+import app.models
 from app.models.constants import BuildingType
 from app.models.core.product import Storage
 from app.models.core.exception import UnableToConstructBuilding, NegativeLevel, CannotBuyBuildingOnRentLandscape
@@ -29,7 +30,7 @@ class BuildingBuilder(object):
         self.method_acquired = None
     
     @classmethod
-    def construct(cls, building_type: str, building_name: str, company: Company,
+    def construct(cls, building_type: str, building_name: str, company: app.models.Company,
                   method_acquired: str, level: int, landscape: Landscape):
         """
         Call this function to create a building with the given type and name
@@ -57,13 +58,16 @@ class BuildingBuilder(object):
             builder: BuildingBuilder = cls(landscape, level, building_type, building_name)
             return builder.construct_building(company, method_acquired)
 
-    def can_build(self, company: Company, method_acquired: str) -> bool:
+    def can_build(self, company: app.models.Company, method_acquired: str) -> bool:
         """
         Return true if can build the building on this landscape
         
         This method only check for whether or not the
         company able to construct the building with given lEVEL and company owner
         assocciated with landscape.
+
+        :param company: Company instance
+        :method_acquired: str
 
         This method does not check for anything else
         """
@@ -84,10 +88,13 @@ class BuildingBuilder(object):
         except BuildingType.DoesNotExist:
             return None
     
-    def construct_building(self, company: Company, method_acquired: str):
+    def construct_building(self, company: app.models.Company, method_acquired: str):
         """
         Construct the building. Only use this method to construct the building
         regardless of method of acquisition
+
+        :param company: Company instance
+        :method_acquired: str
         """
         if self.can_build(company, method_acquired):
             try:
