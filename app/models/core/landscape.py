@@ -218,8 +218,8 @@ class Landscape(models.Model):
 
     objects = LandscapeManager()
 
-    protected_values = ('land_id', 'company_name', 'level', 'continent', 'place', 'buy_cost', 'rent_cost', 'continent_cost',
-                        'continent_rent', 'is_buy', 'is_rent', 'is_selling')
+    protected_values = ('land_id', 'company_name', 'level', 'continent', 'place', 'buy_cost', 'rent_cost',
+                        'continent_cost', 'continent_rent', 'is_buy', 'is_rent', 'is_selling')
 
     def buy(self, *args, **kwargs):
         """Buy the landscape. This function simple will try to
