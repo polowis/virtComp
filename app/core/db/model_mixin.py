@@ -1,3 +1,4 @@
+from typing import Any
 
 
 def get_modified_fields(old_values, new_values):
@@ -77,3 +78,11 @@ class ModelMixin(object):
         if a particular attribute is clean.
         """
         return not self.is_dirty(key_to_check)
+    
+    def get_original(self, key_to_lookup: str = None) -> Any:
+        """
+        Get the original value of the given key
+        """
+        if key_to_lookup is None:
+            return self.original_states
+        return self.original_states[key_to_lookup]
