@@ -37,7 +37,7 @@ class Loader(object):
 
     See methods description for more details.
 
-    For both: 
+    For both:
     file_saved_name: the name of the file to save if store_file is set to True
     """
     credentials = None
