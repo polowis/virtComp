@@ -27,6 +27,18 @@ class Loader(object):
     
     This will try to locate the credential keys if none is found, it will pull
     from csv folder instead.
+
+    There are two way of pulling the data from google sheets
+
+    Public sheets: required spreadsheetID, sheetID
+
+    Private sheets: (recommended) required spreadsheetID, sheetName, range(optional)
+    client_credentials, scope
+
+    See methods description for more details.
+
+    For both: 
+    file_saved_name: the name of the file to save if store_file is set to True
     """
     credentials = None
     public_sheet_endpoint = 'https://docs.google.com/spreadsheets/d'
@@ -34,6 +46,7 @@ class Loader(object):
     def __init__(self):
         """
         see more here https://developers.google.com/sheets/api/guides/concepts
+
         """
         self.scope = Scope.read  # default set to readonly
         self.spreadsheetsID = '1-3mrtO5tBDb1_Sn5YKZrp1avQ4chKD-x-U7c-gWpkuo'
@@ -43,7 +56,7 @@ class Loader(object):
         self.token_path = './setting/secret/google_token.pickle'  # checkpoint so we do not have to login again
         self.endpoint = 'https://docs.google.com/spreadsheets/d'  # for public use
         self.use_oauth2 = False  # enable oauth2 to pull data from private sheets. You will need client key
-        self.store_file = True
+        self.store_file = True  # set to true to download the sheet as csv.
 
         # the sheet file name. This is not the google sheet name but
         # the file name of which will be stored in the folder core
@@ -83,8 +96,8 @@ class Loader(object):
         Set the name of the file needs to be store upon successfully download
         If none is provided, it will instead use the sheet name provided to name the file
         """
-        self.store_file = name
-    
+        self.file_saved_name = name
+
     def set_sheet_ID(self, sheetID: str):
         """
         The id of the sheet in the given spreadsheet. If you intend to use the public sheet provided
@@ -157,7 +170,7 @@ class Loader(object):
             # Call the Sheets API
             sheet = service.spreadsheets()
             if self.range:
-                result = sheet.values().get(spreadsheetId=self.spreadsheetsID, range='A2:B').execute()
+                result = sheet.values().get(spreadsheetId=self.spreadsheetsID, range=self.range).execute()
             else:
                 result = sheet.values().get(spreadsheetId=self.spreadsheetsID, range=self.sheet_name).execute()
             values = result.get('values', [])
