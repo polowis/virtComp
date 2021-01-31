@@ -106,8 +106,6 @@ class Loader(object):
         if given_scope in ['read', 'write']:
             self.scope = getattr(Scope, given_scope)
 
-
-    
     def pull_from_public_sheets(self):
         """This method will try to pull the content from public google sheets"""
         if self.debug:
