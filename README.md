@@ -11,7 +11,7 @@ Virtcomp uses Django, a popular python web framework. To run virtcomp on your lo
 3. Redis for caching
 4. Python 3.7+ and NodeJS (recommended v14)
 
-If you are only intended to run the web server. You only need modules in requirements.txt files. If you want to run extra modules such as for training dataset purpose. You must installed it manually. It is localed in app/core/services/requirements.txt. For Google API requests (not needed)
+If you are only intended to run the web server. You only need modules in requirements.txt files. If you want to run extra modules such as for training dataset purpose for machine learning usage. You must installed it manually. It is located in app/core/services/requirements.txt. For Google API requests (not needed)
 
 ```sh
 $ pip install -r requirements.txt
