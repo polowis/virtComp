@@ -2,6 +2,7 @@ import os.path
 import requests
 import pickle
 from app.core.util.color import Logger
+from setting import local_settings as env
 
 logger = Logger()
 
@@ -49,7 +50,7 @@ class Loader(object):
 
         """
         self.scope = Scope.read  # default set to readonly
-        self.spreadsheetsID = '1-3mrtO5tBDb1_Sn5YKZrp1avQ4chKD-x-U7c-gWpkuo'
+        self.spreadsheetsID = env.GOOGLE_SHEET_ID
         self.sheetID = '216733205'  # use this with public Sheet
         self.sheet_name = 'Sheet1'  # the sheet name used for private sheet with oauth2
         self.credentials_path = './setting/secret/client_credential.json'
@@ -131,13 +132,27 @@ class Loader(object):
                 logger.info('Successfully pulled data')
         except Exception as e:
             raise Exception(e)
+    
+    def _valid_for_oauth2_access(self):
+        """
+        Return boolean denote whether the request has been authorized to access to Google sheets
+        This will check for spreadsheetID, spreadsheet name, and scope. Range name also can be specified
+        """
+        return self.spreadsheetsID is not None and self.sheet_name is not None and self.scope is not None
+    
+    def _valid_for_public_sheets_access(self):
+        """
+        Return boolean denote whether the request has been authorized to access to Google sheets
+        This will check for spreadsheetID, sheetId
+        """
+        return self.spreadsheetsID is not None and self.sheetID is not None
 
     def download(self):
         """Will attempt to download the source file"""
         if self.use_oath2 is False:
             return self.pull_from_public_sheets()
         else:
-            if os.path.exists(self.credentials_path):
+            if os.path.exists(self.credentials_path) and self._valid_for_oauth2_access():
 
                 from googleapiclient.discovery import build
                 from google_auth_oauthlib.flow import InstalledAppFlow
