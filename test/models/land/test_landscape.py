@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+from app.models.core import User
 from app.models import Landscape, Land, Company, Place
 from django.utils import timezone
 import datetime

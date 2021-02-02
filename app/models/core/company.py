@@ -2,7 +2,7 @@ from __future__ import annotations
 import app.models
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+from .user import User
 from app.core.util.base import generate_unique_id
 from app.core.validator.base import Validator
 import logging

@@ -20,5 +20,7 @@ from .landscape import Landscape
 from .building import Building
 from .continent import Continent
 
+from .user import User
+
 __all__ = exceptions + transaction_model + agent_model + product_model
-__all__ += ['Company', 'Landscape', 'Building', 'Continent']
+__all__ += ['Company', 'Landscape', 'Building', 'Continent', 'User']

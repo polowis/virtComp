@@ -2,7 +2,7 @@
 from django.views import View
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from app.models.core import User
 from django.contrib.auth import login
 from app.core.validator.base import Validator
 
