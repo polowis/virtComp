@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+from app.models.core import User
 from app.models import Landscape, Land, Company, BuildingType, Place, Item, AgentCustomer
 from app.core.services.builders.agent_builder import AgentBuilder
 from app.core.services.builders.product_builder import ProductBuilder
