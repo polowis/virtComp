@@ -13,3 +13,8 @@ class TransactionDetails(models.Model):
     money = models.DecimalField(max_digits=20, decimal_places=4, null=True)
     created_at = models.DateTimeField(editable=False)
     updated_at = models.DateTimeField(null=True)
+
+
+class TransactionItem(models.Model):
+    """The produced item that belongs to given transaction"""
+    pass
