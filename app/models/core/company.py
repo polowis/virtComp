@@ -188,5 +188,12 @@ class Company(models.Model, ModelMixin):
     
     def construct_building(self):
         pass
+
+    def get_all_buildings(self):
+        """"""
+        return self.building_set.all()
+    
+    def get_all_landscape(self):
+        return self.landscape_set.all()
         
 
