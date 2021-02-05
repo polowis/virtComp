@@ -79,6 +79,8 @@ class Company(models.Model, ModelMixin):
 
     objects = CompanyManager()
 
+    protected = ['created_at', 'updated_at', 'deleted_at']
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.created_at = timezone.now()
@@ -201,7 +203,7 @@ class Company(models.Model, ModelMixin):
         Return true if the company owns by the given username
 
         :param username: string
-        
+
         :return boolean
         """
         return self.owner_name == username

@@ -39,3 +39,7 @@ class ModelMixinTestCase(TestCase):
         company.balance = 100
         self.assertEqual(company.is_dirty('company_name'), False)
     
+    def test_company_to_dict(self):
+        company: Company = Company.objects.get(id=self.company.id)
+        company.balance = 100
+        company.as_dict()
