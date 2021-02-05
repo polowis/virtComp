@@ -195,5 +195,15 @@ class Company(models.Model, ModelMixin):
     
     def get_all_landscape(self):
         return self.landscape_set.all()
+    
+    def owned_by(self, username: str) -> bool:
+        """
+        Return true if the company owns by the given username
+
+        :param username: string
+        
+        :return boolean
+        """
+        return self.owner_name == username
         
 
