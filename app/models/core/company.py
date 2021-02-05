@@ -71,7 +71,7 @@ class Company(models.Model, ModelMixin):
     owner_name = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     continent = models.CharField(max_length=255, default=Land.objects.default_continent())
-    balance = models.DecimalField(default=0, max_digits=20, decimal_places=4)
+    balance = models.DecimalField(default=300, max_digits=20, decimal_places=4)
     popularity = models.IntegerField(default=0)
     reputation = models.IntegerField(default=0)
     qualification = models.IntegerField(default=0)
