@@ -1,8 +1,9 @@
-from django.db import models
+
 from app.core.validator.base import Validator
+from django.contrib.auth.models import UserManager
 
 
-class UserManager(models.Manager):
+class UserManager(UserManager):
     """
     The user manager class
     """
