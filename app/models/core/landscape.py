@@ -53,7 +53,7 @@ class LandscapeManager(models.Manager):
 
         Set force_json to True to return list of objects
         """
-        protected_values = Landscape.protected_values
+        protected_values = self.model.protected
         if type(company) == Company:
             if force_json:
                 return list(self.filter(company=company).values(*protected_values))
@@ -219,8 +219,8 @@ class Landscape(models.Model, ModelMixin):
 
     objects = LandscapeManager()
 
-    protected_values = ('land_id', 'company_name', 'level', 'continent', 'place', 'buy_cost', 'rent_cost',
-                        'continent_cost', 'continent_rent', 'is_buy', 'is_rent', 'is_selling')
+    protected = ['land_id', 'company_name', 'level', 'continent', 'place', 'buy_cost', 'rent_cost',
+                 'continent_cost', 'continent_rent', 'is_buy', 'is_rent', 'is_selling']
 
     def buy(self, *args, **kwargs):
         """Buy the landscape. This function simple will try to

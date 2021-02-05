@@ -55,6 +55,8 @@ class CompanyManager(models.Manager):
         
         This will ensure that the company name has not been registered and has a valid name
         """
+        if company_name is None or continent is None:
+            return False
         return (not self.company_exists(company_name)
                 and self.has_valid_company_name(company_name)  # noqa
                 and continent.lower() in Land.objects.get_supported_continents())  # noqa
@@ -69,7 +71,7 @@ class Company(models.Model, ModelMixin):
     owner_name = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     continent = models.CharField(max_length=255, default=Land.objects.default_continent())
-    balance = models.DecimalField(default=0, max_digits=20, decimal_places=4)
+    balance = models.DecimalField(default=300, max_digits=20, decimal_places=4)
     popularity = models.IntegerField(default=0)
     reputation = models.IntegerField(default=0)
     qualification = models.IntegerField(default=0)
@@ -78,6 +80,8 @@ class Company(models.Model, ModelMixin):
     deleted_at = models.DateTimeField(null=True)
 
     objects = CompanyManager()
+
+    protected = ['created_at', 'updated_at', 'deleted_at']
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -195,5 +199,15 @@ class Company(models.Model, ModelMixin):
     
     def get_all_landscape(self):
         return self.landscape_set.all()
+    
+    def owned_by(self, username: str) -> bool:
+        """
+        Return true if the company owns by the given username
+
+        :param username: string
+
+        :return boolean
+        """
+        return self.owner_name == username
         
 
