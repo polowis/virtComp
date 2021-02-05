@@ -41,7 +41,6 @@ class UserLoggedInRequiredMixinJSON:
             return JsonResponse(data, safe=False)
 
 
-
 class RedirectIfLoggedInMixin:
     def dispatch(self, request: HttpRequest, *args, **kwargs):
         if not request.user.is_authenticated:
