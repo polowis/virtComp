@@ -19,6 +19,13 @@ class UserManager(models.Manager):
         Return true if user can create an account
         This will make sure that both email and username are not duplicated
         """
+
+        # if none values were provided
+        if username is None or email is None:
+            return False
+
         email_valid = not self.email_exists(email) and Validator.is_email(email)
-        username_valid = not self.username_exists(username) and Validator.is_alphanumeric(username)
+        username_valid = (not self.username_exists(username) and  # noqa
+                          Validator.is_alphanumeric(username) and # noqa
+                          Validator.has_above(username, 4))
         return email_valid and username_valid
