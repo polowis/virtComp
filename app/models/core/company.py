@@ -55,6 +55,8 @@ class CompanyManager(models.Manager):
         
         This will ensure that the company name has not been registered and has a valid name
         """
+        if company_name is None or continent is None:
+            return False
         return (not self.company_exists(company_name)
                 and self.has_valid_company_name(company_name)  # noqa
                 and continent.lower() in Land.objects.get_supported_continents())  # noqa
