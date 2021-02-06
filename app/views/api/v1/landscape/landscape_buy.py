@@ -25,10 +25,10 @@ class LandscapeBuy(View, CompanyLoggedInRequiredMixinJSON):
                 if company.can_own_landscape(land, 'buy'):
                     company.buy_landscape(land)
                     if land.company_name == company.company_name:
-                        data = {'error': False, 'message': 'Successfully Purchase Landscape',
+                        data = {'error': False, 'message': 'Successfully Buy Landscape',
                                 'redirect_url': '/company/'}
                     else:
-                        data = {'error': False, 'message': 'Failure to Purchase Landscape due to unknown reason'}
+                        data = {'error': False, 'message': 'Failure to Buy Landscape due to unknown reason'}
                 data = {'error': True, 'message': "Insufficient amount of money"}
             data = {'error': True, 'message': "A company has owned this land"}
         except Landscape.DoesNotExist:
