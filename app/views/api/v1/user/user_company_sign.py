@@ -21,9 +21,9 @@ class UserCompanySign(View, UserLoggedInRequiredMixinJSON):
         if company_name is not None and Company.objects.company_exists(company_name):
             company: Company = Company.objects.get(company_name=company_name)
             if company.owned_by(request.user.username):
-                data = {'success': True, 'redirect_url': '/company/'}
+                data = {'error': False, 'redirect_url': '/company/'}
                 json_response = JsonResponse(data)
-                http_response = HttpResponse(json_response)
+                http_response = HttpResponse(json_response, content_type="application/json")
                 http_response.set_signed_cookie('host_user', company_name)
                 return http_response
         data = {'error': True, 'message': "The name of company is not valid"}
