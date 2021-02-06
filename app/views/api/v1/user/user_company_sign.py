@@ -10,7 +10,9 @@ class UserCompanySign(View, UserLoggedInRequiredMixinJSON):
 
     SUPPORT_METHOD: ['POST']
 
-    HELP: Logged in given company name
+    HELP: Logged in company
+
+    PERMISSION: user logged in
 
     RETURN: JSON response
     """

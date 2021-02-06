@@ -1,15 +1,18 @@
 from django.views import View
 from django.http import HttpRequest, JsonResponse
 from app.models import Company
+from app.core.mixin.base import UserLoggedInRequiredMixinJSON
 
 
-class CompanyView(View):
+class CompanyView(View, UserLoggedInRequiredMixinJSON):
     """
     URL: /api/v1/company/
 
     SUPPORT_METHOD: ['GET', 'POST']
 
     HELP: GET method: Retrieve company information. POST method: Create company
+
+    PERMISSION: GET: Company logged in, POST: user logged in
 
     RETURN: JSON response
     """

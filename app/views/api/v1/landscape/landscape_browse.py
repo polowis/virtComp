@@ -3,15 +3,18 @@ from django.http import HttpRequest, JsonResponse
 from app.models import Landscape
 import random
 from setting import local_settings as env
+from app.core.mixin.base import CompanyLoggedInRequiredMixinJSON
 
 
-class LandscapeBrowse(View):
+class LandscapeBrowse(View, CompanyLoggedInRequiredMixinJSON):
     """
     URL: /api/v1/landscape/browse
 
     SUPPORT_METHOD: ['GET']
 
     HELP: Get random list of landscape that are not belong to any company
+
+    PERMISSION: Company logged in
 
     RETURN: JSON response
     """

@@ -1,9 +1,10 @@
 from django.views import View
 from django.http import HttpRequest, JsonResponse
 from app.models import Landscape
+from app.core.mixin.base import CompanyLoggedInRequiredMixinJSON
 
 
-class LandscapeID(View):
+class LandscapeID(View, CompanyLoggedInRequiredMixinJSON):
     """
     URL: /api/v1/landscape/{id}/
 
@@ -11,6 +12,8 @@ class LandscapeID(View):
 
     HELP: Return landscape information for given id. The id here must be the custom landscape id,
     not the primary_key (auto_increament)
+
+    PERMISSION: Company logged in
 
     RETURN: JSON response
     """

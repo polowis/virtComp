@@ -12,6 +12,8 @@ class UserCompany(View, UserLoggedInRequiredMixinJSON):
 
     HELP: Retrieve all company belongs to current user
 
+    PERMISSION: User logged in
+
     RETURN: JSON response
     """
     def get(self, request: HttpRequest):
