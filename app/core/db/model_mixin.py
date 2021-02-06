@@ -87,12 +87,19 @@ class ModelMixin(object):
             return self.original_states
         return self.original_states[key_to_lookup]
     
-    def as_dict(self) -> dict:
+    def as_dict(self, *args) -> dict:
         """
         Return the model meta atrribute as dictionary.
         It will not return any attributes specified in protected field
+
+        If any argument is provided, it will return only the one specified even if it
+        is protected and will ignore the protected fields
+
         """
         attrs: dict = self.get_original_states()
+        values = {key: value for key, value in attrs.items() if key in args}
+        if values != {}:
+            return values
         protected_values: list = getattr(self, 'protected', None)
         if protected_values is None:
             return attrs
