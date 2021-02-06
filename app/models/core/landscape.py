@@ -219,8 +219,10 @@ class Landscape(models.Model, ModelMixin):
 
     objects = LandscapeManager()
 
-    protected = ['land_id', 'company_name', 'level', 'continent', 'place', 'buy_cost', 'rent_cost',
-                 'continent_cost', 'continent_rent', 'is_buy', 'is_rent', 'is_selling']
+    unprotected = ['land_id', 'company_name', 'level', 'continent', 'place', 'buy_cost', 'rent_cost',
+                   'continent_cost', 'continent_rent', 'is_buy', 'is_rent', 'is_selling']
+    
+    protected = ['created_at', 'updated_at']
 
     def buy(self, *args, **kwargs):
         """Buy the landscape. This function simple will try to
