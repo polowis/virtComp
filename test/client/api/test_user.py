@@ -25,3 +25,24 @@ class UserAPITestCase(TestCase):
         Company.objects.create_company('johnCompany', self.user, 'alantica')
         response = self.client.post(self.api_endpoint + 'company/sign/', {'companyName': 'johnCompany'})
         self.assertEqual(response.json()['error'], False)
+    
+    def test_valid_user(self):
+        response = self.client.post(self.api_endpoint + 'valid/', {'username': 'alice', 'email': 'alice@gmail.com'})
+        self.assertEqual(response.json()['error'], False)
+    
+    def test_valid_user_with_no_email(self):
+        response = self.client.post(self.api_endpoint + 'valid/', {'username': 'alice'})
+        self.assertEqual(response.json()['error'], True)
+
+    def test_valid_user_with_no_username(self):
+        response = self.client.post(self.api_endpoint + 'valid/', {'email': 'alice@gmail.com'})
+        self.assertEqual(response.json()['error'], True)
+    
+    def test_valid_user_with_no_param(self):
+        response = self.client.post(self.api_endpoint + 'valid/')
+        self.assertEqual(response.json()['error'], True)
+    
+    def test_valid_user_with_invalid_email(self):
+        response = self.client.post(self.api_endpoint + 'valid/', {'username': 'alice', 'email': 'alice'})
+        self.assertEqual(response.json()['error'], True)
+
