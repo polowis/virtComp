@@ -20,6 +20,7 @@ from app.views import *
 from django.views.generic import TemplateView
 from django.http import HttpRequest
 from django.shortcuts import render
+from .api_urls import api_pattern
 
 
 def NewUIView(request: HttpRequest):
@@ -50,7 +51,7 @@ urlpatterns = [
     path('design/', NewUIView),
     
 
-]
+] + api_pattern
 
 handler403 = 'app.views.exceptions.base.Error403'
 handler404 = 'app.views.exceptions.base.Error404'
