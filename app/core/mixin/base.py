@@ -14,7 +14,31 @@ class CompanyLoggedInRequiredMixin:
             raise PermissionDenied
 
 
+class CompanyLoggedInRequiredMixinJSON:
+    """
+    It will check for whether or not the company has logged in
+    and authorized to make the request.
+
+    Return JSON if error
+    """
+    def dispatch(self, request: HttpRequest, *args, **kwargs):
+        company = get_current_register_company(request)
+        if company is not None:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            data = {'error': True, 'message': 'No company found (404)'}
+            return JsonResponse(data, safe=False)
+
+
 class CompanyLoggedInRequiredJSONMixin:
+    """
+    It will check for whether or not the company has logged in
+    and authorized to make the request.
+
+    NOTE: DEPRECATED
+
+    Return JSON if error
+    """
     def dispatch(self, request: HttpRequest, *args, **kwargs):
         company = get_current_register_company(request)
         if company is not None:

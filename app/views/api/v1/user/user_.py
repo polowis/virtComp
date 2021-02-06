@@ -11,6 +11,8 @@ class UserView(View, UserLoggedInRequiredMixinJSON):
 
     HELP: Retrieve user information
 
+    PERMISSON: user logged in
+
     RETURN: JSON response
     """
     def get(self, request: HttpRequest):

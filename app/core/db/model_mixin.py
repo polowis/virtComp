@@ -87,12 +87,30 @@ class ModelMixin(object):
             return self.original_states
         return self.original_states[key_to_lookup]
     
-    def as_dict(self) -> dict:
+    def as_dict(self, *args) -> dict:
         """
         Return the model meta atrribute as dictionary.
         It will not return any attributes specified in protected field
+
+        If any argument is provided, it will return only the one specified even if it
+        is protected and will ignore the protected fields. You may also pass unprotected field in model
+        as well. But keep in mind that unprotected fields will be prioritized as protected will be ignore
+        to prevent clashing
+
         """
         attrs: dict = self.get_original_states()
+        model_unprotected_field = getattr(self, 'unprotected', None)
+        
+        if len(args) > 0:  # if custom fields exists:
+            values = {key: value for key, value in attrs.items() if key in args}
+            return values
+
+        # if model unprotected field exists
+        if model_unprotected_field is not None:
+            values = {key: value for key, value in attrs.items() if key in model_unprotected_field}
+            return values
+
+        # if protected field exists
         protected_values: list = getattr(self, 'protected', None)
         if protected_values is None:
             return attrs

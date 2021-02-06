@@ -219,8 +219,10 @@ class Landscape(models.Model, ModelMixin):
 
     objects = LandscapeManager()
 
-    protected = ['land_id', 'company_name', 'level', 'continent', 'place', 'buy_cost', 'rent_cost',
-                 'continent_cost', 'continent_rent', 'is_buy', 'is_rent', 'is_selling']
+    unprotected = ['land_id', 'company_name', 'level', 'continent', 'place', 'buy_cost', 'rent_cost',
+                   'continent_cost', 'continent_rent', 'is_buy', 'is_rent', 'is_selling']
+    
+    protected = ['created_at', 'updated_at']
 
     def buy(self, *args, **kwargs):
         """Buy the landscape. This function simple will try to
@@ -303,8 +305,34 @@ class Landscape(models.Model, ModelMixin):
         
         :param company: The company instance that wish to own this landscape
 
+        DEPRECATED: consider using buy_landscape for better naming
+
         This function does not call company_able_to_purchase_method, you must call it manually and before this function
-        or else an exception will be thrown
+        or else an exception will be thrown or alternative way is you must call Company.can_own_landscape()
+        """
+        if isinstance(company, Company):
+            self.company = company
+            self.company_name = company.company_name
+            if self.required_extra_continent_cost(company):
+                extra_cost = self.get_extra_contient_cost(company, 'buy')
+                company_new_balance = company.balance - (self.buy_cost + extra_cost)
+            else:
+                company_new_balance = company.balance - self.buy_cost
+            if company_new_balance < 0:
+                raise UnableToOwnLandscape("Company balance does not meet the requirements")
+            company.balance = company_new_balance
+            company.save()
+            self.buy()
+        else:
+            raise TypeError("The company param must be an instance of Company but got {} instead".format(type(company)))
+    
+    def buy_landscape(self, company: Company) -> None:
+        """The function will withdraw a certain amount of money from given company
+        
+        :param company: The company instance that wish to own this landscape
+
+        This function does not call company_able_to_purchase_method, you must call it manually and before this function
+        or else an exception will be thrown or alternative way is you must call Company.can_own_landscape()
         """
         if isinstance(company, Company):
             self.company = company
@@ -328,7 +356,7 @@ class Landscape(models.Model, ModelMixin):
         :param company: The company instance that wish to own this landscape
 
         This function does not call company_able_to_purchase_method, you must call it manually and before this function
-        or else an exception will be thrown
+        or else an exception will be thrown or alternative way is you must call Company.can_own_landscape()
         """
         if isinstance(company, Company):
             self.company = company

@@ -115,6 +115,29 @@ class Company(models.Model, ModelMixin):
         
         :param company: The company instance that wish to own this landscape
 
+        DEPRECATED: Use buy_landscape() instead for better naming.
+
+        This function does not call can_buy_landscape method, you must call it manually and before this function
+        or else an exception will be thrown
+        """
+        if isinstance(landscape, app.models.Landscape):
+            if self._does_not_have_enough_money(landscape.buy_cost):
+                raise ValueError("Company does not have enough money")
+            else:
+                self.balance -= landscape.buy_cost
+                landscape.company = self
+                landscape.company_name = self.company_name
+                self.save()
+                landscape.buy()
+        else:
+            raise TypeError("The landscape param must be an instance of landscape but "
+                            "got {} instead".format(type(landscape)))
+    
+    def buy_landscape(self, landscape: app.models.Landscape) -> None:
+        """The function will withdraw a certain amount of money from given company
+        
+        :param company: The company instance that wish to own this landscape
+
         This function does not call can_buy_landscape method, you must call it manually and before this function
         or else an exception will be thrown
         """

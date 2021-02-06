@@ -42,4 +42,4 @@ class ModelMixinTestCase(TestCase):
     def test_company_to_dict(self):
         company: Company = Company.objects.get(id=self.company.id)
         company.balance = 100
-        company.as_dict()
+        self.assertDictEqual({'company_name': 'johnCompany'}, company.as_dict('company_name'))

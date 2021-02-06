@@ -4,7 +4,8 @@ from typing import Union
 
 
 def get_current_register_company(request: HttpRequest, *args, **kwargs) -> Union[Company, None]:
-    """Return the company instance or None if no company found.
+    """Return the company instance or None if no company found. It will
+    also check for user logged in
     
     This function will take the HttpRequest instance as param
 

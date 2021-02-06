@@ -11,6 +11,8 @@ class UserValid(View):
 
     HELP: Check if user provided valid credential before creating new account
 
+    PERMISSION: None
+
     RETURN: JSON response
     """
     def post(self, request: HttpRequest):
