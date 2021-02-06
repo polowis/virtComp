@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from app.models import User
+from app.models import User, Company
 
 
 class CompanyAPITestCase(TestCase):
@@ -16,7 +16,11 @@ class CompanyAPITestCase(TestCase):
         self.assertEqual(response.json()['error'], False)
         self.assertEqual(response.json()['message'], 'sucessfully created')
     
-    def test_failed_create_company(self):
+    def test_failed_create_company_with_non_ascii_letters(self):
         response = self.client.post(self.api_endpoint, {'companyName': '?dfloe^&', 'continent': 'alantica'})
         self.assertEqual(response.json()['error'], True)
     
+    def test_failed_create_company_with_exists_name(self):
+        Company.objects.create_company('myCompany', self.user, 'alantica')
+        response = self.client.post(self.api_endpoint, {'companyName': 'myCompany', 'continent': 'alantica'})
+        self.assertEqual(response.json()['error'], True)
