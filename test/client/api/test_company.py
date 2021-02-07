@@ -24,3 +24,15 @@ class CompanyAPITestCase(TestCase):
         Company.objects.create_company('myCompany', self.user, 'alantica')
         response = self.client.post(self.api_endpoint, {'companyName': 'myCompany', 'continent': 'alantica'})
         self.assertEqual(response.json()['error'], True)
+    
+    def test_failed_create_company_with_no_param(self):
+        response = self.client.post(self.api_endpoint)
+        self.assertEqual(response.json()['error'], True)
+    
+    def test_failed_create_company_with_no_missing_companyname(self):
+        response = self.client.post(self.api_endpoint, {'continent': 'alantica'})
+        self.assertEqual(response.json()['error'], True)
+    
+    def test_failed_create_company_with_not_support_continent(self):
+        response = self.client.post(self.api_endpoint, {'companyName': 'myCompany', 'continent': 'mycontinent'})
+        self.assertEqual(response.json()['error'], True)
