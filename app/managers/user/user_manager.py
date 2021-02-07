@@ -13,7 +13,7 @@ class UserManager(UserManager):
     
     def email_exists(self, email: str) -> bool:
         """return true if email exists"""
-        return self.objects.filter(email=email).exists()
+        return self.filter(email=email).exists()
     
     def can_create_account(self, username: str, email: str) -> bool:
         """
