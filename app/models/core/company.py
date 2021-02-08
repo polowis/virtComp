@@ -232,5 +232,9 @@ class Company(models.Model, ModelMixin):
         :return boolean
         """
         return self.owner_name == username
+    
+    def pay(self, amount: Union[int, float]) -> None:
+        self.balance -= amount
+        self.save()
         
 

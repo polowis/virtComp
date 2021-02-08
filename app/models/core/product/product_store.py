@@ -28,8 +28,10 @@ class ProducedItem(models.Model):
     """The products stored in each building"""
     record_id = models.CharField(max_length=255, default=generate_unique_id)
     name = models.CharField(max_length=255)
-    building = models.OneToOneField(Building, on_delete=models.CASCADE)  # the storage that holds the item
+    # the storage that holds the item
+    building: Building = models.OneToOneField(Building, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)  # the constant item attribute
+    in_global_store = models.BooleanField(default=False)
     quality = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(editable=False)
     updated_at = models.DateTimeField()

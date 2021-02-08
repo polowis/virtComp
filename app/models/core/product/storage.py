@@ -38,6 +38,9 @@ class Storage(models.Model):
         except Exception as e:
             raise Exception(e)
     
+    def move_to_global_store(self, item):
+        pass
+    
     def has_item(self, item: str):
         """Check if item exists in the storage"""
         if isinstance(item, str):
@@ -51,3 +54,8 @@ class Storage(models.Model):
         if isinstance(item, str):
             return ProducedItem.objects.filter(name=item, building=self.building)
         return ProducedItem.objects.filter(name=item, building=self.building)
+    
+    def update_capacity(self):
+        capacity = ProducedItem.objects.filter(building=self.building, in_global_store=False).count()
+        self.current_capacity += capacity
+        self.save()

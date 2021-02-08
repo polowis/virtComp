@@ -2,6 +2,7 @@ from django.db import models
 from app.models.core import Company
 from app.models.core.product import ProducedItem
 from django.utils import timezone
+from django.db.models import Sum
 
 __all__ = ['GlobalStore', 'GlobalStoreItem']
 
@@ -29,6 +30,8 @@ class GlobalStore(models.Model):
     number_of_products = models.PositiveIntegerField(default=0)
     max_number_of_products = models.PositiveIntegerField(default=2000)
 
+    total_amount = models.DecimalField(max_digits=20, decimal_places=4)
+
     registered_at = models.DateTimeField(editable=False, default=timezone.now)
     updated_at = models.DateTimeField()
 
@@ -44,6 +47,17 @@ class GlobalStore(models.Model):
     def put_item_on_store(self, item: ProducedItem, price):
         """Put item on store"""
         return GlobalStoreItem.objects._store_item(item, price, self)
+    
+    def buy_items(self, company_buyer: Company, item_list: list):
+        total_cost = GlobalStoreItem.objects.filter(item_id__in=item_list, company_store=self).aggregate(Sum('price'))
+        if company_buyer._does_not_have_enough_money(total_cost):
+            raise ValueError("Company must have enough money")
+        else:
+            company_buyer.pay(total_cost)
+            self.total_amount = total_cost
+            self.save()
+
+        items = GlobalStoreItem.objects.filter(item_id__in=item_list).update(is_bought=True)
 
 
 class GlobalStoreItemManager(models.Manager):
@@ -52,6 +66,8 @@ class GlobalStoreItemManager(models.Manager):
             self.get(item_id=item.id)
             raise self.model.AlreadyExists()
         except self.model.DoesNotExist:
+            item.in_global_store = True
+            item.save()
             return self.create(item_id=item.id, produced_item=item,
                                price=price, company_store=company_storage)
 
@@ -62,7 +78,7 @@ class GlobalStoreItem(models.Model):
     company_store = models.ForeignKey(GlobalStore, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=20, decimal_places=4)
     is_bought = models.BooleanField(default=False)
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(editable=False, default=timezone.now)
     updated_at = models.DateTimeField()
 
     objects = GlobalStoreItemManager()
@@ -73,6 +89,9 @@ class GlobalStoreItem(models.Model):
     def save(self, *args, **kwargs):
         self.updated_at = timezone.now()
         return super().save(*args, **kwargs)
+    
+    def move_out(self, building):
+        pass
 
 
 
