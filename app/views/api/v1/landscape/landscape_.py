@@ -18,4 +18,4 @@ class LandscapeView(View, CompanyLoggedInRequiredMixinJSON):
     """
     def get(self, request: HttpRequest):
         landscapes = list(Landscape.objects.filter(company_name=request.company.company_name).values())
-        return JsonResponse(landscapes)
+        return JsonResponse(landscapes, safe=False)
