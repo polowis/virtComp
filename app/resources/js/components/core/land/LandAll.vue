@@ -4,7 +4,7 @@
     <div class="page">
         <div class="app-content">
             <div class="wrapper-table">
-                <h1 style="float:left; width: 30%; color: #f02929; margin-left: 10%;">Your lands</h1>
+                <h1 style="float:left; width: 30%; color: #54ff5f; margin-left: 10%;">Your lands</h1>
                 <h1 style="float:right; width: 30%; color: #f02929">Lands on sale </h1>
                 <div style="width:85%; float:right;">
                     
@@ -39,7 +39,7 @@
                     <tbody>
                         <tr v-for="land in this.normalizeLandData()" v-bind:key="land.land_id" class="hover-row">
                             <td style="cursor: pointer; color: #00d1b2"><a :href="'/land/' + land.land_id + '/view/'" style="color: #00d1b2">{{land.land_id}}</a></td>
-                            <td>${{land.buy_cost}}</td>
+                            <td><i class="fas fa-caret-up" style="color:#00ff00"></i> ${{land.buy_cost}}</td>
                             <td>${{land.rent_cost}}</td>
                             <td>{{land.continent}}</td>
                         </tr>
