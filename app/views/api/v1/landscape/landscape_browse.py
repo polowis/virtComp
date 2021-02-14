@@ -8,7 +8,7 @@ from app.core.mixin.base import CompanyLoggedInRequiredMixinJSON
 
 class LandscapeBrowse(View, CompanyLoggedInRequiredMixinJSON):
     """
-    URL: /api/v1/landscape/browse
+    URL: /api/v1/landscape/browse/
 
     SUPPORT_METHOD: ['GET']
 
@@ -19,6 +19,7 @@ class LandscapeBrowse(View, CompanyLoggedInRequiredMixinJSON):
     RETURN: JSON response
     """
     def get(self, request: HttpRequest):
+        print("dd")
         if request.user.is_authenticated:
             lands_available = Landscape.objects.get_available_land()
             random_lands = random.sample(list(lands_available.values()), env.MAXIMUM_lAND_VIEW)
