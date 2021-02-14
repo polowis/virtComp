@@ -4,7 +4,7 @@
     <div class="page">
         <div class="app-content">
             <div class="wrapper-table">
-                <h1 style="float:left; width: 30%; color: #54ff5f; margin-left: 10%;">Your lands</h1>
+                <h1 style="float:left; width: 30%; color: #4ada53; margin-left: 10%;">Your lands</h1>
                 <h1 style="float:right; width: 30%; color: #f02929">Lands on sale </h1>
                 <div style="width:85%; float:right;">
                     
@@ -21,11 +21,19 @@
                         <th>Level</th>
                         <th>Continent</th>
                     </thead>
-                    <tbody>
+
+                    <tbody v-if="this.landsOwned.length !== 0">
                         <tr v-for="land in this.landsOwned" v-bind:key="land.land_id" class="hover-row">
                             <td style="cursor: pointer; color: #00d1b2"><a :href="'/land/' + land.land_id + '/view/'" style="color: #00d1b2">{{land.land_id}}</a></td>
                             <td>{{land.level}}</td>
                             <td>{{land.continent}}</td>
+                        </tr>
+                    </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan="3"> 
+                                You have not obtain any landscape. Get one now. Need <a href="/documentation/">help?</a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
