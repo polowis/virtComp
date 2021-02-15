@@ -64,7 +64,8 @@ export default {
 
     methods: {
         fetchLandDetail() {
-            axios.post((location.pathname+location.search)).then(response => {
+            let id = location.pathname.split("/")[2]
+            axios.get(`/api/v1/landscape/${id}/view/`).then(response => {
                 let data = response.data
                 this.land = data
             })
