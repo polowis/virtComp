@@ -11,8 +11,8 @@
                 <div class="land-details">
                     <h3>Land ID: {{land.land_id}}</h3>
                     
-                    <p>Company Owner: {{land.company_name}}</p>
-                    <p v-if="land.company_name !== null">Land Status: Not available to purchase </p>
+                    <p>Company Owner: <b style="color: #ffeb3b">{{land.company_name}}</b></p>
+                    <p v-if="land.company_name !== null" style="color: #f14668">Land Status: Not available to purchase </p>
                     <p v-else style="color: #00d1b2">Land Status: Available to purchase</p>
                     <p>Land Level: {{land.level}}</p>
                     <p>Land Cost: ${{land.buy_cost}}</p>
