@@ -30,7 +30,7 @@ class GlobalStore(models.Model):
     number_of_products = models.PositiveIntegerField(default=0)
     max_number_of_products = models.PositiveIntegerField(default=2000)
 
-    total_amount = models.DecimalField(max_digits=20, decimal_places=4)
+    total_money = models.DecimalField(max_digits=20, decimal_places=4, default=0)
 
     registered_at = models.DateTimeField(editable=False, default=timezone.now)
     updated_at = models.DateTimeField()
@@ -54,10 +54,11 @@ class GlobalStore(models.Model):
             raise ValueError("Company must have enough money")
         else:
             company_buyer.pay(total_cost)
-            self.total_amount = total_cost
+            self.total_money = total_cost
             self.save()
 
         items = GlobalStoreItem.objects.filter(item_id__in=item_list).update(is_bought=True)
+        return items
 
 
 class GlobalStoreItemManager(models.Manager):
