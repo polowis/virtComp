@@ -44,7 +44,7 @@ urlpatterns = [
     path('user/isavailable/', UserAvailability.as_view()),
     path('user/companies/', CurrentUserCompany.as_view()),
     path('api/data/companytype/', CompanyTypeView.as_view()),
-    path('land/view/', LandAvailable.as_view()),
+    path('land/', LandAvailable.as_view()),
     path('land/<land_id>/view/', LandView.as_view()),
     path('land/<land_id>/buy/', LandBuy.as_view()),
     path('land/<land_id>/rent/', LandRent.as_view()),

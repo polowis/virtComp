@@ -3,44 +3,59 @@
     <NavbarComponent></NavbarComponent>
     <div class="page">
         <div class="app-content">
-    <div class="wrapper-table">
-         <div style="width: 700px">
-         <a class="button is-primary is-small is-pulled-right">
-                <span class="icon is-small">
-                <i class="fas fa-redo"></i>
-                </span>
-                <span @click.prevent="fetchLands()">Refresh</span>
-        </a>
-        </div>
-        <table class="table is-hoverable" style="width: 700px; color: #ffffff">
-            <thead>
-                <th>Land ID</th>
-                <th>Buy Cost</th>
-                <th>Rent Cost</th>
-                <th>Level</th>
-                <th>Continent</th>
-            </thead>
-            <tbody>
-                <tr v-for="land in this.normalizeLandData()" v-bind:key="land.land_id" class="hover-row">
-                    <td style="cursor: pointer; color: #00d1b2"><a :href="'/land/' + land.land_id + '/view/'" style="color: #00d1b2">{{land.land_id}}</a></td>
-                    <td>${{land.buy_cost}}</td>
-                    <td>${{land.rent_cost}}</td>
-                    <td>{{land.level}}</td>
-                    <td>{{land.continent}}</td>
+            <div class="wrapper-table">
+                <h1 style="float:left; width: 30%; color: #4ada53; margin-left: 10%;">Your lands</h1>
+                <h1 style="float:right; width: 30%; color: #f02929">Lands on sale </h1>
+                <div style="width:85%; float:right;">
+                    
+                    <a class="button is-primary is-small is-pulled-right">
+                    <span class="icon is-small">
+                        <i class="fas fa-redo"></i>
+                    </span>
+                    <span @click.prevent="fetchLands()">Refresh</span>
+                </a>
+                </div>
+                <table class="table is-hoverable is-pulled-left" style="width: 40%; color: #ffffff">
+                    <thead>
+                        <th>Land ID</th>
+                        <th>Level</th>
+                        <th>Continent</th>
+                    </thead>
 
-                </tr>
-                <!--
-                <tr v-for="company in companiesOwned" v-bind:key=company.company_id>
-                    <td @click.prevent="registerSavedCompany(company.company_name)" style="cursor: pointer; color: #00d1b2">{{company.company_name}}</td>
-                    <td>{{company.balance}}</td>
-                    <td>0</td>
-                    <td>0</td>
-                </tr>-->
-            </tbody>
-        </table>
+                    <tbody v-if="this.landsOwned.length !== 0">
+                        <tr v-for="land in this.landsOwned" v-bind:key="land.land_id" class="hover-row">
+                            <td style="cursor: pointer; color: #00d1b2"><a :href="'/land/' + land.land_id + '/view/'" style="color: #00d1b2">{{land.land_id}}</a></td>
+                            <td>{{land.level}}</td>
+                            <td>{{land.continent}}</td>
+                        </tr>
+                    </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan="3"> 
+                                You have not obtain any landscape. Get one now. Need <a href="/documentation/">help?</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table is-hoverable is-pulled-right" style="width: 40%; color: #ffffff">
+                    <thead>
+                        <th>Land ID</th>
+                        <th>Buy Cost</th>
+                        <th>Rent Cost</th>
+                        <th>Continent</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="land in this.normalizeLandData()" v-bind:key="land.land_id" class="hover-row">
+                            <td style="cursor: pointer; color: #00d1b2"><a :href="'/land/' + land.land_id + '/view/'" style="color: #00d1b2">{{land.land_id}}</a></td>
+                            <td><i class="fas fa-caret-up" style="color:#00ff00"></i> ${{land.buy_cost}}</td>
+                            <td>${{land.rent_cost}}</td>
+                            <td>{{land.continent}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        </div>
-        </div>
+    </div>
     </div>
 </template>
 <script>
@@ -52,12 +67,14 @@ export default {
 
     data() {
         return {
-            lands: []
+            lands: [],
+            landsOwned: []
         }
     },
 
     mounted() {
         this.fetchLands()
+        this.fetchOwnedLands()
     },
 
     computed: {
@@ -66,12 +83,19 @@ export default {
 
     methods: {
         fetchLands() {
-            axios.post('/land/view/').then(response => {
+            axios.get('/api/v1/landscape/browse/').then(response => {
                 let data = response.data
                 if(data.hasOwnProperty('error')){
                     window.location.href = data.redirect_url
                 }
                 this.lands = data
+            })
+        },
+
+        fetchOwnedLands() {
+            axios.get('/api/v1/landscape/').then(response => {
+                let data = response.data
+                this.landsOwned = data
             })
         },
 
@@ -105,10 +129,11 @@ export default {
 <style scoped>
 .wrapper-table {
         margin: auto;
-        width: 700px;
+        width: 95%;
     }
 .table thead th{
     color: #03a9f4 !important;
+    font-size: 10px;
 }
 
 .hover-row:hover{

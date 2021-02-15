@@ -8,7 +8,7 @@ from app.core.mixin.base import CompanyLoggedInRequiredMixinJSON
 
 class LandscapeBrowse(View, CompanyLoggedInRequiredMixinJSON):
     """
-    URL: /api/v1/landscape/browse
+    URL: /api/v1/landscape/browse/
 
     SUPPORT_METHOD: ['GET']
 

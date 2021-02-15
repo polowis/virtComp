@@ -18,7 +18,7 @@ user_pattern = [
 
 landscape_pattern = [
     path('', Landscape.LandscapeView.as_view()),
-    path('<land_id>/', Landscape.LandscapeID.as_view()),
+    path('<land_id>/view/', Landscape.LandscapeID.as_view()),
     path('<land_id>/buy/', Landscape.LandscapeBuy.as_view()),
     path('<land_id>/rent/', Landscape.LandscapeRent.as_view()),
     path('browse/', Landscape.LandscapeBrowse.as_view())
