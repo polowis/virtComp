@@ -70,7 +70,7 @@ class LandscapeManager(models.Manager):
         If protected_values is provided, it will return only the fields specified otherwise
         it will use the default settings from landscape model
         """
-        protected_values = tuple(protected_values) if protected_values else Landscape.protected_values
+        protected_values = tuple(protected_values) if protected_values else Landscape.protected
         return Landscape.objects.values(*protected_values).get(land_id=land_id)
 
     def get_rent_landscape_by_company(self, company: Union[Company, str]) -> bool:
