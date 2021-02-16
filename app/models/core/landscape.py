@@ -70,7 +70,7 @@ class LandscapeManager(models.Manager):
         If protected_values is provided, it will return only the fields specified otherwise
         it will use the default settings from landscape model
         """
-        protected_values = tuple(protected_values) if protected_values else Landscape.protected_values
+        protected_values = tuple(protected_values) if protected_values else Landscape.protected
         return Landscape.objects.values(*protected_values).get(land_id=land_id)
 
     def get_rent_landscape_by_company(self, company: Union[Company, str]) -> bool:
@@ -480,5 +480,17 @@ class Landscape(models.Model, ModelMixin):
         # check if no building on this land
         if not hasattr(self, 'building'):
             return level == 0
+    
+    def next_pay_rent_date(self) -> str:
+        """Return the date that rent must be paid
+        in yyyy-mm-dd format
+
+        Please note that if the landscape is bought (not on rent) then it will return
+        the string "No payment required"
+        """
+        if self.is_rent:
+            next_due = self.last_collected_money_at + timedelta(days=7)
+            return datetime.strftime(next_due, "%Y-%m-%d")
+        return "No payment required"
     
 

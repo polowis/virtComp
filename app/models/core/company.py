@@ -77,7 +77,7 @@ class Company(models.Model, ModelMixin):
     qualification = models.IntegerField(default=0)
     created_at = models.DateTimeField(editable=False)
     updated_at = models.DateTimeField(null=True)
-    deleted_at = models.DateTimeField(null=True)
+    deleted_at = models.DateTimeField(editable=False, null=True)
 
     objects = CompanyManager()
 

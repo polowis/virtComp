@@ -20,7 +20,11 @@ class LandscapeID(View, CompanyLoggedInRequiredMixinJSON):
     def get(self, request: HttpRequest, land_id=None):
         try:
             land: Landscape = Landscape.objects.get(land_id=land_id)
-            return JsonResponse(land.as_dict())
+            land_details = land.as_dict()
+            if land_details['company_name'] == request.company.company_name:
+                land_details['owner'] = 1
+                land_details['rent_due'] = land.next_pay_rent_date()
+            return JsonResponse(land_details)
         except Exception:
             data = {'error': True, 'message': 'Landscape not found'}
             return JsonResponse(data)
