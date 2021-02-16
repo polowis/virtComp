@@ -40,6 +40,10 @@
                         <div class="control" v-if="land.is_rent">
                             <button class="button is-dark">Pay rent</button>
                         </div>
+                        <br>
+                        <div class="control">
+                            <button class="button is-success">Construct building</button>
+                        </div>
                     </div>
                 </div>
             </div>
