@@ -38,7 +38,7 @@ $ npm run dev
 4. SECRET_KEY (set your secret key or use the sample provided one, optional)
 Settings are located in setting directory. Change if you want. Keep in mind that you will need to create a copy version of settings.py or rename it as local_settings.py. Or things will not work
 
-5. Make sure you a database server up and running. (recommend PostgresQL)
+5. Make sure you have a database server up and running. (recommend PostgresQL)
 
 6. Run the server
 ```sh
