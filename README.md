@@ -73,3 +73,4 @@ $ ./manage.py runserver
 ```
 $ ./manage.py test
 ```
+Tested with python 3.7, 3.8, 3.9. NodeJS version used v14
