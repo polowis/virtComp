@@ -21,6 +21,9 @@ class LandscapeID(View, CompanyLoggedInRequiredMixinJSON):
         try:
             land: Landscape = Landscape.objects.get(land_id=land_id)
             land_details = land.as_dict()
+            if hasattr(land, 'building'):
+                land_building = land.building.as_dict()
+                land_details['building'] = land_building
             if land_details['company_name'] == request.company.company_name:
                 land_details['owner'] = 1
                 land_details['rent_due'] = land.next_pay_rent_date()
