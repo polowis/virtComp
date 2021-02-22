@@ -31,7 +31,7 @@ company_pattern = [
 ]
 
 constants_pattern = [
-    path('/buildingtypename', Constants.BuildingTypeName.as_view())
+    path('buildingtypename/', Constants.BuildingTypeName.as_view())
 ]
 
 
