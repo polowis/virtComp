@@ -42,7 +42,7 @@
                         </div>
                         <br>
                         <div class="control">
-                            <button class="button is-success">Construct building</button>
+                            <button class="button is-success"><a :href="'/land/'+ land.land_id +'/building/create/'" style="color: white;">Construct building</a></button>
                         </div>
                     </div>
                 </div>

@@ -48,6 +48,7 @@ urlpatterns = [
     path('land/<land_id>/view/', LandView.as_view()),
     path('land/<land_id>/buy/', LandBuy.as_view()),
     path('land/<land_id>/rent/', LandRent.as_view()),
+    path('land/<land_id>/building/create/', BuildingCreate.as_view()),
     path('design/', NewUIView),
     
 

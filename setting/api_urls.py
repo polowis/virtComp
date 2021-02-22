@@ -6,6 +6,7 @@ from django.urls import path, include
 from app.views.api.v1.user import UserView, UserCompany, UserCompanySign, UserValid
 from app.views.api.v1.company import CompanyView
 import app.views.api.v1.landscape as Landscape
+import app.views.api.v1.constants as Constants
 
 API_VERSION = 'v1'
 
@@ -29,9 +30,15 @@ company_pattern = [
     path('', CompanyView.as_view())
 ]
 
+constants_pattern = [
+    path('buildingtypename/', Constants.BuildingTypeName.as_view())
+]
+
+
 api_pattern = [
     path(f'api/{API_VERSION}/user/', include(user_pattern)),
     path(f'api/{API_VERSION}/company/', include(company_pattern)),
-    path(f'api/{API_VERSION}/landscape/', include(landscape_pattern))
+    path(f'api/{API_VERSION}/landscape/', include(landscape_pattern)),
+    path(f'api/{API_VERSION}/constants/', include(constants_pattern))
 
 ]
