@@ -22,7 +22,7 @@ export default {
 
     methods: {
         fetchBuildingType() {
-            axios.get('api/v1/constants/buildingtypename/').then(response => {
+            axios.get('/api/v1/constants/buildingtypename/').then(response => {
                 let data = response.data
                 this.supportedBuildingType = data
             })
