@@ -34,7 +34,8 @@ class BuildingBuilder(object):
                   method_acquired: str, level: int, landscape: Landscape):
         """
         Call this function to create a building with the given type and name
-        And the company instance that owns the building regardless of acquisition methods
+        And the company instance that owns the building regardless of acquisition methods. If you wish
+        to not declare constructor.
 
         NOTE: The given landscape must owned by the given company
 
