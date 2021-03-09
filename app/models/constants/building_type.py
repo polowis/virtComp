@@ -250,5 +250,9 @@ class BuildingType(models.Model):
 
         raise NegativeLevel() if the given level is negative
         """
-        return getattr(self, f'get_{method_acquired}_cost')(level)
+        try:
+            value = getattr(self, f'get_{method_acquired}_cost')(level)
+            return value
+        except AttributeError:
+            raise NegativeLevel(level, "Failed to get cost, either method or level is invalid")
 
