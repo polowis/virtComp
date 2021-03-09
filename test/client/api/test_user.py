@@ -26,6 +26,11 @@ class UserAPITestCase(TestCase):
         response = self.client.post(self.api_endpoint + 'company/sign/', {'companyName': 'johnCompany'})
         self.assertEqual(response.json()['error'], False)
     
+    def test_sign_company_return_valid_cookie(self):
+        Company.objects.create_company('johnCompany', self.user, 'alantica')
+        response = self.client.post(self.api_endpoint + 'company/sign/', {'companyName': 'johnCompany'})
+        self.assertNotEqual(response.client.cookies.get("host_user"), None)
+    
     def test_valid_user(self):
         response = self.client.post(self.api_endpoint + 'valid/', {'username': 'alice', 'email': 'alice@gmail.com'})
         self.assertEqual(response.json()['error'], False)
