@@ -7,6 +7,7 @@ from app.views.api.v1.user import UserView, UserCompany, UserCompanySign, UserVa
 from app.views.api.v1.company import CompanyView
 import app.views.api.v1.landscape as Landscape
 import app.views.api.v1.constants as Constants
+import app.views.api.v1.building as Building
 
 API_VERSION = 'v1'
 
@@ -34,11 +35,15 @@ constants_pattern = [
     path('buildingtypename/', Constants.BuildingTypeName.as_view())
 ]
 
+building_pattern = [
+    path("create/", Building.BuildingCreate.as_view())
+]
 
 api_pattern = [
     path(f'api/{API_VERSION}/user/', include(user_pattern)),
     path(f'api/{API_VERSION}/company/', include(company_pattern)),
     path(f'api/{API_VERSION}/landscape/', include(landscape_pattern)),
-    path(f'api/{API_VERSION}/constants/', include(constants_pattern))
+    path(f'api/{API_VERSION}/constants/', include(constants_pattern)),
+    path(f'api/{API_VERSION}/building/', include(building_pattern))
 
 ]
