@@ -132,7 +132,7 @@ class BuildingBuilder(object):
 
     def get_building_details_as_dict(self) -> dict:
         """
-        Return the dictionary of buildingtyp details
+        Return the dictionary of buildingtype details
         If you're looking for an instance, refer to get_building_details() instead
         """
         details: dict = {
