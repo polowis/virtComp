@@ -34,7 +34,8 @@ class BuildingBuilder(object):
                   method_acquired: str, level: int, landscape: Landscape):
         """
         Call this function to create a building with the given type and name
-        And the company instance that owns the building regardless of acquisition methods
+        And the company instance that owns the building regardless of acquisition methods. If you wish
+        to not declare constructor.
 
         NOTE: The given landscape must owned by the given company
 
@@ -131,7 +132,7 @@ class BuildingBuilder(object):
 
     def get_building_details_as_dict(self) -> dict:
         """
-        Return the dictionary of buildingtyp details
+        Return the dictionary of buildingtype details
         If you're looking for an instance, refer to get_building_details() instead
         """
         details: dict = {
