@@ -4,7 +4,7 @@
 Virtcomp is totally different from other business simulation games. It offers a new and better experience. It is the playground where you actually compete with each other. There would be no advantages over other players, it will just be completely based on your skills. 
 
 ## Running virtcomp on your local machine
-Virtcomp uses Django, a popular python web framework. To run virtcomp on your local machine. There are many prequesities:
+This is the unstable version of VirtComp, it only provides sample data so some of them might not be accurate and you cannot pull the data from origin source (it will result in error if you try ). Virtcomp uses Django, a popular python web framework. To run virtcomp on your local machine. There are many prequesities:
 
 1. You need to have all the required modules installed (except a fews)
 2. You must have a database driver (or use sqlite)
@@ -16,6 +16,7 @@ If you are only intended to run the web server. You only need modules in require
 ```sh
 $ pip install -r requirements.txt
 ```
+However if you want to test the full version, you must install packages listed in ```app/core/services/requirements.txt```.
 
 Sample data available in csv_data directory. Otherwise, you will need to pull those from public google sheet of your choice but with same format. You may also be aware that if you use your custom csv (sheets) tests may not work as expected. To enable pulling from google sheet, set USE_DIRECT_SHEETS_DOWNLOAD to True.
 
