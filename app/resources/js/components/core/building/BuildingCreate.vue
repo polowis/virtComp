@@ -19,8 +19,11 @@
                 <label class="label" style="color:white;">Select your method of acquiring</label>
                 <div class="control">
                     <div class="select is-primary">
-                        <select v-model="method">
+                        <select v-model="method" v-if="landDetails.is_buy === true">
                             <option>Buy</option>
+                            <option>Rent</option>
+                        </select>
+                        <select v-model="method" v-if="landDetails.is_rent === true">
                             <option>Rent</option>
                         </select>
                     </div>
@@ -55,12 +58,13 @@ export default {
             landDetails: "",
             supportedBuildingType: [],
             buildingType: "",
-            method: "Buy",
+            method: "",
         }
     },
 
     created() {
         this.fetchBuildingType()
+        this.fetchLandDetails()
     },
 
     methods: {
@@ -68,6 +72,14 @@ export default {
             axios.get('/api/v1/constants/buildingtypename/').then(response => {
                 let data = response.data
                 this.supportedBuildingType = data
+            })
+        },
+
+        fetchLandDetails() {
+            let id = location.pathname.split("/")[2]
+            axios.get(`/api/v1/landscape/${id}/view/`).then(response => {
+                let data = response.data
+                this.landDetails = data
             })
         }
     }
