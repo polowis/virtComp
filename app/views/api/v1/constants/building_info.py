@@ -11,7 +11,7 @@ class BuildingInfo(View):
     def get(self, request: HttpRequest):
         building_request = request.GET.get("building")
         building_method = request.GET.get("method", "")
-        building_level = request.GET.get("level", 1)
+        building_level = int(request.GET.get("level", 1))
 
         try:
             building: BuildingType = BuildingType.objects.get_building_by_type(building_request)
