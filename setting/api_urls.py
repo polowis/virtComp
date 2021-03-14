@@ -32,7 +32,8 @@ company_pattern = [
 ]
 
 constants_pattern = [
-    path('buildingtypename/', Constants.BuildingTypeName.as_view())
+    path('buildingtypename/', Constants.BuildingTypeName.as_view()),
+    path('buildinginfo/', Constants.BuildingInfo.as_view())
 ]
 
 building_pattern = [
