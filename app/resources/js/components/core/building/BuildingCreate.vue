@@ -46,6 +46,11 @@
             <div class="field" v-if="buildingInfo !== ''">
                 <p>Cost: {{buildingInfo.cost}}</p>
             </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-success">Construct Building</button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
